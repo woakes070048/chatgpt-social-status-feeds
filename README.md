@@ -1,7 +1,11 @@
 ![Header](./png_20230324_105953_0000.png)
 
 # chatgpt-social-status2rss
-A script and Web GUI that generates statuses using customizable prompts and add them to rss feeds That can be used to auto post statuses
+A script and Web GUI that generates statuses using customizable prompts and add them to rss feeds That can be used to auto post statuses.
+
+
+## Who This Is For
+This is mostly ment anyone who manages social media for others. This allows you to create awesome status updates regularly with little to no effort. Also allows your clients to log in and make changes. This creates feeds that are meant to be fed into software such as Chatpion's rss autoposter.
 
 ## How It Works
 - config.php - Contains the API key and other constants.
@@ -22,3 +26,6 @@ You can use it for easy managment and sub account managment. This helps provide 
 -  Delete a status from a feed.
 
 ### To-Do
+- Upload files lol
+- Secure /accounts and /feeds
+- Polish the GUI
