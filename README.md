@@ -1,4 +1,4 @@
-![Header](./png_20230324_105829_0000.png)
+![Header](./png_20230324_105953_0000.png)
 
 # chatgpt-social-status2rss
 A script and Web GUI that generates statuses using customizable prompts and add them to rss feeds That can be used to auto post statuses
