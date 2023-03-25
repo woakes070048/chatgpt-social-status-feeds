@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once '../config.php';
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = $_POST['username'];
@@ -10,7 +10,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $_SESSION['user'] = 'admin';
         header('Location: index.php');
     } else {
-        $accountFile = "accounts/{$username}";
+        $accountFile = "../storage/accounts/{$username}";
 
         if (file_exists($accountFile)) {
             $accountInfo = json_decode(file_get_contents($accountFile), true);

@@ -1,12 +1,12 @@
 <?php
-require_once 'config.php';
-require_once 'status.php';
+require_once '../config.php';
+require_once '../lib/status.php';
 
 if (isset($_GET['acct']) && isset($_GET['key'])) {
     $account = $_GET['acct'];
     $key = $_GET['key'];
 
-    $accountFile = "accounts/{$account}";
+    $accountFile = "../storage/accounts/{$account}";
 
     if (file_exists($accountFile)) {
         $accountInfo = unserialize(file_get_contents($accountFile));
@@ -25,7 +25,7 @@ if (isset($_GET['acct']) && isset($_GET['key'])) {
 }
 
 function outputRssFeed($account, $key) {
-    $statusFile = "statuses/{$account}";
+    $statusFile = "../storage/statuses/{$account}";
 
     $statuses = [];
     if (file_exists($statusFile)) {

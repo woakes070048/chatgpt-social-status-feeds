@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once "config.php";
+require_once "../config.php";
 
 if (!isset($_SESSION["user"])) {
     header("Location: login.php");
@@ -30,7 +30,7 @@ if (isset($_POST["create_account"])) {
             "sub_account_login" => $subAccountLogin,
         ];
 
-        $accountsDir = "accounts/";
+        $accountsDir = "../storage/accounts/";
         $accountFile = $accountsDir . $accountName;
 
         if (!file_exists($accountsDir)) {
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             "password" => $password,
         ];
 
-        $accountFile = "accounts/{$accountName}";
+        $accountFile = "../storage/accounts/{$accountName}";
 
         if (file_exists($accountFile)) {
             file_put_contents($accountFile, serialize($accountData));
@@ -71,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     } elseif (isset($_POST["delete"])) {
         $accountName = trim($_POST["account"]);
-        $accountFile = "accounts/{$accountName}";
-        $statusFile = "statuses/{$accountName}";
+        $accountFile = "../storage/accounts/{$accountName}";
+        $statusFile = "../storage/statuses/{$accountName}";
 
         if (file_exists($accountFile)) {
             unlink($accountFile);
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $accountName = trim($_POST["account"]);
         $index = (int) $_POST["index"];
 
-        $statusFile = "statuses/{$accountName}";
+        $statusFile = "../storage/statuses/{$accountName}";
         $statuses = file_exists($statusFile)
             ? unserialize(file_get_contents($statusFile))
             : [];
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 function getAccounts()
 {
     $accounts = [];
-    $accountFiles = glob("accounts/*");
+    $accountFiles = glob("../storage/accounts/*");
 
     foreach ($accountFiles as $accountFile) {
         $accountInfo = unserialize(file_get_contents($accountFile));
@@ -116,7 +116,7 @@ function getAccounts()
 
 $accounts = $isAdmin
     ? getAccounts()
-    : [json_decode(file_get_contents("accounts/{$_SESSION["user"]}"), true)];
+    : [json_decode(file_get_contents("../storage/accounts/{$_SESSION["user"]}"), true)];
 
 function getCronUrl($account, $Key)
 {
@@ -136,12 +136,13 @@ function getFeedUrl($account, $Key)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/assets/styles.css">
+    <script src="/assets/script.js"></script>
     <title>Dashboard</title>
 </head>
 
 <body>
     <header>
-        <div class="logo">Logo</div>
+        <div class="logo"><img src="/assets/logo.png"></div>
         <div class="logout-button">
             <form action="<?php echo htmlspecialchars(
                                 $_SERVER["PHP_SELF"]
@@ -198,7 +199,7 @@ function getFeedUrl($account, $Key)
                     <div class="statuses">
                         <h3>Statuses</h3>
                         <?php
-                        $statusFile = "statuses/{$account["name"]}";
+                        $statusFile = "../storage/statuses/{$account["name"]}";
                         $statuses = file_exists($statusFile)
                             ? unserialize(file_get_contents($statusFile))
                             : [];
@@ -234,8 +235,12 @@ function getFeedUrl($account, $Key)
                 </div>
             </div>
         <?php endforeach; ?>
-        <!-- New Account Box -->
-        <div class="account-box">
+
+    </div>
+    <button id="add-account-btn">Add Account</button>
+
+    <div class="account-popup" id="account-popup">
+        <div class="new-account-box">
             <div class="create-account-form">
                 <h3>Create New Account</h3>
                 <form action="<?php echo htmlspecialchars(
@@ -249,8 +254,8 @@ function getFeedUrl($account, $Key)
                     <textarea name="prompt" id="prompt" required></textarea>
                     <label for="sub_account_login">Sub Account Login (optional):</label>
                     <input type="text" name="sub_account_login" id="sub_account_login">
-                    <button type="submit" class="add-account-button" name="create_account">Create
-                        Account</button>
+                    <button type="submit" class="add-account-button" name="create_account">Create Account</button>
+                    <button type="button" id="close-popup-btn">Close</button>
                 </form>
             </div>
         </div>

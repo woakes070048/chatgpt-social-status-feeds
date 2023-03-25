@@ -1,5 +1,5 @@
 <?php
-require_once 'config.php';
+require_once '../config.php';
 
 function generateStatus($account, $key, $prompt)
 {
@@ -36,7 +36,7 @@ function generateStatus($account, $key, $prompt)
 
 
 function saveStatus($account, $status) {
-    $statusFile = "statuses/{$account}";
+    $statusFile = "../storage/statuses/{$account}";
     $statuses = [];
     if (file_exists($statusFile)) {
         $statuses = unserialize(file_get_contents($statusFile));
