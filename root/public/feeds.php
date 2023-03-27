@@ -1,6 +1,20 @@
 <?php
-require_once '../config.php';
-require_once '../lib/status.php';
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: feeds.php
+ * Description: ChatGPT API Status Generator
+ */
+
+// Check if the required query parameters are present in the URL
+if (!isset($_GET['acct']) || !isset($_GET['key'])) {
+    // If the parameters are missing, show an error message and exit the script
+    echo 'Error: Missing required parameters';
+    exit();
+}
+
+require_once '../app/status-helper.php';
 
 if (isset($_GET['acct']) && isset($_GET['key'])) {
     $account = $_GET['acct'];
@@ -18,13 +32,16 @@ if (isset($_GET['acct']) && isset($_GET['key'])) {
             echo 'Invalid key.';
         }
     } else {
-                echo 'Invalid account.';
+        echo 'Invalid account.';
+        exit();
     }
 } else {
     echo 'Missing account or key.';
+    exit();
 }
 
-function outputRssFeed($account, $key) {
+function outputRssFeed($account, $key)
+{
     $statusFile = "../storage/statuses/{$account}";
 
     $statuses = [];

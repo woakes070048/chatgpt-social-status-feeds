@@ -1,4 +1,12 @@
 <?php
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: status-helper.php
+ * Description: ChatGPT API Status Generator
+ */
+
 require_once '../config.php';
 
 function generateStatus($account, $key, $prompt)
@@ -35,7 +43,8 @@ function generateStatus($account, $key, $prompt)
 }
 
 
-function saveStatus($account, $status) {
+function saveStatus($account, $status)
+{
     $statusFile = "../storage/statuses/{$account}";
     $statuses = [];
     if (file_exists($statusFile)) {

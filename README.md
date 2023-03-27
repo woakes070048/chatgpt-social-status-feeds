@@ -26,6 +26,8 @@ You can use it for easy managment and sub account managment. This helps provide 
 -  Delete a status from a feed.
 
 ### To-Do
-- Upload files lol
-- Secure /accounts and /feeds
 - Polish the GUI
+
+### Resent Changes
+- Added a WAF
+-Improved GUI

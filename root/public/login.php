@@ -1,53 +1,41 @@
 <?php
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: login.php
+ * Description: ChatGPT API Status Generator
+ */
+
 session_start();
-require_once '../config.php';
-
-if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    if ($username === ADMIN_USERNAME && $password === ADMIN_PASSWORD) {
-        $_SESSION['user'] = 'admin';
-        header('Location: index.php');
-    } else {
-        $accountFile = "../storage/accounts/{$username}";
-
-        if (file_exists($accountFile)) {
-            $accountInfo = json_decode(file_get_contents($accountFile), true);
-
-            if ($accountInfo['password'] === $password) {
-                $_SESSION['user'] = $username;
-                header('Location: index.php');
-            } else {
-                $errorMessage = 'Invalid password.';
-            }
-        } else {
-            $errorMessage = 'Invalid account.';
-        }
-    }
-}
+require_once "../app/auth-helper.php";
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AI Status Admin Login</title>
+    <link rel="stylesheet" href="assets/login.css">
 </head>
 
 <body>
-    <div class="login-container">
-        <h1>Login</h1>
-        <?php if (isset($errorMessage)) : ?>
-            <div class="error-message"><?php echo $errorMessage; ?></div>
-        <?php endif; ?>
-        <form action="login.php" method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <button type="submit">Login</button>
+    <div class="login-box">
+        <img src="assets/logo.png" alt="Logo" class="logo">
+        <h2>AI Status Admin</h2>
+        <form method="post">
+            <label>Username:</label>
+            <input type="text" name="username"><br><br>
+            <label>Password:</label>
+            <input type="password" name="password"><br><br>
+            <input type="submit" value="Log In">
         </form>
+        <?php if (isset($error_msg)) : ?>
+            <div id="error-msg"><?php echo $error_msg; ?></div>
+        <?php endif; ?>
     </div>
 </body>
 

@@ -1,6 +1,20 @@
 <?php
-require_once '../config.php';
-require_once '../lib/status.php';
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: cron.php
+ * Description: ChatGPT API Status Generator
+ */
+
+// Check if the required query parameters are present in the URL
+if (!isset($_GET['acct']) || !isset($_GET['key'])) {
+    // If the parameters are missing, show an error message and exit the script
+    echo 'Error: Missing required parameters';
+    exit();
+}
+
+require_once '../app/status-helper.php';
 
 if (isset($_GET['acct']) && isset($_GET['key'])) {
     $account = $_GET['acct'];
