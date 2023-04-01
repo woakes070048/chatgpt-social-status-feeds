@@ -26,7 +26,10 @@ if (isset($_GET['acct']) && isset($_GET['key'])) {
         $accountInfo = unserialize(file_get_contents($accountFile));
 
         if ($accountInfo['key'] === $key) {
-            generateStatus($account, $key, $accountInfo['prompt']);
+            $prompt = $accountInfo['prompt'];
+            $link = $accountInfo['link'];
+            $hashtags = $accountInfo['hashtags'];
+            generateStatus($account, $key, $prompt, $link, $hashtags);
             echo 'Status generated successfully.';
         } else {
             echo 'Invalid key.';

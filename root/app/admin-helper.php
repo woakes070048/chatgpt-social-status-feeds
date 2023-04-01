@@ -13,12 +13,16 @@ if (isset($_POST["create_account"])) {
     $accountName = trim($_POST["account_name"]);
     $key = trim($_POST["key"]);
     $prompt = trim($_POST["prompt"]);
+    $hashtags = isset($_POST["hashtags"]) ? true : false;
+    $link = trim($_POST["link"]);
 
-    if (!empty($accountName) && !empty($key) && !empty($prompt)) {
+    if (!empty($accountName) && !empty($key) && !empty($prompt) && !empty($link)) { // Update: Link field is required
         $accountData = [
             "account" => $accountName,
             "key" => $key,
             "prompt" => $prompt,
+            "hashtags" => $hashtags,
+            "link" => $link,
         ];
 
         $accountsDir = "../storage/accounts/";
@@ -35,7 +39,7 @@ if (isset($_POST["create_account"])) {
         alert("Account with this name already exists.");
        </script>';
         }
-    } elseif (empty($accountName) || empty($key) || empty($prompt)) {
+    } elseif (empty($accountName) || empty($key) || empty($prompt) || empty($link)) { // Update: Link field is required
         echo '<script>
         alert("Please fill in all the required fields.");
     </script>';
@@ -47,11 +51,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $accountName = trim($_POST["account"]);
         $key = trim($_POST["key"]);
         $prompt = trim($_POST["prompt"]);
+        $link = trim($_POST["link"]);
+        $hashtags = isset($_POST["hashtags"]) ? true : false;
 
         $accountData = [
             "account" => $accountName,
             "key" => $key,
             "prompt" => $prompt,
+            "link" => $link,
+            "hashtags" => $hashtags,
         ];
 
         $accountFile = "../storage/accounts/{$accountName}";
@@ -61,6 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo '<script>
         alert("Account updated successfully.");
     </script>';
+            header('Location: /index.php');
+            exit;
         } else {
             echo '<script>
         alert("Account does not exist.");
@@ -73,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (file_exists($accountFile)) {
             unlink($accountFile);
-                       echo '<script>
+            echo '<script>
         alert("Account deleted successfully.");
     </script>';
         } else {
@@ -93,7 +103,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $statuses = file_exists($statusFile)
             ? unserialize(file_get_contents($statusFile))
             : [];
-
         if (isset($statuses[$index])) {
             unset($statuses[$index]);
             file_put_contents($statusFile, serialize($statuses));
@@ -105,22 +114,25 @@ function getAccounts()
 {
     $accounts = [];
     $accountFiles = glob("../storage/accounts/*");
-
     foreach ($accountFiles as $accountFile) {
         $accountInfo = unserialize(file_get_contents($accountFile));
-        $accountInfo["name"] = basename($accountFile);
-        $accounts[] = $accountInfo;
+        if ($accountInfo !== false) {
+            $accountInfo["name"] = basename($accountFile);
+            $accounts[] = $accountInfo;
+        }
     }
 
     return $accounts;
 }
 
-function getCronUrl($account, $Key)
+function getCronUrl($account, $key)
 {
-    return "/cron.php?acct={$account}&key={$Key}";
+    $key = $key ?? '';
+    return "/cron.php?acct={$account}&key={$key}";
 }
 
-function getFeedUrl($account, $Key)
+function getFeedUrl($account, $key)
 {
-    return "/feeds.php?acct={$account}&key={$Key}";
+    $key = $key ?? '';
+    return "/feeds.php?acct={$account}&key={$key}";
 }

@@ -9,11 +9,18 @@
 
 require_once '../config.php';
 
-function generateStatus($account, $key, $prompt)
+function generateStatus($account, $key, $prompt, $link, $hashtags)
 {
+    $message = $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
+    if ($hashtags) {
+        $message .= ' Also add relevant hashtags.';
+    } else {
+        $message .= ' Also DONOT include any hashtags!';
+    }
+
     $data = [
         'model' => MODEL,
-        'messages' => [['role' => 'user', 'content' => $prompt]],
+        'messages' => [['role' => 'user', 'content' => $message]],
         'temperature' => TEMPERATURE,
     ];
 
@@ -30,7 +37,9 @@ function generateStatus($account, $key, $prompt)
     $response = curl_exec($ch);
     curl_close($ch);
 
-    error_log("API response: " . $response); // Log the response for debugging
+    error_log("API request: " . json_encode($data), 3, "../api.log"); // Log the request for debugging
+    error_log("API response: " . $response, 3, "../api.log"); // Log the response for debugging
+
 
     $response_data = json_decode($response, true);
 
