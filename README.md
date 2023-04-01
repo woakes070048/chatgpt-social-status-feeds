@@ -9,7 +9,7 @@ This is mostly ment anyone who manages social media for others. This allows you 
 
 ## How It Works
 - config.php - Contains the API key and other constants.
-- status.php - Handles status generation and saving.
+- status-helper.php - Handles status generation and saving.
 - feeds.php - Provides the RSS feed for each account.
 - cron.php - Generates statuses for each account using the specified prompt.
 
@@ -27,7 +27,9 @@ You can use it for easy managment and sub account managment. This helps provide 
 
 ### To-Do
 - Polish the GUI
+- Generate AI Images?
 
 ### Resent Changes
 - Added a WAF
--Improved GUI
+- Improved GUI
+- Added Link & Hashtags options
