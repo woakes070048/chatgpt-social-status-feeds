@@ -321,4 +321,12 @@ footer {
     margin: 10px;
     width: 95%;
   }
+
+  .update-account-popup {
+    width: 95%
+  }
+
+  .add-account-popup {
+    width: 95%
+  }
 }
