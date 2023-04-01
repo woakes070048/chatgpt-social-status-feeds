@@ -38,7 +38,7 @@ $accounts = getAccounts();
             if ($account !== null) : ?>
                 <div class="account-box">
                     <div class="statuses">
-                        <h3>Statuses</h3>
+                        <h3><?php echo htmlspecialchars($account["account"]); ?> Statuses</h3>
                         <?php
                         $statusFile = "../storage/statuses/{$account["name"]}";
                         $statuses = file_exists($statusFile)
@@ -99,8 +99,10 @@ $accounts = getAccounts();
                     <textarea name="prompt" id="update-prompt" required></textarea>
                     <label for="update-link">Link:</label>
                     <input type="text" name="link" id="update-link" required>
-                    <label for="update-hashtags">Include Hashtags:</label>
-                    <input type="checkbox" name="hashtags" id="update-hashtags">
+                    <div class="hashtags">
+                        <label for="update-hashtags">Include Hashtags:</label>
+                        <input type="checkbox" name="hashtags" id="update-hashtags">
+                    </div>
                     <button type="submit" class="update-account-btn" name="update">Update Account</button>
                     <button type="submit" class="delete-account-btn" name="delete">Delete Account</button>
                     <button type="button" class="close-update-popup-btn" id="close-update-popup-btn">Close</button>
@@ -122,8 +124,10 @@ $accounts = getAccounts();
                     <textarea name="prompt" id="add-prompt" required></textarea>
                     <label for="link">Link:</label>
                     <input type="text" name="link" id="link" required>
-                    <label for="hashtags">Include Hashtags:</label>
-                    <input type="checkbox" name="hashtags" id="hashtags">
+                    <div class="hashtags">
+                        <label for="hashtags">Include Hashtags:</label>
+                        <input type="checkbox" name="hashtags" id="hashtags">
+                    </div>
                     <button type="submit" class="add-account-button" name="create_account">Create Account</button>
                     <button type="button" id="close-add-popup-btn">Close</button>
                 </form>
