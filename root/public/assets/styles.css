@@ -133,10 +133,13 @@ header {
   display: inline-flex;
 }
 
-.account-options button {
-  margin: 0 10px 20px 20px;
+.account-options > form > button {
+  margin: 0 10px 4px 20px;
 }
 
+.update-account-btn {
+  margin: 1px 10px 20px 20px;
+}
 .update-account-form label,
 .update-account-form input,
 .update-account-form textarea,
@@ -326,7 +329,7 @@ footer {
     width: 95%
   }
 
-  .add-account-popup {
+    .add-account-popup {
     width: 95%
   }
 }

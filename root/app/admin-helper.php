@@ -13,8 +13,8 @@ if (isset($_POST["create_account"])) {
     $accountName = trim($_POST["account_name"]);
     $key = trim($_POST["key"]);
     $prompt = trim($_POST["prompt"]);
-    $hashtags = isset($_POST["include_hashtags"]) ? true : false;
-    $link = trim($_POST["link_text"]);
+    $hashtags = isset($_POST["hashtags"]) ? true : false;
+    $link = trim($_POST["link"]);
 
     if (!empty($accountName) && !empty($key) && !empty($prompt) && !empty($link)) { // Make sure link field is not empty
         $accountData = [
@@ -50,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $accountName = trim($_POST["account"]);
         $key = trim($_POST["key"]);
         $prompt = trim($_POST["prompt"]);
-        $hashtags = isset($_POST["include_hashtags"]) ? true : false;
-        $link = trim($_POST["link_text"]);
+        $hashtags = isset($_POST["hashtags"]) ? true : false;
+        $link = trim($_POST["link"]);
 
         $accountData = [
             "account" => $accountName,
