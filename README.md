@@ -15,6 +15,8 @@ This is mostly ment anyone who manages social media for others. This allows you 
 
 Each account should have a file in the /accounts/ folder with the format: ACCOUNTNAME. The file should contain a JSON object with an account, key, and prompt property. The generated statuses will be saved in the /statuses/ folder with the format: ACCOUNTNAME.You can access the RSS feed for each account at /feeds.php?acct=ACCOUNTNAME&key=KEY. To generate statuses for a specific account using a cron.  Basically use the feed as the source for status updates with whatever managment platform, bot or social content script you use aka like Chatpion. I'm using flat files storage honestly because it's easier and because it seems like a waste to use a whole database for something that's as simple with so little file writing.
 
+You can upload images to each feed. if you upload 2 images the next 2 statuses will generate attaching an image to each one. If you generate another status it will be assigned _NOIMAGE_. If you upload 3 more the next 3 statuses will be assigned images. Deleting a status deletes the image.
+
 ### The Web GUI
 You can use it for easy managment and sub account managment. This helps provide easy access to change security keys, create subaccess, check statuses and delete statuses. This script creates "accounts", each account is a feed. They each have their own cron job and sub login (optional).
 
@@ -33,3 +35,4 @@ You can use it for easy managment and sub account managment. This helps provide 
 - Added a WAF
 - Improved GUI
 - Added Link & Hashtags options
+- Added status images

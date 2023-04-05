@@ -8,12 +8,13 @@
  */
 
 require_once '../config.php';
+require_once "../app/admin-helper.php";
 
 function generateStatus($account, $key, $prompt, $link, $hashtags)
 {
-    $message = $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
+    $message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
     if ($hashtags) {
-        $message .= ' Also add relevant hashtags.';
+        $message .= ' Also add relevant hashtags (but donot use #CallToAction).';
     } else {
         $message .= ' Also DONOT include any hashtags!';
     }

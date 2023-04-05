@@ -102,6 +102,52 @@ body {
   padding: 20px;
 }
 
+/* imagesStyles */
+.images-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  border-radius: 4px;
+}
+
+.images-box {
+  flex-wrap: wrap;
+  position: relative;
+  margin: 5px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.images-form {
+  padding: 20px;
+}
+
+.images-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  overflow-y: scroll;
+  height: 450px;
+}
+
+.image-item {
+  width: 33.33%;
+  box-sizing: border-box;
+  padding: 10px;
+  float: left;
+}
+
+.delete-form {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 /* Index Page Styles */
 header {
   display: flex;
@@ -137,7 +183,8 @@ header {
   margin: 0 10px 4px 20px;
 }
 
-.update-account-btn {
+.update-account-btn,
+.images-btn {
   margin: 1px 10px 20px 20px;
 }
 .update-account-form label,
@@ -196,7 +243,9 @@ button:hover {
 }
 
 .update-account-btn,
+.images-btn,
 .add-account-button,
+.upload-image,
 .login-container button {
   background-color: #66cc33;
 }
@@ -212,6 +261,8 @@ button#add-account-btn {
 }
 
 button#close-add-popup-btn,
+.close-btn,
+.delete-image,
 .delete-account-btn,
 .trigger-cron,
 .logout-button button {
@@ -229,12 +280,15 @@ button#add-account-btn,
 }
 
 .update-account-btn:hover,
+.upload-image:hover,
 .add-account-button:hover,
 .login-container button:hover {
   background-color: #72e937;
 }
 
 button#close-add-popup-btn:hover,
+.close-btn:hover,
+.delete-image:hover,
 .delete-account-btn:hover,
 .logout-button:hover,
 .trigger-cron:hover {
@@ -249,6 +303,17 @@ button#add-account-btn:hover,
 .delete-status-button:hover,
 .close-update-popup-btn:hover {
   background-color: #ec971f;
+}
+
+.upload-form {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.upload-form button {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .cron-feed-addresses {
@@ -282,6 +347,11 @@ button#add-account-btn:hover,
   margin-bottom: 10px;
   border-radius: 4px;
   background-color: #f0f0f0;
+}
+
+.status-image {
+  width: 150px;
+  height: 150px;
 }
 
 footer {
@@ -321,15 +391,29 @@ footer {
   }
 
   button#add-account-btn {
-    margin: 10px;
+    margin: 30px 10px 100px 10px;
     width: 95%;
   }
 
-  .update-account-popup {
+  .add-account-popup,
+  .update-account-popup,
+  .images-popup {
     width: 95%
   }
 
-    .add-account-popup {
-    width: 95%
+  .image-item {
+    width: 48%;
+    padding: 0;
+  }
+
+  .upload-form {
+    flex-wrap: wrap;
+  }
+
+  .upload-form button {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0;
+    margin-right: 20px;
   }
 }

@@ -32,9 +32,7 @@
     const updateKeyField = document.getElementById("update-key");
     const updatePromptField = document.getElementById("update-prompt");
     const updateLinkField = document.getElementById("update-link");
-    const updateHashtagsCheckbox = document.getElementById(
-      "update-hashtags"
-    );
+    const updateHashtagsCheckbox = document.getElementById("update-hashtags");
 
     updateAccountButtons.forEach((button) => {
       button.addEventListener("click", () => {
@@ -42,8 +40,7 @@
         const key = button.getAttribute("data-key");
         const prompt = button.getAttribute("data-prompt");
         const link = button.getAttribute("data-link");
-        const Hashtags =
-          button.getAttribute("data-hashtags") === "true";
+        const Hashtags = button.getAttribute("data-hashtags") === "true";
 
         updateAccountNameField.value = accountName;
         updateKeyField.value = key;
@@ -62,6 +59,28 @@
     window.addEventListener("click", (event) => {
       if (event.target == updateAccountPopup) {
         updateAccountPopup.style.display = "none";
+      }
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const imagesBtn = document.getElementById("images-btn");
+    const imagesPopup = document.getElementById("images-popup");
+    const closeBtn = document.getElementById("close-btn");
+    const uploadForm = document.querySelector(".upload-form");
+    const imageFileInput = document.getElementById("image-file");
+
+    imagesBtn.addEventListener("click", () => {
+      imagesPopup.style.display = "block";
+    });
+
+    closeBtn.addEventListener("click", () => {
+      imagesPopup.style.display = "none";
+    });
+
+    window.addEventListener("click", (event) => {
+      if (event.target == imagesPopup) {
+        imagesPopup.style.display = "none";
       }
     });
   });
