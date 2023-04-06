@@ -68,8 +68,8 @@ if (isset($_GET['acct']) && isset($_GET['key'])) {
             $hashtags = $accountInfo['hashtags'];
             generateStatus($account, $key, $prompt, $link, $hashtags);
             updateUnassociatedImages($account);
-            header('Location: login.php');
-            exit();
+            header('Location: /index.php');
+            exit;
         } else {
             echo 'Invalid key.';
         }

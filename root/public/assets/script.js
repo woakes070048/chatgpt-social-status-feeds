@@ -63,25 +63,34 @@
     });
   });
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const imagesBtn = document.getElementById("images-btn");
-    const imagesPopup = document.getElementById("images-popup");
-    const closeBtn = document.getElementById("close-btn");
-    const uploadForm = document.querySelector(".upload-form");
-    const imageFileInput = document.getElementById("image-file");
+  function initializeImageButtons() {
+    const imagesBtns = document.querySelectorAll(".images-btn");
+    const imagesPopups = document.querySelectorAll(".images-popup");
+    const closeBtns = document.querySelectorAll(".close-btn");
 
-    imagesBtn.addEventListener("click", () => {
-      imagesPopup.style.display = "block";
+    imagesBtns.forEach((imagesBtn, index) => {
+      imagesBtn.addEventListener("click", () => {
+        imagesPopups[index].style.display = "block";
+      });
     });
 
-    closeBtn.addEventListener("click", () => {
-      imagesPopup.style.display = "none";
+    closeBtns.forEach((closeBtn, index) => {
+      closeBtn.addEventListener("click", () => {
+        imagesPopups[index].style.display = "none";
+      });
     });
 
     window.addEventListener("click", (event) => {
-      if (event.target == imagesPopup) {
-        imagesPopup.style.display = "none";
-      }
+      imagesPopups.forEach((imagesPopup) => {
+        if (event.target == imagesPopup) {
+          imagesPopup.style.display = "none";
+        }
+      });
     });
+  }
+
+  // Call initializeImageButtons after the page has loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    initializeImageButtons();
   });
 })();

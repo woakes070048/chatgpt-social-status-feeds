@@ -25,12 +25,12 @@ foreach ($accounts as $account) :
                     <?php if (!empty($statuses)) :
                         foreach ($statuses as $index => $status) :
                             if (!empty($status)) :
-                        $image = "";
-                        if (!empty($images[$index])) {
-                            if ($images[$index] !== '_NOIMAGE_') {
-                                $image = '<img src="' . htmlspecialchars($images[$index]) . '" class="status-image">';
-                            }
-                        }
+                                $image = "";
+                                if (!empty($images[$index])) {
+                                    if ($images[$index] !== '_NOIMAGE_') {
+                                        $image = '<img src="' . htmlspecialchars($images[$index]) . '" class="status-image">';
+                                    }
+                                }
                     ?>
                                 <li>
                                     <?php echo $image . htmlspecialchars($status, ENT_QUOTES, "UTF-8"); ?>
@@ -64,41 +64,40 @@ foreach ($accounts as $account) :
                 <button class="images-btn" id="images-btn">Images</button>
             </div>
         </div>
+        <div class="images-popup" id="images-popup">
+            <div class="images-box">
+                <div class="images-form">
+                    <h3>Images</h3>
+                    <div class="images-list">
+                        <?php
+                        $image_folder = "images/" . $account['name'] . "/";
+                        $images = glob($image_folder . "*.{jpg,jpeg,png}", GLOB_BRACE);
+                        $count = count($images);
+                        for ($i = 0; $i < $count; $i++) {
+                            $image_name = basename($images[$i]);
+                            echo '<div class="image-item">';
+                            echo '<img src="' . htmlspecialchars($images[$i]) . '" alt="' . htmlspecialchars($image_name) . '" width="150" height="150">';
+                            echo '<form class="delete-form" action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="POST">';
+                            echo '<input type="hidden" name="account_name" value="' . htmlspecialchars($account['name']) . '">';
+                            echo '<input type="hidden" name="image_name" value="' . htmlspecialchars($image_name) . '">';
+                            echo '<button class="delete-image" type="submit" name="delete-image">Delete</button>';
+                            echo '</form>';
+                            echo '</div>';
+                            if (($i + 1) % 3 == 0) {
+                                echo '<div style="clear:both;"></div>';
+                            }
+                        }
+                        ?>
+                    </div>
+                    <form class="upload-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
+                        <label for="image-file">Upload Image:</label>
+                        <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($account['name']); ?>">
+                        <input type="file" name="image-file">
+                        <button class="upload-image" type="submit" name="upload-image">Upload Image</button>
+                        <button type="button" class="close-btn" id="close-btn">Close</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     <?php endif; ?>
 <?php endforeach; ?>
-
-<div class="images-popup" id="images-popup">
-    <div class="images-box">
-        <div class="images-form">
-            <h3>Images</h3>
-            <div class="images-list">
-                <?php
-                $image_folder = "images/" . $account['name'] . "/";
-                $images = glob($image_folder . "*.{jpg,jpeg,png}", GLOB_BRACE);
-                $count = count($images);
-                for ($i = 0; $i < $count; $i++) {
-                    $image_name = basename($images[$i]);
-                    echo '<div class="image-item">';
-                    echo '<img src="' . htmlspecialchars($images[$i]) . '" alt="' . htmlspecialchars($image_name) . '" width="150" height="150">';
-                    echo '<form class="delete-form" action="' . htmlspecialchars($_SERVER["PHP_SELF"]) . '" method="POST">';
-                    echo '<input type="hidden" name="account_name" value="' . htmlspecialchars($account['name']) . '">';
-                    echo '<input type="hidden" name="image_name" value="' . htmlspecialchars($image_name) . '">';
-                    echo '<button class="delete-image" type="submit" name="delete-image">Delete</button>';
-                    echo '</form>';
-                    echo '</div>';
-                    if (($i + 1) % 3 == 0) {
-                        echo '<div style="clear:both;"></div>';
-                    }
-                }
-                ?>
-            </div>
-            <form class="upload-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" enctype="multipart/form-data">
-                <label for="image-file">Upload Image:</label>
-                <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($account['name']); ?>">
-                <input type="file" name="image-file">
-                <button class="upload-image" type="submit" name="upload-image">Upload Image</button>
-                <button type="button" class="close-btn" id="close-btn">Close</button>
-            </form>
-        </div>
-    </div>
-</div>

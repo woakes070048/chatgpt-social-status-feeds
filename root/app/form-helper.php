@@ -47,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (file_exists($accountFile)) {
             unlink($accountFile);
-            echo '<script>
-    alert("Account deleted successfully.");
-</script>';
+            // Account Deleted
+            header('Location: /index.php');
+            exit;
         } else {
             echo '<script>
     alert("Account does not exist.");
@@ -128,6 +128,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (!file_exists($accountFile)) {
                 file_put_contents($accountFile, serialize($accountData));
+                // Account Created
+                header('Location: /index.php');
+                exit;
             } else {
                 echo '<script>
         alert("Account with this name already exists.");
@@ -168,12 +171,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $imgFile = "images/{$accountName}/img";
             if (file_exists($imgFile)) {
-                $images = unserialize(file_get_contents($imgFile));
-                unset($images[$imageName]);
-                file_put_contents($imgFile, serialize($images));
+                $imageLines = file($imgFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                $index = array_search($imagePath, $imageLines); // Updated to search for the full image path
+                if ($index !== false) {
+                    unset($imageLines[$index]);
+                    file_put_contents($imgFile, implode(PHP_EOL, $imageLines));
+                }
             }
         } else {
             // File does not exist
+            header('Location: /index.php');
+            exit;
         }
     }
 }

@@ -281,6 +281,7 @@ button#add-account-btn,
 
 .update-account-btn:hover,
 .upload-image:hover,
+.images-btn:hover,
 .add-account-button:hover,
 .login-container button:hover {
   background-color: #72e937;

@@ -26,7 +26,12 @@ require_once "../app/form-helper.php";
 
 <body>
     <header>
-        <div class="logo"><img src="/assets/logo.png"></div>
+        <div class="logo">
+            <a href="/">
+                <img src="/assets/logo.png" alt="Logo">
+            </a>
+        </div>
+
         <div class="logout-button">
             <form action="<?php echo htmlspecialchars(
                                 $_SERVER["PHP_SELF"]
