@@ -7,7 +7,8 @@ define('MAX_STATUSES', 10);
 
 define('DOMAIN', 'localhost');
 
-define('PROMPT_PREFIX', 'You are a social media marketer. You will respond only with the requested status and nothing else.');
+define('PROMPT_PREFIX', 'Your currant task is:');
+define('SYSTEM_MSG', 'You are a social media marketer. You will respond only with the requested status and nothing else.');
 
-define('ADMIN_USERNAME', 'admin');
-define('ADMIN_PASSWORD', 'pass');
+define('VALID_USERNAME', 'admin');
+define('VALID_PASSWORD', 'pass');

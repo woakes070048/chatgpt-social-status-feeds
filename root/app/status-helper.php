@@ -12,16 +12,21 @@ require_once "../app/admin-helper.php";
 
 function generateStatus($account, $key, $prompt, $link, $hashtags)
 {
-    $message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
+    $system_message = SYSTEM_MSG;
+    $user_message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
+
     if ($hashtags) {
-        $message .= ' Also add relevant hashtags (but donot use #CallToAction).';
+        $user_message .= ' Also add relevant hashtags (but donot use #CallToAction).';
     } else {
-        $message .= ' Also DONOT include any hashtags!';
+        $user_message .= ' Also DONOT include any hashtags!';
     }
 
     $data = [
         'model' => MODEL,
-        'messages' => [['role' => 'user', 'content' => $message]],
+        'messages' => [
+            ['role' => 'system', 'content' => $system_message],
+            ['role' => 'user', 'content' => $user_message]
+        ],
         'temperature' => TEMPERATURE,
     ];
 
@@ -51,7 +56,6 @@ function generateStatus($account, $key, $prompt, $link, $hashtags)
         echo 'Invalid response from API.';
     }
 }
-
 
 function saveStatus($account, $status)
 {
