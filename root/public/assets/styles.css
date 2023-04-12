@@ -353,6 +353,7 @@ button#add-account-btn:hover,
 .status-image {
   width: 150px;
   height: 150px;
+  margin: -10px 10px -10px -10px;
 }
 
 footer {

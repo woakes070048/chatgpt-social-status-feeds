@@ -23,6 +23,7 @@ foreach ($accounts as $account) :
                 ?>
                 <ul>
                     <?php if (!empty($statuses)) :
+                        $count = count($statuses);
                         foreach ($statuses as $index => $status) :
                             if (!empty($status)) :
                                 $image = "";
@@ -33,7 +34,7 @@ foreach ($accounts as $account) :
                                 }
                     ?>
                                 <li>
-                                    <?php echo $image . htmlspecialchars($status, ENT_QUOTES, "UTF-8"); ?>
+                                    <?php echo $image . htmlspecialchars($status['text'], ENT_QUOTES, "UTF-8"); ?>
                                     <form class="delete-status-form" action="<?php echo htmlspecialchars(
                                                                                     $_SERVER["PHP_SELF"]
                                                                                 ); ?>" method="POST">

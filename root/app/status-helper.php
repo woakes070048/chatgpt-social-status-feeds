@@ -61,11 +61,17 @@ function saveStatus($account, $status)
 {
     $statusFile = "../storage/statuses/{$account}";
     $statuses = [];
+
     if (file_exists($statusFile)) {
         $statuses = unserialize(file_get_contents($statusFile));
     }
 
-    array_unshift($statuses, $status);
+    $newStatus = [
+        'text' => $status,
+        'created_at' => date('Y-m-d H:i:s')
+    ];
+
+    array_unshift($statuses, $newStatus);
 
     if (count($statuses) > MAX_STATUSES) {
         $statuses = array_slice($statuses, 0, MAX_STATUSES);
