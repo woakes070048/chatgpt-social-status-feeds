@@ -9,7 +9,7 @@
 
 require_once '../config.php';
 require_once '../app/status-helper.php';
-require_once "../app/admin-helper.php";
+require_once '../app/admin-helper.php';
 
 function updateUnassociatedImages($account)
 {

@@ -3,6 +3,9 @@
 # chatgpt-social-status2rss
 A script and Web GUI that generates statuses using customizable prompts and add them to rss feeds That can be used to auto post statuses.
 
+## NEWEST UPDATES!!
+- Just added multi user support
+- Default login is admin admin
 
 ## Who This Is For
 This is mostly ment anyone who manages social media for others. This allows you to create awesome status updates regularly with little to no effort. Also allows your clients to log in and make changes. This creates feeds that are meant to be fed into software such as Chatpion's rss autoposter.

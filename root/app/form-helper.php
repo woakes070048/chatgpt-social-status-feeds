@@ -3,7 +3,7 @@
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
- * File: image-helper.php
+ * File: form-helper.php
  * Description: ChatGPT API Status Generator
  */
 
@@ -11,6 +11,49 @@ require_once '../config.php';
 require_once "../app/admin-helper.php";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $usersFilePath = '../storage/users/';
+    $currentUser = $_SESSION['username'];
+    $currentUserInfo = json_decode(file_get_contents($usersFilePath . $currentUser), true);
+
+    // Only admins can add/update or delete users
+    if ($currentUserInfo['admin'] == 1) {
+        // If it's an add_update_user request
+        if (isset($_POST['add_update_user'])) {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $admin = isset($_POST['admin']) ? 1 : 0;
+            $totalAccounts = $_POST['total-accounts'];
+            $accountAccess = $_POST['account-access']; // This should be an array
+
+            // Construct user data array
+            $user = array(
+                "username" => $username,
+                "password" => $password,
+                "admin" => $admin,
+                "total-accounts" => $totalAccounts,
+                "account-access" => $accountAccess,
+            );
+
+            // Convert array to JSON
+            $userJson = json_encode($user);
+
+            // Save JSON to file
+            file_put_contents($usersFilePath . $username, $userJson);
+        }
+
+        // If it's a delete_user request
+        elseif (isset($_POST['delete_user'])) {
+            $username = $_POST['username'];
+
+            // Delete the user file
+            unlink($usersFilePath . $username);
+        }
+    } else {
+        // Non-admin user tried to access admin functionality, log them out and redirect to login page
+        unset($_SESSION['username']);
+        header("Location: /login.php"); // Replace with your actual login page URL
+        exit();
+    }
     if (isset($_POST["update"])) {
         $accountName = trim($_POST["account"]);
         $key = trim($_POST["key"]);
@@ -133,13 +176,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 exit;
             } else {
                 echo '<script>
-        alert("Account with this name already exists.");
-       </script>';
+            alert("Account with this name already exists.");
+           </script>';
             }
         } elseif (empty($accountName) || empty($key) || empty($prompt) || empty($link)) { // Check if any required fields are empty
             echo '<script>
-        alert("Please fill in all the required fields.");
-    </script>';
+            alert("Please fill in all the required fields.");
+        </script>';
         }
     } elseif (isset($_POST['upload-image'])) {
         $accountName = $_POST['account_name'];

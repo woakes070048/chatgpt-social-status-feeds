@@ -10,6 +10,17 @@
 // Include the config file
 require_once '../config.php';
 
+// Function to get user data
+function getUserData($username) {
+    $userFile = "../storage/users/$username";
+    if (file_exists($userFile)) {
+        $userData = json_decode(file_get_contents($userFile), true);
+        return $userData;
+    } else {
+        return null;
+    }
+}
+
 // Check if the user is not logged in
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     // If the current file is not login.php, redirect to login.php
@@ -20,11 +31,15 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     }
 
     if (isset($_POST['username']) && isset($_POST['password'])) {
+        // Get user data
+        $userData = getUserData($_POST['username']);
+
         // Validate the login
         $username = $_POST['username'];
         $password = $_POST['password'];
-        if ($username === VALID_USERNAME && $password === VALID_PASSWORD) {
+        if ($userData && $username === $userData['username'] && $password === $userData['password']) {
             $_SESSION['logged_in'] = true;
+            $_SESSION['username'] = $username;
             header('Location: index.php');
             exit();
         }

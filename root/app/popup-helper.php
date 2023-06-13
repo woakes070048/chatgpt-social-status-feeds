@@ -8,6 +8,7 @@
  */
 
 require_once "../app/admin-helper.php";
+require_once "../app/auth-helper.php";
 
 ?>
 <div class="update-account-popup" id="update-account-popup" style="display:none;">
@@ -54,6 +55,71 @@ require_once "../app/admin-helper.php";
                 <button type="submit" class="add-account-button" name="create_account">Create Account</button>
                 <button type="button" id="close-add-popup-btn">Close</button>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="manage-users-popup" id="manage-users-popup" style="display:none;">
+    <div class="manage-users-box">
+        <div class="manage-users-grid">
+            <div class="manage-users-form">
+                <h3>Add/Update User</h3>
+                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" id="manage-user-form">
+                    <label for="username">Username:</label>
+                    <input type="text" name="username" id="username" required>
+
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" required>
+
+                    <div class="admin-checkbox">
+                        <label for="admin">Admin:</label>
+                        <input type="checkbox" name="admin" id="admin">
+                    </div>
+
+                    <div class="form-ta">
+                    <label for="total-accounts">Total Accounts:</label>
+                    <select name="total-accounts" id="total-accounts">
+                        <?php for ($i = 1; $i <= 10; $i++) : ?>
+                            <option value="<?php echo $i; ?>"><?php echo $i; ?></option>
+                        <?php endfor; ?>
+                    </select>
+                        </div>
+
+                    <div class="form-aa">
+                    <label for="account-access">Account Access:</label>
+                    <select name="account-access[]" id="account-access" style="font-size: 1.5em; height: 300px;" multiple >
+                        <?php foreach ($accounts as $account) : ?>
+                            <option value="<?php echo htmlspecialchars($account['name']); ?>">
+                                <?php echo htmlspecialchars($account['name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                        </div>
+                    <button type="submit" class="add-user-button" name="add_update_user">Add/Update User</button>
+                    <button type="button" id="close-manage-users-popup-btn">Close</button>
+                </form>
+            </div>
+
+            <div class="manage-users-list">
+    <h3>Users List</h3>
+    <?php 
+    $userFiles = glob('../storage/users/*'); // Get all .json files in the user directory
+    foreach ($userFiles as $userFile) : 
+        $username = pathinfo($userFile, PATHINFO_FILENAME); // Get the filename without extension as username
+        $user = getUserData($username);
+        if ($user !== null) :
+    ?>
+        <div class="user-item">
+            <p><?php echo htmlspecialchars($username); ?></p>
+            <button class="update-user-btn" data-username="<?php echo htmlspecialchars($username); ?>" data-user='<?php echo json_encode($user); ?>'>Update</button>
+            <button class="delete-user-btn" data-username="<?php echo htmlspecialchars($username); ?>">Delete</button>
+        </div>
+    <?php 
+        endif;
+    endforeach; 
+    ?>
+</div>
+
         </div>
     </div>
 </div>

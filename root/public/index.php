@@ -44,7 +44,8 @@ require_once "../app/form-helper.php";
         <?php require_once "../app/box-helper.php"; ?>
     </div>
 
-    <button id="add-account-btn">Add Account</button>
+    <button id="add-account-btn" style="<?php echo ($userData['admin'] || $currentAccounts < $totalAccounts) ? '' : 'display:none!important;'; ?>">Add Account</button>
+    <button id="manage-users-btn" style="<?php echo ($userData['admin']) ? '' : 'display:none!important;'; ?>">Manage Account</button>
 
     <?php require_once "../app/popup-helper.php"; ?>
 

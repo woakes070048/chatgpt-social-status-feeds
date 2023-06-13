@@ -48,6 +48,52 @@ body {
   border: 1px solid #ebccd1;
 }
 
+/* Manage Users Styles */
+.manage-users-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  border-radius: 4px;
+}
+
+
+.manage-users-box {
+  flex-wrap: wrap;
+  position: relative;
+  margin: 5px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.manage-users-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.manage-users-form, .manage-users-list {
+  padding: 20px;
+}
+
+.user-item {
+  font-size: 1.4em;
+  border: 2px solid #66cc33;
+  padding: 0 10px 0 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-items: stretch;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+}
+
 /* Add Account Styles */
 
 .add-account-popup {
@@ -187,6 +233,10 @@ header {
 .images-btn {
   margin: 1px 10px 20px 20px;
 }
+
+.manage-users-form label,
+.manage-users-form input,
+.manage-users-form textarea,
 .update-account-form label,
 .update-account-form input,
 .update-account-form textarea,
@@ -196,6 +246,22 @@ header {
   display: block;
   margin-bottom: 20px;
   width: 95%;
+}
+
+.admin-checkbox label,
+.admin-checkbox input {
+  width: unset!important;
+  box-shadow: unset!important;
+}
+
+.admin-checkbox input {
+  height: 20px;
+  width: 20px!important;
+}
+
+.form-ta, .form-aa {
+display: flex;
+flex-direction: column;
 }
 
 .hashtags label,
@@ -214,11 +280,16 @@ textarea {
 }
 
 input,
-button {
+button,
+select {
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #66cc33;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+select {
+  margin-bottom: 20px;
 }
 
 button {
@@ -242,6 +313,8 @@ button:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.update-user-btn,
+.add-user-button,
 .update-account-btn,
 .images-btn,
 .add-account-button,
@@ -250,17 +323,19 @@ button:hover {
   background-color: #66cc33;
 }
 
-button#add-account-btn {
+button#add-account-btn,
+button#manage-users-btn {
   margin-left: 40%;
   margin-right: 40%;
-  margin-top: 60px;
-  margin-bottom: 140px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
   width: 20%;
 }
 
 button#close-add-popup-btn,
+button#close-manage-users-popup-btn,
 .close-btn,
 .delete-image,
 .delete-account-btn,
@@ -270,15 +345,19 @@ button#close-add-popup-btn,
 }
 
 button#add-account-btn,
+button#manage-users-btn,
 .generate-button {
   background-color: #0366d6;
 }
 
+.delete-user-btn,
 .delete-status-button,
 .close-update-popup-btn {
   background-color: #f0ad4e;
 }
 
+.update-user-btn:hover,
+.add-user-button:hover,
 .update-account-btn:hover,
 .upload-image:hover,
 .images-btn:hover,
@@ -297,10 +376,12 @@ button#close-add-popup-btn:hover,
 }
 
 button#add-account-btn:hover,
+button#manage-users-btn:hover,
 .generate-button:hover {
   background-color: #286090;
 }
 
+.delete-user-btn:hover,
 .delete-status-button:hover,
 .close-update-popup-btn:hover {
   background-color: #ec971f;
@@ -362,7 +443,7 @@ footer {
   background-color: #66cc33;
   color: #ffffff;
   text-align: center;
-  position: fixed;
+  position: relative;
   bottom: 0;
   left: 0;
   right: 0;
@@ -376,6 +457,18 @@ footer {
 @media (max-width: 768px) {
   .container {
     justify-content: center;
+  }
+
+  .statuses li {
+    flex-wrap: wrap;
+  }
+
+  .status-image {
+    margin: 10px 10px 10px 10px;
+  }
+
+  .delete-status-form {
+    margin-top: 10px;
   }
 
   .account-wrapper {
@@ -392,15 +485,20 @@ footer {
     width: 200px;
   }
 
-  button#add-account-btn {
-    margin: 30px 10px 100px 10px;
+  button#add-account-btn, button#manage-users-btn, button#manage-users-btn {
+    margin: 10px 10px 10px 10px;
     width: 95%;
   }
 
-  .add-account-popup,
+  .add-account-popup, .manage-users-popup,
   .update-account-popup,
   .images-popup {
     width: 95%
+  }
+
+  .manage-users-popup {
+  height:95%;
+  overflow-x: scroll;
   }
 
   .image-item {
@@ -418,4 +516,8 @@ footer {
     margin-left: 0;
     margin-right: 20px;
   }
+
+  .manage-users-grid {
+    grid-template-columns: 1fr;
+}
 }

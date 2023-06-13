@@ -9,8 +9,13 @@
 
 require_once "../app/admin-helper.php";
 
+$userData = getUserData($_SESSION['username']);
+
 foreach ($accounts as $account) :
-    if ($account !== null) :
+    // Skip this iteration if the user doesn't have access to this account
+    if (!$userData['admin'] && !in_array($account['name'], explode(',', $userData['account-access']))) {
+        continue;
+    }
 ?>
         <div class="account-box">
             <div class="statuses">
@@ -100,5 +105,4 @@ foreach ($accounts as $account) :
                 </div>
             </div>
         </div>
-    <?php endif; ?>
 <?php endforeach; ?>
