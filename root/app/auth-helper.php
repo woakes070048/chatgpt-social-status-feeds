@@ -7,8 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-// Include the config file
-require_once '../config.php';
 
 // Function to get user data
 function getUserData($username) {
@@ -19,6 +17,22 @@ function getUserData($username) {
     } else {
         return null;
     }
+}
+
+function getAccountData($accountName)
+{
+    $accountOwner = $_SESSION["username"];
+    $accountFile = "../storage/accounts/{$accountOwner}/{$accountName}";
+
+    if(file_exists($accountFile)) {
+        $accountInfo = json_decode(file_get_contents($accountFile), true);
+        if ($accountInfo !== null) {
+            $accountInfo["name"] = $accountName;  // Adding the account name to the array
+            return $accountInfo;
+        }
+    }
+
+    return null;
 }
 
 // Check if the user is not logged in
@@ -40,15 +54,15 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
         if ($userData && $username === $userData['username'] && $password === $userData['password']) {
             $_SESSION['logged_in'] = true;
             $_SESSION['username'] = $username;
-            header('Location: index.php');
+            header('Location: /home');
             exit();
         }
     }
 } else {
-    // If the user is already logged in and the current file is login.php, redirect to index.php
+    // If the user is already logged in and the current file is login.php, redirect to /home
     $current_file = basename($_SERVER['PHP_SELF']);
     if ($current_file === 'login.php') {
-        header('Location: index.php');
+        header('Location: /home');
         exit();
     }
 }

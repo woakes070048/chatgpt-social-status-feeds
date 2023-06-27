@@ -6,9 +6,10 @@
  * File: login.php
  * Description: ChatGPT API Status Generator
  */
-
 session_start();
+require_once '../config.php';
 require_once "../app/auth-helper.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +20,7 @@ require_once "../app/auth-helper.php";
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="noindex, nofollow">
     <title>AI Status Admin Login</title>
-    <link rel="stylesheet" href="assets/login.css">
+    <link rel="stylesheet" href="assets/css/login.css">
 </head>
 
 <body>

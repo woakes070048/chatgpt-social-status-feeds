@@ -9,11 +9,10 @@
 
 require_once '../config.php';
 require_once '../app/status-helper.php';
-require_once '../app/admin-helper.php';
 
-function updateUnassociatedImages($account)
+function updateUnassociatedImages($accountName)
 {
-    $imageFolder = "images/{$account}/";
+    $imageFolder = "images/{$accountName}/";
     if (!file_exists($imageFolder)) {
         mkdir($imageFolder, 0777, true);
     }
@@ -54,22 +53,37 @@ if (!isset($_GET['acct']) || !isset($_GET['key'])) {
 }
 
 if (isset($_GET['acct']) && isset($_GET['key'])) {
-    $account = $_GET['acct'];
+    $accountName = $_GET['acct'];
     $key = $_GET['key'];
 
-    $accountFile = "../storage/accounts/{$account}";
+    $accountFiles = glob("../storage/accounts/*/{$accountName}");
 
-    if (file_exists($accountFile)) {
-        $accountInfo = unserialize(file_get_contents($accountFile));
+    if (!empty($accountFiles)) {
+        // Get the account file
+        $accountFile = $accountFiles[0];
+        $accountData = json_decode(file_get_contents($accountFile), true);
+        $accountOwner = $accountData['owner'];
 
-        if ($accountInfo['key'] === $key) {
-            $prompt = $accountInfo['prompt'];
-            $link = $accountInfo['link'];
-            $hashtags = $accountInfo['hashtags'];
-            generateStatus($account, $key, $prompt, $link, $hashtags);
-            updateUnassociatedImages($account);
-            header('Location: /index.php');
-            exit;
+        if ($accountData['key'] === $key) {
+            // Check user's API usage limit
+            $userFile = "../storage/users/{$accountOwner}";
+            $userInfo = json_decode(file_get_contents($userFile), true);
+
+            if ($userInfo['used-api-calls'] < $userInfo['max-api-calls']) {
+                // Update user's API usage count
+                $userInfo['used-api-calls'] += 1;
+                file_put_contents($userFile, json_encode($userInfo));
+
+                // Generate status and update images
+                $prompt = $accountData['prompt'];
+                $link = $accountData['link'];
+                $hashtags = $accountData['hashtags'];
+                generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hashtags);
+                updateUnassociatedImages($accountName);
+                echo 'Status created.';
+            } else {
+                echo 'API usage limit reached for the user.';
+            }
         } else {
             echo 'Invalid key.';
         }

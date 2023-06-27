@@ -8,9 +8,8 @@
  */
 
 require_once '../config.php';
-require_once "../app/admin-helper.php";
 
-function generateStatus($account, $key, $prompt, $link, $hashtags)
+function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hashtags)
 {
     $system_message = SYSTEM_MSG;
     $user_message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
@@ -51,19 +50,22 @@ function generateStatus($account, $key, $prompt, $link, $hashtags)
 
     if (isset($response_data['choices'][0]['message']['content'])) {
         $status = $response_data['choices'][0]['message']['content'];
-        saveStatus($account, $status);
+        saveStatus($accountName, $accountOwner, $status); // Pass $accountOwner to saveStatus
     } else {
         echo 'Invalid response from API.';
     }
 }
 
-function saveStatus($account, $status)
+function saveStatus($accountName, $accountOwner, $status)
 {
-    $statusFile = "../storage/statuses/{$account}";
+    $statusFile = "../storage/statuses/{$accountOwner}/{$accountName}"; // Update the status file path
     $statuses = [];
 
     if (file_exists($statusFile)) {
-        $statuses = unserialize(file_get_contents($statusFile));
+        $statuses = json_decode(file_get_contents($statusFile), true);
+        if ($statuses === null) {
+            $statuses = []; // Initialize as an empty array if null
+        }
     }
 
     $newStatus = [
@@ -74,8 +76,35 @@ function saveStatus($account, $status)
     array_unshift($statuses, $newStatus);
 
     if (count($statuses) > MAX_STATUSES) {
-        $statuses = array_slice($statuses, 0, MAX_STATUSES);
+        $statuses = array_slice($statuses, 0, MAX_STATUSES); // Limit the array to MAX_STATUSES
+
+        // Get the image file path
+        $imageFile = "images/{$accountName}/img";
+        $imageAssignments = [];
+
+        if (file_exists($imageFile)) {
+            $imageAssignments = file($imageFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        }
+
+        $oldestStatusIndex = MAX_STATUSES - 1;
+        if (isset($statuses[$oldestStatusIndex])) {
+            $oldestStatus = $statuses[$oldestStatusIndex];
+
+            if (isset($oldestStatus['image_name']) && $oldestStatus['image_name'] !== "_NOIMAGE_") {
+                $imagePath = "images/{$accountName}/" . basename($oldestStatus['image_name']);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
+            // Remove the oldest status and image assignment from the arrays
+            array_splice($statuses, $oldestStatusIndex, 1);
+            array_splice($imageAssignments, $oldestStatusIndex, 1);
+
+            // Save the updated image assignments to the file
+            file_put_contents($imageFile, implode(PHP_EOL, $imageAssignments));
+        }
     }
 
-    file_put_contents($statusFile, serialize($statuses));
+    file_put_contents($statusFile, json_encode($statuses));
 }
