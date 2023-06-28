@@ -34,7 +34,7 @@ To ensure optimal performance and resource management, you can set limits on API
 #### Get Started
 Getting started is quick and easy! Simply edit the config.php file to configure your API key and other settings. For the default admin login credentials, please refer to the storage/users/admin file.
 
-### Change Log - Version X.X.X
+### Change Log - Version 2.0.1
 
 - Added
  - Added optimization on upload of images.
@@ -62,7 +62,7 @@ Getting started is quick and easy! Simply edit the config.php file to configure 
  - Updated the RSS and cron URLs to include the user name and account information.
    - This change simplifies logic handling with reduced PHP requirements.
 
-###To-Do List
+### To-Do List
 We're continuously working to enhance the ChatGPT Social Status2RSS experience. Here are some items on our to-do list:
 -Polish the GUI to provide an even more delightful user experience.
 -Explore the possibility of generating AI-powered images to further enrich your statuses.
