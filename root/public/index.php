@@ -64,7 +64,7 @@ if (isset($_GET['page'])) {
         </div>
 
         <div class="logout-button">
-            <form action="/index.php" method="POST">
+            <form action="/login.php" method="POST">
                 <button class="orange-button" type="submit" name="logout">Logout</button>
             </form>
         </div>
