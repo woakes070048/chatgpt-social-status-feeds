@@ -3,50 +3,29 @@
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
- * File: /pages/home.php
+ * File: ../app/pages/home.php
  * Description: ChatGPT API Status Generator
 */
 ?>
+
 <div class="account-box">
     <?php
-    $accounts = [];  // Initialize accounts array
     $accountOwner = $_SESSION['username'];
 
-    // The user will only see their accounts
-    foreach (glob("../storage/accounts/{$accountOwner}/*") as $accountFile) {
-        // Parse the account name from the file structure
-        $accountName = basename($accountFile);
-        $accounts[] = $accountName;
-    }
+    // Get the user's account directories
+    $accountDirs = glob("../storage/accounts/{$accountOwner}/*", GLOB_ONLYDIR);
 
-    if (empty($accounts)) {
+    if (empty($accountDirs)) {
         echo 'Please set up an account!';
         return;
     }
 
-    foreach ($accounts as $accountName) :
-        $accountFile = "../storage/accounts/{$accountOwner}/{$accountName}";
-        if (!file_exists($accountFile)) {
-            // Skip this account if the file does not exist
-            continue;
-        }
-
-        $account = json_decode(file_get_contents($accountFile), true);
-
-        $statusFile = "../storage/statuses/{$accountOwner}/{$accountName}";
-        if (!file_exists($statusFile)) {
-            // Status file does not exist, initialize statuses as empty array
-            $statuses = [];
-        } else {
-            $statusesJson = file_get_contents($statusFile);
-            $statuses = !empty($statusesJson) ? json_decode($statusesJson, true) : [];
-        }
-
-        $imageFile = "images/{$accountName}/img";
-        $images = file_exists($imageFile) ? file($imageFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) : [];
-
-        $cronUrl = htmlspecialchars(getCronUrl($accountName, $account['key']));
-        $feedUrl = htmlspecialchars(getFeedUrl($accountName, $account['key']));
+    foreach ($accountDirs as $accountDir) :
+        $accountName = basename($accountDir);
+        $acctInfo = getAcctInfo($accountOwner, $accountName);
+        $statuses = getStatusInfo($accountOwner, $accountName);
+        $cronUrl = htmlspecialchars("/cron.php?user={$accountOwner}&acct={$accountName}&key={$acctInfo['key']}");
+        $feedUrl = htmlspecialchars("/feeds.php?user={$accountOwner}&acct={$accountName}&key={$acctInfo['key']}");
     ?>
         <div class="statuses">
             <h3><?php echo htmlspecialchars($accountName); ?> Statuses</h3>
@@ -55,12 +34,10 @@
                     <?php foreach ($statuses as $index => $status) : ?>
                         <?php if (!empty($status['text'])) : ?>
                             <?php
-                            $image = "";
-                            if (!empty($images[$index])) {
-                                if ($images[$index] !== '_NOIMAGE_') {
-                                    $image = '<img src="' . htmlspecialchars($images[$index]) . '" class="status-image">';
-                                }
-                            }
+                            $imagePath = $status['status-image'] !== null
+                                ? "images/{$accountOwner}/{$accountName}/{$status['status-image']}"
+                                : 'assets/images/default.jpg';
+                            $image = '<img src="' . htmlspecialchars($imagePath) . '" class="status-image">';
                             ?>
                             <li>
                                 <?php echo $image; ?>

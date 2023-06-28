@@ -1,0 +1,218 @@
+/* ================================================
+    STATUS MANAGEMENT STYLES
+================================================ */
+.account-box {
+  background-color: #ffffff;
+  min-height: calc(100% - 85px);
+  border-radius: 20px 20px 4px 4px;
+  border-bottom: 2px solid #66cc33;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.statuses {
+  padding: 10px;
+  max-width: 100%;
+  overflow-x: overlay;
+}
+
+.statuses ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.statuses li {
+  display: flex;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20%;
+  border: 2px solid #66cc33;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.status-image {
+  width: calc(100% + 20px);
+  height: 249px;
+  margin: -10px 10px 10px -10px;
+}
+
+.cron-feed-addresses {
+  padding-top: 20px;
+  border-top: 2px solid #66cc33;
+  border-bottom: 2px solid #66cc33;
+  width: 100%;
+}
+
+.cron-feed-addresses > p {
+  margin: 0 10px 20px 10px;
+}
+
+/* ================================================
+    GALLERY PAGE STYLES
+================================================ */
+
+.images-list {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid #66cc33;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.image-item {
+  width: 33.33%;
+  height: 225px;
+  border: 1px solid #66cc33;
+  box-sizing: border-box;
+}
+
+.image-item img {
+  width: 100%;
+  height: 225px;
+}
+
+.no-images {
+  margin: 20px;
+  font-size: 2dropem;
+}
+
+.delete-image {
+  position: relative;
+  bottom: 55px;
+  left: 10px;
+}
+
+#account_selection_form > select {
+  border: 1px solid #66cc33;
+}
+
+.dropzone {
+  min-height: 304px!important;
+  border: 2px solid #66cc33!important;
+  background: white!important;
+  padding: 20px 20px!important;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  overflow-y: overlay;
+  max-height: 400px;
+}
+
+.dropzone .dz-message {
+  margin-top: 60px;
+}
+
+.dz-button {
+  box-shadow: unset;
+}
+
+.dropzone .dz-preview .dz-image {
+  width: 100px!important;
+  height: 100px!important;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination a {
+  display: inline-block;
+  margin: 0 5px;
+  background-color: #66cc33;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.pagination a.active {
+  background-color: #333;
+  color: #fff;
+}
+
+.pagination a:hover {
+  background-color: #0366d6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* ================================================
+    ACCOUNT/USER/GALLERY EDITING STYLES
+================================================ */
+.edit-users-box,
+.edit-accounts-box,
+.edit-images-box {
+  display: flex;
+  flex-direction: row;
+  border-radius: 20px 20px 0 0;
+  background-color: #ffffff;
+  min-height: 100vh;
+}
+
+.edit-users-form,
+.edit-accounts-form,
+.edit-images-form {
+  width: 25%;
+  padding: 20px;
+  background-color: #d6d6d6;
+}
+
+.edit-users-list,
+.edit-accounts-list,
+.edit-images-list {
+  width: 75%;
+}
+
+.user-item,
+.account-item {
+  min-width: 30%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #66cc33;
+  background-color: aliceblue;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  float: left;
+}
+
+.user-item button,
+.account-item button {
+  float: left;
+  margin-right: 20px;
+}
+
+.selections {
+  display: flex;
+  flex-direction: column;
+}
+
+.selections label,
+.selections select {
+  flex: 1;
+}
+
+.account-details {
+  display: inline-flex;
+  padding: 10px;
+  margin-top: 39px;
+  border: 1px solid #66cc33;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-details p {
+  margin-inline: 10px;
+}

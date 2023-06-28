@@ -3,85 +3,27 @@
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
- * File: /form/gallery.php
- * Description: ChatGPT API Status Generator
- */
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['upload_image'])) {
-        $accountName = $_POST['account_name'];
-        $imageFolder = "images/" . ($accountName) . "/";
-        if (!file_exists($imageFolder)) {
-            mkdir($imageFolder, 0755, true);
-        }
-
-        $imageError = $_FILES['image-file']['error'];
-
-        if ($imageError === UPLOAD_ERR_OK) {
-            $imageTmpName = $_FILES['image-file']['tmp_name'];
-            $extension = pathinfo($_FILES['image-file']['name'], PATHINFO_EXTENSION);
-            $newFileName = generateUniqueFileName($extension);
-            $imagePath = $imageFolder . $newFileName;
-
-            if (move_uploaded_file($imageTmpName, $imagePath)) {
-                // Optimize and resize the uploaded image
-                optimizeAndResizeImage($imagePath);
-
-                // File uploaded and optimized successfully
-                header("Location: /gallery/" . urlencode($accountName));
-                exit;
-            } else {
-                // Handle the file move error
-                echo "Error moving uploaded file.";
-            }
-        } else {
-            // Handle the upload error
-            echo "Error uploading file.";
-        }
-    } elseif (isset($_POST['delete-image'])) {
-        $accountName = $_POST['account_name'];
-        $imageName = $_POST['image_name'];
-        $imagePath = "images/{$accountName}/{$imageName}";
-
-        if (file_exists($imagePath)) {
-            unlink($imagePath);
-            // File deleted successfully
-
-            $imgFile = "images/{$accountName}/img";
-            if (file_exists($imgFile)) {
-                $imageLines = file($imgFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-                $index = array_search($imagePath, $imageLines);
-                if ($index !== false) {
-                    unset($imageLines[$index]);
-                    file_put_contents($imgFile, implode(PHP_EOL, $imageLines));
-                }
-            }
-        }
-    }
-}
-?>
-
-<?php
-/*
- * Project: ChatGPT API
- * Author: Vontainment
- * URL: https://vontainment.com
- * File: /pages/gallery.php
+ * File: ../app/pages/gallery.php
  * Description: ChatGPT API Image Editor
  */
 ?>
 
 <?php
 $accountOwner = $_SESSION['username'];
-$accountDirs = glob("../storage/accounts/{$accountOwner}/*");
+$accountDirs = glob("../storage/accounts/{$accountOwner}/*", GLOB_ONLYDIR);
+$accountDirs = array_filter($accountDirs, 'is_dir');  // Only keep directories
 $selectedAccountName = isset($_GET['acct']) ? $_GET['acct'] : '';
+
 if (!$selectedAccountName && count($accountDirs) > 0) {
     $selectedAccountName = basename($accountDirs[0]);
     header("Location: /gallery/$selectedAccountName");
     exit();
 }
-?>
 
+?>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css" rel="stylesheet" />
 <div class="edit-images-box">
     <div class="edit-images-form">
         <h3>Select Account</h3>
@@ -90,9 +32,11 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
             <select name="account_name" id="account_name" required>
                 <?php
                 foreach ($accountDirs as $accountDir) {
-                    $accountName = basename($accountDir);
-                    $selected = ($selectedAccountName === $accountName) ? 'selected' : '';
-                    echo "<option value=\"$accountName\" $selected>$accountName</option>";
+                    if (is_dir($accountDir)) {
+                        $accountName = basename($accountDir);
+                        $selected = ($selectedAccountName === $accountName) ? 'selected' : '';
+                        echo "<option value=\"$accountName\" $selected>$accountName</option>";
+                    }
                 }
                 ?>
             </select>
@@ -103,24 +47,23 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
             <input type="hidden" name="page" value="gallery">
             <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($selectedAccountName); ?>">
             <div class="fallback">
-                <input name="image-file" type="file" multiple />
+                <input name="image-file[]" type="file" multiple />
             </div>
         </form>
-
-
 
         <button class="reload-btn" onclick="window.location.reload();">Reload Page</button>
     </div>
 
     <div class="edit-images-list">
-        <h3>Images</h3>
         <div class="images-list">
             <?php
             $accountName = $selectedAccountName;
-            $image_folder = "images/{$accountName}/";
-            $images = glob($image_folder . "*.{jpg,jpeg,png}", GLOB_BRACE);
+            $acctInfo = getAcctInfo($accountOwner, $accountName);
+            $statusInfo = getStatusInfo($accountOwner, $accountName);
+            $image_folder = "../storage/images/{$accountOwner}/{$selectedAccountName}/";
+            $images = glob($image_folder . "*.jpg", GLOB_BRACE);
             $count = count($images);
-            $imagesPerPage = 6;
+            $imagesPerPage = 9;
             $totalPages = ceil($count / $imagesPerPage);
             $currentPage = isset($_GET['p']) ? max(1, min((int)$_GET['p'], $totalPages)) : 1;
             $startIndex = ($currentPage - 1) * $imagesPerPage;
@@ -133,17 +76,16 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
                     $image_name = basename($images[$i]);
             ?>
                     <div class="image-item">
-                        <div class="image-placeholder" style="background-color: #66cc33;"></div>
-                        <img src="/<?php echo htmlspecialchars($images[$i]); ?>" alt="<?php echo htmlspecialchars($image_name); ?>">
-                        <form class="delete-form" action="/gallery/<?php echo urlencode($selectedAccountName); ?>" method="POST">
+                    <img src="/gallery/<?php echo urlencode($selectedAccountName); ?>/<?php echo urlencode($image_name); ?>" alt="<?php echo htmlspecialchars($image_name); ?>">
+                        <form class="delete-image" action="/gallery/<?php echo urlencode($selectedAccountName); ?>" method="POST">
                             <input type="hidden" name="page" value="gallery">
                             <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($accountName); ?>">
                             <input type="hidden" name="image_name" value="<?php echo htmlspecialchars($image_name); ?>">
-                            <button class="red-button" type="submit" name="delete-image">Delete Image</button>
+                            <button class="red-button" type="submit" name="delete_image">Delete Image</button>
                         </form>
                     </div>
             <?php
-                    if (($i + 1) % 3 == 0) {
+                    if (($i + 1) % 3 == 0 && $i != $endIndex - 1) {
                         echo '<div style="clear:both;"></div>';
                     }
                 }
@@ -164,6 +106,7 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
             </div>
         <?php endif; ?>
     </div>
+
 </div>
 <script>
     Dropzone.autoDiscover = false;
@@ -185,6 +128,9 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
                 if (this.getQueuedFiles().length > 0 && this.getUploadingFiles().length < 6) {
                     // If there are more queued files and fewer than 6 uploading files, start the upload for the next file
                     this.processQueue();
+                } else if (this.getQueuedFiles().length === 0 && this.getUploadingFiles().length === 0) {
+                    // All images have finished uploading
+                    window.location.href = "/gallery/<?php echo urlencode($selectedAccountName); ?>";
                 }
             });
             this.on("error", function(file, errorMessage) {

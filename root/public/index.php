@@ -8,57 +8,49 @@
 */
 session_start();
 require_once '../config.php';
-require_once "../app/auth-helper.php";
-require_once '../app/status-helper.php';
+require_once '../lib/common-lib.php';
+require_once '../lib/status-lib.php';
 
-// Get the value of "?page=" from the URL
-$page = isset($_GET['page']) ? $_GET['page'] : '';
+// Check if the user is not logged in
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+        header('Location: login.php');
+        exit();
+    }
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
 
-// Path to the forms and helpers directories
-$helpersDir = '../helpers/';
-$formsDir = '../forms/';
+    // Check if $page-helper.php exists
+    $helperFile = "../app/helpers/" . $page . "-helper.php";
+    if (file_exists($helperFile)) {
+        require_once($helperFile);
+    }
 
-// Check if the PHP file exists in the helpers directory
-$helpersFile = $helpersDir . $page . '.php';
-if (file_exists($helpersFile)) {
-    require_once($helpersFile);
-}
+    // Check if $page-forms.php exists
+    $formsFile = "../app/forms/" . $page . "-forms.php";
+    if (file_exists($formsFile)) {
+        require_once($formsFile);
+    }
 
-// Check if the PHP file exists in the forms directory
-$formsFile = $formsDir . $page . '.php';
-if (file_exists($formsFile)) {
-    require_once($formsFile);
+    // Check if $page.php exists
+    $pageFile = "../app/pages/" . $page . ".php";
+    if (file_exists($pageFile)) {
+        $pageOutput = $pageFile;
+    } else {
+        $pageOutput = "../lib/404-lib.php";
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- All the scripts at the end -->
-        <script src="/assets/js/script.js"></script>
-    <script src="/assets/js/tabs.js"></script>
-    <?php
-    if ($page) {
-        // Check if the 'page' parameter equals 'gallery'
-        if ($page === 'gallery') {
-            echo '
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
-            <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css" rel="stylesheet" />
-            ';
-        }
-
-        // Check if the additional JavaScript file exists
-        $additionalJsFile = __DIR__ . '/assets/js/inc/' . $page . '.js';
-        if (file_exists($additionalJsFile)) {
-            echo '<script src="/assets/js/inc/' . $page . '.js"></script>';
-        }
-    }
-    ?>
+    <script src="/assets/js/header-scripts.js"></script>
     <link rel="stylesheet" href="/assets/css/styles.css">
-    <link rel="stylesheet" href="/assets/css/tabs.css">
+    <link rel="stylesheet" href="/assets/css/pages.css">
+    <link rel="stylesheet" href="/assets/css/mobile.css">
 
     <title>Dashboard</title>
 </head>
@@ -72,45 +64,48 @@ if (file_exists($formsFile)) {
         </div>
 
         <div class="logout-button">
-            <form action="/login.php" method="POST">
-                <button type="submit" name="logout">Logout</button>
+            <form action="/index.php" method="POST">
+                <button class="orange-button" type="submit" name="logout">Logout</button>
             </form>
         </div>
     </header>
 
     <!-- Tab links -->
     <div class="tab">
-    <a href="/home"><button class="tablinks">Manage Statuses</button></a>
-    <a href="/accounts"><button class="tablinks">Manage Accounts</button></a>
-    <a href="/gallery"><button class="tablinks">Manage Gallery</button></a>
-    <?php $userData = getUserData($_SESSION['username']); if ($userData['admin'] == 1) : ?>
-        <a href="/users"><button class="tablinks">Manage Users</button></a>
-    <?php endif; ?>
-</div>
+        <a href="/home"><button class="tablinks">Manage Statuses</button></a>
+        <a href="/accounts"><button class="tablinks">Manage Accounts</button></a>
+        <a href="/gallery"><button class="tablinks">Manage Gallery</button></a>
+        <?php
+        if (isset($_SESSION['username'])) {
+            $userData = getUserInfo($_SESSION['username']);
+            if ($userData['admin'] == 1) :
+        ?>
+                <a href="/users"><button class="tablinks">Manage Users</button></a>
+            <?php
+            elseif ($userData['admin'] == 0) :
+            ?>
+                <a href="/info"><button class="tablinks">Change Password</button></a>
+        <?php
+            endif;
+        }
+        ?>
+    </div>
 
+    <!-- Tab links -->
     <!-- Tab content -->
     <?php
-if($page) {
-    $file = '../pages/' . $page . '.php';
-
-    if(file_exists($file)) {
-        include($file);
-    } else {
-        // Handle the error, for example, redirect to a 404 page
-        // header('Location: /404.html');
-        // exit();
+    if (isset($pageOutput)) {
+        require_once $pageOutput;
     }
-} else {
-    // Handle the error, for example, redirect to a homepage
-    // header('Location: /');
-    // exit();
-}
-?>
+    ?>
+    <!-- Tab content -->
     <footer>
         <p>&copy;
             <?php echo date("Y"); ?> Vontainment. All Rights Reserved.
         </p>
     </footer>
-    <?php require_once '../app/support-helper.php'; ?>
+    <script src="/assets/js/footer-scripts.js"></script>
+    <?php require_once '../lib/support-lib.php'; ?>
 </body>
+
 </html>

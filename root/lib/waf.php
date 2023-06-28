@@ -1,11 +1,19 @@
 <?php
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: waf.php
+ * Description: ChatGPT API Status Generator
+ */
 
 // Define the list of disallowed characters and patterns
 $disallowed_chars = array("<?", "?>", "<%", "%>", "<script", "</script>");
 $disallowed_patterns = array("/bin/sh", "exec(", "system(", "passthru(", "shell_exec(", "phpinfo(");
 
 // Function to check if a string contains a disallowed character
-function contains_disallowed_chars($str) {
+function contains_disallowed_chars($str)
+{
     global $disallowed_chars;
     foreach ($disallowed_chars as $char) {
         if (strpos($str, $char) !== false) {
@@ -16,7 +24,8 @@ function contains_disallowed_chars($str) {
 }
 
 // Function to check if a string contains a disallowed pattern
-function contains_disallowed_patterns($str) {
+function contains_disallowed_patterns($str)
+{
     global $disallowed_patterns;
     foreach ($disallowed_patterns as $pattern) {
         if (strpos($str, $pattern) !== false) {

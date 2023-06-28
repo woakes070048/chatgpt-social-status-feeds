@@ -15,7 +15,7 @@ function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hash
     $user_message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
 
     if ($hashtags) {
-        $user_message .= ' Also add relevant hashtags (but donot use #CallToAction).';
+        $user_message .= ' Also add relevant hashtags (but do not use #CallToAction).';
     } else {
         $user_message .= ' Also DONOT include any hashtags!';
     }
@@ -45,7 +45,6 @@ function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hash
     error_log("API request: " . json_encode($data), 3, "../api.log"); // Log the request for debugging
     error_log("API response: " . $response, 3, "../api.log"); // Log the response for debugging
 
-
     $response_data = json_decode($response, true);
 
     if (isset($response_data['choices'][0]['message']['content'])) {
@@ -58,53 +57,57 @@ function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hash
 
 function saveStatus($accountName, $accountOwner, $status)
 {
-    $statusFile = "../storage/statuses/{$accountOwner}/{$accountName}"; // Update the status file path
+    $statusFile = "../storage/accounts/{$accountOwner}/{$accountName}/statuses";
     $statuses = [];
 
     if (file_exists($statusFile)) {
         $statuses = json_decode(file_get_contents($statusFile), true);
         if ($statuses === null) {
-            $statuses = []; // Initialize as an empty array if null
+            $statuses = [];
         }
     }
 
+    // Check if the current amount of statuses is more than MAX_STATUSES
+    if (count($statuses) >= MAX_STATUSES) {
+        $oldestStatus = array_pop($statuses);
+        $statusImage = $oldestStatus['status-image'];
+
+        if ($statusImage !== null) {
+            $imagePath = "../storage/images/{$accountOwner}/{$accountName}/{$statusImage}";
+
+            // Delete the image associated with the oldest status
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+    }
+
+    // Randomly pick an image file from the directory
+    $imageDirectory = "../storage/images/{$accountOwner}/{$accountName}/";
+    $imageFiles = glob($imageDirectory . "*.jpg");
+
+    if (empty($imageFiles)) {
+        $statusImage = null;
+    } else {
+        $randomImageFile = $imageFiles[array_rand($imageFiles)];
+
+        // Move the image file to the new location
+        $imageFileName = basename($randomImageFile);
+        $newImageLocation = "images/{$accountOwner}/{$accountName}/{$imageFileName}";
+        rename($randomImageFile, $newImageLocation);
+
+        $statusImage = $imageFileName;
+    }
+
+    // Add the "status-image" property to the new status
     $newStatus = [
         'text' => $status,
-        'created_at' => date('Y-m-d H:i:s')
+        'created_at' => date('Y-m-d H:i:s'),
+        'status-image' => $statusImage
     ];
 
     array_unshift($statuses, $newStatus);
 
-    if (count($statuses) > MAX_STATUSES) {
-        $statuses = array_slice($statuses, 0, MAX_STATUSES); // Limit the array to MAX_STATUSES
-
-        // Get the image file path
-        $imageFile = "images/{$accountName}/img";
-        $imageAssignments = [];
-
-        if (file_exists($imageFile)) {
-            $imageAssignments = file($imageFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        }
-
-        $oldestStatusIndex = MAX_STATUSES - 1;
-        if (isset($statuses[$oldestStatusIndex])) {
-            $oldestStatus = $statuses[$oldestStatusIndex];
-
-            if (isset($oldestStatus['image_name']) && $oldestStatus['image_name'] !== "_NOIMAGE_") {
-                $imagePath = "images/{$accountName}/" . basename($oldestStatus['image_name']);
-                if (file_exists($imagePath)) {
-                    unlink($imagePath);
-                }
-            }
-
-            // Remove the oldest status and image assignment from the arrays
-            array_splice($statuses, $oldestStatusIndex, 1);
-            array_splice($imageAssignments, $oldestStatusIndex, 1);
-
-            // Save the updated image assignments to the file
-            file_put_contents($imageFile, implode(PHP_EOL, $imageAssignments));
-        }
-    }
-
+    // Save the updated statuses JSON data
     file_put_contents($statusFile, json_encode($statuses));
 }

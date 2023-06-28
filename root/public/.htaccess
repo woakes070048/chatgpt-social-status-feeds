@@ -8,6 +8,12 @@ RewriteRule ^$ /home [L,R=301]
 RewriteCond %{THE_REQUEST} \s/index\.php\s [NC]
 RewriteRule ^index\.php$ /home [L,R=301]
 
+# Rewrite /gallery/ACCT/IMAGE to index.php?page=gallery&acct=ACCT&image=IMAGE
+RewriteCond %{REQUEST_URI} ^/gallery/([^/]+)/([a-zA-Z0-9]+\.jpg)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^gallery/([^/]+)/([a-zA-Z0-9]+\.jpg)$ /index.php?page=gallery&acct=$1&image=$2 [L]
+
 # Rewrite /gallery/acct/1 to index.php?page=gallery&acct=ACCT&p=1
 RewriteCond %{REQUEST_URI} ^/gallery/([^/]+)/(\d+)$
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -21,7 +27,7 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^gallery/([^/]+)/?$ /index.php?page=gallery&acct=%1 [L]
 
 # Internally rewrite /home, /users, /accounts, /gallery to index.php?page=home, index.php?page=gallery, index.php?page=users, and index.php?page=accounts
-RewriteCond %{REQUEST_URI} ^/(home|users|accounts|gallery)$
+RewriteCond %{REQUEST_URI} ^/(home|users|accounts|gallery|info)$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/]*)$ /index.php?page=$1 [L]

@@ -1,0 +1,103 @@
+/* ================================================
+    RESPONSIVE STYLES
+================================================ */
+@media (max-width: 768px) {
+  /* General Styles */
+  body {
+    margin: 0 0 70px;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 96%;
+  }
+
+.support-popup iframe {
+    height: 100%;
+    width: 100%;
+}
+
+.myacct-popup, .support-popup {
+  width: 100%;
+  height: 100%;
+}
+
+.myacct-closeButton, .support-closeButton {
+  right: 30px;
+  top: 20px;
+}
+
+  select,
+  .status-image,
+  .edit-users-form,
+  .edit-accounts-form,
+  .edit-images-form,
+  .edit-users-list,
+  .edit-accounts-list,
+  .edit-images-list,
+  .dropzone {
+    width: 100%;
+  }
+
+  /* Logo Styles */
+  .logo img {
+    width: 200px;
+  }
+
+  /* Account Styles */
+  .account-details {
+    width: 90%;
+    flex-direction: column;
+  }
+
+  .account-item,
+  .user-item {
+    width: 90%;
+  }
+
+  .account-box {
+    width: 100%;
+    flex: unset;
+    margin: 0;
+  }
+
+  /* Status Styles */
+  .statuses li {
+    width: 100%;
+  }
+
+  .status-image {
+    height: 200px;
+    margin: -10px -10px 10px -10px;
+  }
+
+  .delete-status-form {
+    margin-top: 10px;
+  }
+
+  /* Edit Styles */
+  .edit-users-box,
+  .edit-accounts-box,
+  .edit-images-box {
+    flex-wrap: wrap;
+  }
+
+  /* Image Styles */
+  .image-item {
+    width: 100%;
+  }
+
+  /* Pagination Styles */
+  .pagination {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    flex-direction: row;
+  }
+
+  .pagination a {
+    margin: 5px 5px;
+  }
+}

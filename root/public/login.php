@@ -8,7 +8,8 @@
  */
 session_start();
 require_once '../config.php';
-require_once "../app/auth-helper.php";
+require_once '../lib/common-lib.php';
+require_once '../lib/auth-lib.php';
 
 ?>
 
@@ -25,7 +26,7 @@ require_once "../app/auth-helper.php";
 
 <body>
     <div class="login-box">
-        <img src="assets/logo.png" alt="Logo" class="logo">
+        <img src="assets/images/logo.png" alt="Logo" class="logo">
         <h2>AI Status Admin</h2>
         <form method="post">
             <label>Username:</label>
