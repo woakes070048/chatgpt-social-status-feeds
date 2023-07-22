@@ -10,7 +10,7 @@
  function outputRssFeed($accountName, $accountOwner, $acctInfo, $key)
  {
      // Paths according to new storage structure
-     $statusPath = "../storage/accounts/{$accountOwner}/{$accountName}/statuses";
+     $statusPath = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";
      $imageFolderPath = "images/{$accountOwner}/{$accountName}/";
 
      // Read the status file and decode it into an associative array

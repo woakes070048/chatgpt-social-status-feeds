@@ -37,10 +37,47 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.status-text {
+  overflow-x: overlay;
+  height: 250px;
+}
+
 .status-image {
   width: calc(100% + 20px);
-  height: 249px;
+  height: 220px;
   margin: -10px 10px 10px -10px;
+  overflow-x: hidden;
+}
+
+.delete-status-button {
+  width: 100%;
+  margin: 20px 0 10px 0;
+}
+
+.share-buttons {
+display: flex;
+background-color:aliceblue;
+flex-wrap: wrap;
+flex-direction: row;
+justify-content: space-around;
+margin: 0 -10px 0 -10px;
+padding: 10px;
+border-top: 2px solid #66cc33;
+border-bottom: 2px solid #66cc33;
+
+}
+
+.share-buttons svg {
+  -webkit-filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
+          filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
+  transition: -webkit-filter 0.3s ease-in-out;
+  transition: filter 0.3s ease-in-out;
+  transition: filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out;
+}
+
+.share-buttons svg:hover {
+  -webkit-filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+          filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
 }
 
 .cron-feed-addresses {

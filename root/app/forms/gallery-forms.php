@@ -11,7 +11,7 @@
     if (isset($_POST['upload_image'])) {
         $accountName = $_POST['account_name'];
         $accountOwner = $_SESSION['username'];
-        $imageFolder = "../storage/images/{$accountOwner}/{$accountName}/";
+        $imageFolder = IMAGES_DIR . "/{$accountOwner}/{$accountName}/";
 
         if (!file_exists($imageFolder)) {
             mkdir($imageFolder, 0755, true);
@@ -41,7 +41,7 @@
         $accountName = $_POST['account_name'];
         $accountOwner = $_SESSION['username'];
         $imageName = $_POST['image_name'];
-        $imagePath = "../storage/images/{$accountOwner}/{$accountName}/{$imageName}";
+        $imagePath = IMAGES_DIR . "/{$accountOwner}/{$accountName}/{$imageName}";
 
         if (!file_exists($imagePath)) {
             return;
@@ -56,7 +56,7 @@
         $accountName = $_GET['acct'];
         $imageName = $_GET['image'];
 
-        $imagePath = "../storage/images/{$accountOwner}/{$accountName}/{$imageName}";
+        $imagePath = IMAGES_DIR . "/{$accountOwner}/{$accountName}/{$imageName}";
 
         if (file_exists($imagePath)) {
             header('Content-Type: image/jpeg');

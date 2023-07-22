@@ -6,12 +6,14 @@
  * File: login.php
  * Description: ChatGPT API Status Generator
  */
+
 session_start();
 require_once '../config.php';
+require_once '../lib/waf-lib.php';
 require_once '../lib/common-lib.php';
 require_once '../lib/auth-lib.php';
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en-US">

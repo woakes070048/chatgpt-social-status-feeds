@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($password === $password2) {
             // Load user data from file
-            $userFile = "../storage/users/{$username}";
+            $userFile = USERS_DIR . "/{$username}";
             if (file_exists($userFile)) {
                 $userData = json_decode(file_get_contents($userFile), true);
 

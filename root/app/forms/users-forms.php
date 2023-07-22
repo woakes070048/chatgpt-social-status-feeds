@@ -48,13 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userJson = json_encode($userData);
 
         // Define the path for the user file
-        $userFile = "../storage/users/{$username}";
+        $userFile = USERS_DIR . "/{$username}";
 
         // Save JSON to file
         file_put_contents($userFile, $userJson);
 
         // Create directories if they don't exist
-        $accountsDir = "../storage/accounts/{$username}";
+        $accountsDir = ACCOUNTS_DIR . "/{$username}";
         if (!is_dir($accountsDir)) {
             mkdir($accountsDir, 0755, true);
         }
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Create directories if they don't exist
-        $imageDir2 = "../storage/images/{$username}";
+        $imageDir2 = IMAGES_DIR . "/{$username}";
         if (!is_dir($imageDir2)) {
             mkdir($imageDir2, 0755, true);
         }
@@ -90,10 +90,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Define the paths
-        $userFile = "../storage/users/{$username}";
-        $accountDirectory = "../storage/accounts/{$username}";
+        $userFile = USERS_DIR . "/{$username}";
+        $accountDirectory = ACCOUNTS_DIR . "/{$username}";
         $imageDirectory = "images/{$username}";
-        $imageDirectory2 = "../storage/images/{$username}";
+        $imageDirectory2 = IMAGES_DIR . "/{$username}";
 
         // Delete the account directory and its contents
         if (is_dir($accountDirectory)) {

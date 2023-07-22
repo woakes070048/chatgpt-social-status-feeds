@@ -12,14 +12,10 @@ require_once '../config.php';
 function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hashtags)
 {
     $system_message = SYSTEM_MSG;
-    $user_message = PROMPT_PREFIX . $prompt . ' ALWAYS include a relevant call to action with the link ' . $link;
+    $user_message = 'Generate a social status under 256 characters with NO hashtags: ' . $prompt;
+    $user_message .= 'Also add the following CTA: Visit: ' . $link . ' (Followed by a brief reason to do so.)';
 
-    if ($hashtags) {
-        $user_message .= ' Also add relevant hashtags (but do not use #CallToAction).';
-    } else {
-        $user_message .= ' Also DONOT include any hashtags!';
-    }
-
+    // Request 1: Generate the social status without hashtags
     $data = [
         'model' => MODEL,
         'messages' => [
@@ -27,8 +23,34 @@ function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hash
             ['role' => 'user', 'content' => $user_message]
         ],
         'temperature' => TEMPERATURE,
+        'max_tokens' => TOKENS,
     ];
+    $status_response = getApiResponse($data);
 
+    // Request 2 (Optional): Generate hashtags if required
+    $hashtag_response = null;
+    if ($hashtags) {
+        $hashtag_message = 'Generate and only reply with 3 to 5 relevant hashtags (Based on this status: ' . $status_response . ').';
+        $hashtag_data = [
+            'model' => MODEL,
+            'messages' => [
+                ['role' => 'system', 'content' => $system_message],
+                ['role' => 'user', 'content' => $hashtag_message]
+            ],
+            'temperature' => TEMPERATURE,
+            'max_tokens' => TOKENS,
+        ];
+        $hashtag_response = getApiResponse($hashtag_data);
+    }
+
+    // Merge the responses to create the final status
+    $status = $status_response . ' ' . ($hashtag_response ?? "");
+
+    saveStatus($accountName, $accountOwner, $status);
+}
+
+function getApiResponse($data)
+{
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, API_ENDPOINT);
     curl_setopt($ch, CURLOPT_POST, 1);
@@ -42,22 +64,21 @@ function generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hash
     $response = curl_exec($ch);
     curl_close($ch);
 
-    error_log("API request: " . json_encode($data), 3, "../api.log"); // Log the request for debugging
-    error_log("API response: " . $response, 3, "../api.log"); // Log the response for debugging
+    error_log("API request: " . json_encode($data), 3, LOG_DIR . "/api.log"); // Log the request for debugging
+    error_log("API response: " . $response, 3, LOG_DIR . "/api.log"); // Log the response for debugging
 
     $response_data = json_decode($response, true);
 
     if (isset($response_data['choices'][0]['message']['content'])) {
-        $status = $response_data['choices'][0]['message']['content'];
-        saveStatus($accountName, $accountOwner, $status); // Pass $accountOwner to saveStatus
+        return $response_data['choices'][0]['message']['content'];
     } else {
-        echo 'Invalid response from API.';
+        return 'Invalid response from API.';
     }
 }
 
 function saveStatus($accountName, $accountOwner, $status)
 {
-    $statusFile = "../storage/accounts/{$accountOwner}/{$accountName}/statuses";
+    $statusFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";
     $statuses = [];
 
     if (file_exists($statusFile)) {
@@ -73,7 +94,7 @@ function saveStatus($accountName, $accountOwner, $status)
         $statusImage = $oldestStatus['status-image'];
 
         if ($statusImage !== null) {
-            $imagePath = "../storage/images/{$accountOwner}/{$accountName}/{$statusImage}";
+            $imagePath = IMAGES_DIR . "/{$accountOwner}/{$accountName}/{$statusImage}";
 
             // Delete the image associated with the oldest status
             if (file_exists($imagePath)) {
@@ -83,7 +104,7 @@ function saveStatus($accountName, $accountOwner, $status)
     }
 
     // Randomly pick an image file from the directory
-    $imageDirectory = "../storage/images/{$accountOwner}/{$accountName}/";
+    $imageDirectory = IMAGES_DIR . "/{$accountOwner}/{$accountName}/";
     $imageFiles = glob($imageDirectory . "*.jpg");
 
     if (empty($imageFiles)) {

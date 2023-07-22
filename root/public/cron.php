@@ -32,11 +32,8 @@ if (!isset($_GET['user']) || !isset($_GET['acct']) || !isset($_GET['key'])) {
             $link = $acctInfo['link'];
             $hashtags = $acctInfo['hashtags'];
             generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hashtags);
-            echo '<script type="text/javascript">
-            alert("Status Created!.");
-            window.location.href = window.location.href;
-            </script>';
-            exit;
+            header('Location: /home');
+            exit();
         }
     }
 }

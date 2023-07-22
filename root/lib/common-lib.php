@@ -9,7 +9,7 @@
 
  //This function retrieves user information from the user file.
 function getUserInfo($username) {
-    $filePath = "../storage/users/{$username}";
+    $filePath = USERS_DIR . "/{$username}";
     if (file_exists($filePath)) {
         $userData = file_get_contents($filePath);
         $userInfo = json_decode($userData, true);
@@ -21,7 +21,7 @@ function getUserInfo($username) {
 
 //This function retrieves account information from the account file.
 function getAcctInfo($username, $account) {
-    $filePath = "../storage/accounts/{$username}/{$account}/acct";
+    $filePath = ACCOUNTS_DIR . "/{$username}/{$account}/acct";
     if (file_exists($filePath)) {
         $acctData = file_get_contents($filePath);
         $acctInfo = json_decode($acctData, true);
@@ -33,7 +33,7 @@ function getAcctInfo($username, $account) {
 
 //This function retrieves status information from the statuses file.
 function getStatusInfo($username, $account) {
-    $filePath = "../storage/accounts/{$username}/{$account}/statuses";
+    $filePath = ACCOUNTS_DIR . "/{$username}/{$account}/statuses";
     if (file_exists($filePath)) {
         $statusData = file_get_contents($filePath);
         $statusInfo = json_decode($statusData, true);

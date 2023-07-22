@@ -35,7 +35,7 @@
         $username = $_SESSION['username'];
 
         // Get all accounts for the logged-in user
-        $accountFiles = glob("../storage/accounts/{$username}/*", GLOB_ONLYDIR);
+        $accountFiles = glob(ACCOUNTS_DIR . "/{$username}/*", GLOB_ONLYDIR);
 
         foreach ($accountFiles as $accountFolder) :
             $accountName = pathinfo($accountFolder, PATHINFO_FILENAME); // Get the directory name as account name
@@ -44,6 +44,7 @@
             if ($accountData !== null) :
                 // Generate data attributes string
                 $dataAttributes = "data-account-name=\"$accountName\" ";
+                $dataAttributes .= "data-key=\"" . htmlspecialchars($accountData['key']) . "\" ";
                 $dataAttributes .= str_replace(['&', '='], ['" data-', '="'], http_build_query(array_diff_key($accountData, ['hashtags' => '']), 'data-'));
                 $dataAttributes .= "\" data-hashtags=\"" . ($accountData['hashtags'] ? 'true' : 'false') . "\"";
         ?>

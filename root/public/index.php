@@ -8,41 +8,14 @@
 */
 session_start();
 require_once '../config.php';
+require_once '../lib/waf-lib.php';
 require_once '../lib/common-lib.php';
-require_once '../lib/status-lib.php';
-
-// Check if the user is not logged in
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-        header('Location: login.php');
-        exit();
-    }
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-
-    // Check if $page-helper.php exists
-    $helperFile = "../app/helpers/" . $page . "-helper.php";
-    if (file_exists($helperFile)) {
-        require_once($helperFile);
-    }
-
-    // Check if $page-forms.php exists
-    $formsFile = "../app/forms/" . $page . "-forms.php";
-    if (file_exists($formsFile)) {
-        require_once($formsFile);
-    }
-
-    // Check if $page.php exists
-    $pageFile = "../app/pages/" . $page . ".php";
-    if (file_exists($pageFile)) {
-        $pageOutput = $pageFile;
-    } else {
-        $pageOutput = "../lib/404-lib.php";
-    }
-}
+require_once '../lib/load-lib.php';
 ?>
 
+
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8">
@@ -72,21 +45,31 @@ if (isset($_GET['page'])) {
 
     <!-- Tab links -->
     <div class="tab">
-        <a href="/home"><button class="tablinks">Manage Statuses</button></a>
-        <a href="/accounts"><button class="tablinks">Manage Accounts</button></a>
-        <a href="/gallery"><button class="tablinks">Manage Gallery</button></a>
+        <a href="/home"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/home') echo 'active'; ?>">Statuses</button></a>
+        <a href="/accounts"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/accounts') echo 'active'; ?>">Accounts</button></a>
+        <a href="/gallery">
+    <button class="tablinks <?php
+    $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    if (preg_match('/^\/gallery\/.+/', $currentPath)) {
+        echo 'active';
+    }
+    ?>">Gallery</button>
+</a>
+
         <?php
         if (isset($_SESSION['username'])) {
             $userData = getUserInfo($_SESSION['username']);
-            if ($userData['admin'] == 1) :
+            if ($userData && isset($userData['admin'])) {
+                if ($userData['admin'] == 1) :
         ?>
-                <a href="/users"><button class="tablinks">Manage Users</button></a>
-            <?php
-            elseif ($userData['admin'] == 0) :
-            ?>
-                <a href="/info"><button class="tablinks">Change Password</button></a>
+        <a href="/users"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/users') echo 'active'; ?>">Users</button></a>
         <?php
-            endif;
+                elseif ($userData['admin'] == 0) :
+            ?>
+        <a href="/info"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/info') echo 'active'; ?>">My info</button></a>
+        <?php
+                endif;
+            }
         }
         ?>
     </div>

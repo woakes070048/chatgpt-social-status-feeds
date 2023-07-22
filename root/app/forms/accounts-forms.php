@@ -24,7 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $acctInfo['hashtags'] = $hashtags;
             $acctInfo['link'] = $link;
 
-            file_put_contents("../storage/accounts/{$accountOwner}/{$accountName}/acct", json_encode($acctInfo));
+            // Create the directory for the account if it doesn't exist
+            $directoryPath = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/";
+            if (!file_exists($directoryPath)) {
+                mkdir($directoryPath, 0777, true);
+            }
+
+            // Create the directory for the images if it doesn't exist
+            $imagesDirectoryPath = "images/{$accountOwner}/{$accountName}/";
+            if (!file_exists($imagesDirectoryPath)) {
+                mkdir($imagesDirectoryPath, 0777, true);
+            }
+
+            // Then write the account file
+            file_put_contents("{$directoryPath}acct", json_encode($acctInfo));
 
             echo '<script type="text/javascript">
                 alert("Account has been created or modified");
@@ -38,39 +51,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </script>';
             exit;
         }
-    }
+    } elseif (isset($_POST["delete_account"])) {
+        $accountName = trim($_POST["account_name"]);
+        $accountOwner = $_SESSION["username"];
 
-} elseif (isset($_POST["delete_account"])) {
-    $accountName = trim($_POST["account_name"]);
-    $accountOwner = $_SESSION["username"];
+        $accountFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/acct";
+        $statusFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";
 
-    $accountFile = "../storage/accounts/{$accountOwner}/{$accountName}/acct";
-    $statusFile = "../storage/accounts/{$accountOwner}/{$accountName}/statuses";
+        if (file_exists($accountFile)) {
+            unlink($accountFile);
 
-    if (file_exists($accountFile)) {
-        unlink($accountFile);
-
-        if (file_exists($statusFile)) {
-            unlink($statusFile);
-        }
-
-        $imageFolder = "images/{$accountOwner}/{$accountName}/";
-        if (file_exists($imageFolder)) {
-            $files = glob($imageFolder . '*');
-            foreach ($files as $file) {
-                if (is_file($file)) {
-                    unlink($file);
-                }
+            if (file_exists($statusFile)) {
+                unlink($statusFile);
             }
-            rmdir($imageFolder);
-        }
 
-        // Account Deleted
-        echo '<script type="text/javascript">
-    alert("Account Deleted");
-    window.location.href = window.location.href;
-    </script>';
-        exit;
+            $accountDirectory = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/";
+            if (is_dir($accountDirectory)) {
+                $files = glob($accountDirectory . '*');
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
+                rmdir($accountDirectory);
+            }
+
+            $imageFolder = IMAGES_DIR . "/{$accountOwner}/{$accountName}/";
+            if (file_exists($imageFolder)) {
+                $files = glob($imageFolder . '*');
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
+                }
+                rmdir($imageFolder);
+            }
+
+            // Account Deleted
+            echo '<script type="text/javascript">
+                alert("Account Deleted");
+                window.location.href = window.location.href;
+            </script>';
+            exit;
+        }
     }
 }
-?>

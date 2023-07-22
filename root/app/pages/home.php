@@ -13,7 +13,7 @@
     $accountOwner = $_SESSION['username'];
 
     // Get the user's account directories
-    $accountDirs = glob("../storage/accounts/{$accountOwner}/*", GLOB_ONLYDIR);
+    $accountDirs = glob(ACCOUNTS_DIR . "/{$accountOwner}/*", GLOB_ONLYDIR);
 
     if (empty($accountDirs)) {
         echo 'Please set up an account!';
@@ -42,7 +42,7 @@
                             <li>
                                 <?php echo $image; ?>
                                 <p class="status-text"><?php echo htmlspecialchars($status['text']); ?></p>
-
+                                <?php echo shareButton($status['text'], $imagePath, $acctInfo['link'], $index); ?>
                                 <form class="delete-status-form" action="/home" method="POST">
                                     <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
                                     <input type="hidden" name="username" value="<?php echo htmlspecialchars($accountOwner); ?>">

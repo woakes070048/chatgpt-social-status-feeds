@@ -34,8 +34,14 @@ To ensure optimal performance and resource management, you can set limits on API
 #### Get Started
 Getting started is quick and easy! Simply edit the config.php file to configure your API key and other settings. For the default admin login credentials, please refer to the storage/users/admin file.
 
-### Change Log - Version 2.0.1
+### Change Log
 
+#### Version 3.0.0
+- Cleaned up code, lowered API usage for same outcome.
+- Added quick share status to Facebook, Twitter, Pinterest, and Linkedin.
+ - Due to the nature of sharing by social links, Facebook and Linkedin auto copy the status to the clipboard and you will have to past in the status window.
+
+#### Version 2.0.1
 - Added
  - Added optimization on upload of images.
    - Maximum size for image width can now be set in the config file. Default size is 720p.
@@ -70,3 +76,9 @@ We're continuously working to enhance the ChatGPT Social Status2RSS experience. 
 -Join us on this exciting journey as we revolutionize social media management and empower you with cutting-edge tools to create captivating and engaging content effortlessly.
 
 Get ready to take your social media game to new heights with ChatGPT Social Status2RSS!
+
+### Installing
+- Upload files to web server.
+- Change docroot to public folder.
+- Update config.php
+- Login admin/admin

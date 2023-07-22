@@ -10,7 +10,7 @@
 
 <?php
 $accountOwner = $_SESSION['username'];
-$accountDirs = glob("../storage/accounts/{$accountOwner}/*", GLOB_ONLYDIR);
+$accountDirs = glob(ACCOUNTS_DIR . "/{$accountOwner}/*", GLOB_ONLYDIR);
 $accountDirs = array_filter($accountDirs, 'is_dir');  // Only keep directories
 $selectedAccountName = isset($_GET['acct']) ? $_GET['acct'] : '';
 
@@ -60,7 +60,7 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
             $accountName = $selectedAccountName;
             $acctInfo = getAcctInfo($accountOwner, $accountName);
             $statusInfo = getStatusInfo($accountOwner, $accountName);
-            $image_folder = "../storage/images/{$accountOwner}/{$selectedAccountName}/";
+            $image_folder = IMAGES_DIR . "/{$accountOwner}/{$selectedAccountName}/";
             $images = glob($image_folder . "*.jpg", GLOB_BRACE);
             $count = count($images);
             $imagesPerPage = 9;

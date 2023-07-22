@@ -29,7 +29,6 @@
 }
 
   select,
-  .status-image,
   .edit-users-form,
   .edit-accounts-form,
   .edit-images-form,
@@ -38,6 +37,10 @@
   .edit-images-list,
   .dropzone {
     width: 100%;
+  }
+
+  .status-image {
+    width: calc(100% + 20px);
   }
 
   /* Logo Styles */
