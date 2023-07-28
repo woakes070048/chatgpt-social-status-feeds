@@ -17,11 +17,9 @@ User limits and more: Set API call limits, maximum number of accounts per user, 
   <tr>
     <td><img src="/images/ss-1.jpg" alt="Screenshot 1" width="200"/></td>
     <td><img src="/images/ss-2.jpg" alt="Screenshot 2" width="200"/></td>
-    <td><img src="/images/ss-3.jpg" alt="Screenshot 3" width="200"/></td>
     <td><img src="/images/ss-4.jpg" alt="Screenshot 4" width="200"/></td>
   </tr>
   <tr>
-    <td><img src="/images/ss-5.jpg" alt="Screenshot 5" width="200"/></td>
     <td><img src="/images/ss-6.jpg" alt="Screenshot 6" width="200"/></td>
     <td><img src="/images/ss-7.jpg" alt="Screenshot 7" width="200"/></td>
     <td><img src="/images/ss-8.jpg" alt="Screenshot 8" width="200"/></td>
