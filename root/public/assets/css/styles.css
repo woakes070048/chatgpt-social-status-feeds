@@ -74,6 +74,8 @@ footer {
 }
 
 .myacct-overlay,
+.blklist-overlay,
+.status-overlay,
 .support-overlay {
   display: none;
   position: fixed;
@@ -85,6 +87,8 @@ footer {
 }
 
 .myacct-popup,
+.blklist-popup,
+.status-popup,
 .support-popup {
   display: none;
   position: fixed;
@@ -106,6 +110,8 @@ footer {
 }
 
 .myacct-closeButton,
+.blklist-closeButton,
+.status-closeButton,
 .support-closeButton {
   position: absolute;
   right: 60px;
@@ -115,6 +121,8 @@ footer {
 }
 
 .supportButton,
+.blklistButton,
+.statusButton,
 .myacctButton {
   width: 50px;
   height: 50px;
@@ -140,25 +148,32 @@ footer {
   right: 80px;
 }
 
+.statusButton {
+  bottom: 50px;
+  right: 80px;
+}
+
+.blklistButton {
+  bottom: 50px;
+  right: 280px;
+}
+
 .myacct-overlay,
+.blklist-overlay,
+.status-overlay,
 .support-overlay {
   background: rgba(0, 0, 0, 0.5);
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
-.green-button,
-.red-button,
-.orange-button,
-button {
+.status-popup #copyButton,
+.status-popup .green-button {
+width: 100%;
+}
+
+.green-button {
   background-color: #66cc33;
-  color: #fff;
-  border: none;
-  font-size: 18px;
-  padding: 10px 20px;
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s;
 }
 
 .green-button:hover {
@@ -186,6 +201,13 @@ button {
 
 button {
   background-color: #0366d6;
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s;
 }
 
 button:hover {
@@ -204,6 +226,16 @@ input[type="password" i] {
   width: 97%;
   border: 1px solid #66cc33;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit" i] {
+  color: #fff;
+  border: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s;
 }
 
 select {

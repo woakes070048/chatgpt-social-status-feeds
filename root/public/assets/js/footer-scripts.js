@@ -16,9 +16,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.support-iframe').src = "https://crm.vontainment.com/forms/ticket";
     });
 
-    document.querySelector('.myacctButton').addEventListener('click', function () {
-        document.querySelector('.myacct-popup').style.display = 'block';
-        document.querySelector('.myacct-overlay').style.display = 'block';
+    document.querySelector('.blklistButton').addEventListener('click', function () {
+        document.querySelector('.blklist-popup').style.display = 'block';
+        document.querySelector('.blklist-overlay').style.display = 'block';
+    });
+
+    document.querySelector('.statusButton').addEventListener('click', function () {
+        document.querySelector('.status-popup').style.display = 'block';
+        document.querySelector('.status-overlay').style.display = 'block';
     });
 
     document.querySelector('.support-closeButton').addEventListener('click', function () {
@@ -27,9 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector('.support-iframe').src = "";
     });
 
-    document.querySelector('.myacct-closeButton').addEventListener('click', function () {
-        document.querySelector('.myacct-popup').style.display = 'none';
-        document.querySelector('.myacct-overlay').style.display = 'none';
+    document.querySelector('.blklist-closeButton').addEventListener('click', function () {
+        document.querySelector('.blklist-popup').style.display = 'none';
+        document.querySelector('.blklist-overlay').style.display = 'none';
+    });
+
+    document.querySelector('.status-closeButton').addEventListener('click', function () {
+        document.querySelector('.status-popup').style.display = 'none';
+        document.querySelector('.status-overlay').style.display = 'none';
     });
 
     // Check if the current URL path contains '/home'
@@ -45,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-
         // Get the linkedin button elements
         const linkedinButtons = document.querySelectorAll('.share-buttons a[data-social="linkedin"]');
         // Check if the elements exist
@@ -57,4 +66,35 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
+
+    // The code for form submission
+    $("#quickstatusForm").submit(function(e){
+        e.preventDefault(); //prevent the form from actually submitting
+        var prompt = $("#prompt").val();
+
+        // Use AJAX to send a POST request
+        $.ajax({
+            url: '/ajax.php',  // Replace this with the path to your PHP file
+            type: 'POST',
+            data: { prompt: prompt },
+            success: function(data) {
+                $("#quickresponse").val(data);
+            }
+        });
+    });
+
+    $("#copyButton").click(function(){
+        /* Get the text field */
+        var copyText = document.getElementById("quickresponse");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+        alert("Copied the text: " + copyText.value);
+    });
 });

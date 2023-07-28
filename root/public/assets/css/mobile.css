@@ -18,12 +18,12 @@
     width: 100%;
 }
 
-.myacct-popup, .support-popup {
-  width: 100%;
+.myacct-popup, .support-popup, .blklist-popup, .status-popup  {
+  width: 95%;
   height: 100%;
 }
 
-.myacct-closeButton, .support-closeButton {
+.myacct-closeButton, .support-closeButton, .blklist-closeButton , .status-closeButton {
   right: 30px;
   top: 20px;
 }

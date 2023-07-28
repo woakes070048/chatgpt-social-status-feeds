@@ -14,7 +14,6 @@ require_once '../lib/common-lib.php';
 require_once '../lib/auth-lib.php';
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en-US">
 

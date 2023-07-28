@@ -48,9 +48,22 @@ Each account serves as a "social account" with a dedicated image stash. Through 
 To ensure optimal performance and resource management, you can set limits on API calls, maximum accounts per user, and maximum statuses per account. For example, you can specify a limit of 30 statuses per account, with the system automatically removing the oldest status and its associated image when a new one is generated.
 
 #### Get Started
-Getting started is quick and easy! Simply edit the config.php file to configure your API key and other settings. For the default admin login credentials, please refer to the storage/users/admin file.
+- Getting started is quick and easy! Simply edit the config.php file to configure your API key and other settings.
+- Upload files to web server.
+- Change docroot to public folder.
+- Update config.php
+- Login admin/admin'
+- Get ready to take your social media game to new heights with ChatGPT Social Status2RSS!
 
 ### Change Log
+
+#### Version 3.1.0
+- Admins now can check and remove IPs from blacklist that the built in WAF has blocked.
+- New Quick Status maker for unique situations.
+- New ajax.php for ajax requests.
+- Set max tokens
+- Better logging
+
 
 #### Version 3.0.0
 - Cleaned up code, lowered API usage for same outcome.
@@ -85,16 +98,8 @@ Getting started is quick and easy! Simply edit the config.php file to configure 
    - This change simplifies logic handling with reduced PHP requirements.
 
 ### To-Do List
-We're continuously working to enhance the ChatGPT Social Status2RSS experience. Here are some items on our to-do list:
--Polish the GUI to provide an even more delightful user experience.
--Explore the possibility of generating AI-powered images to further enrich your statuses.
--Continuously improve the code structure and security to ensure a robust and reliable platform.
--Join us on this exciting journey as we revolutionize social media management and empower you with cutting-edge tools to create captivating and engaging content effortlessly.
-
-Get ready to take your social media game to new heights with ChatGPT Social Status2RSS!
-
-### Installing
-- Upload files to web server.
-- Change docroot to public folder.
-- Update config.php
-- Login admin/admin
+- We're continuously working to enhance the ChatGPT Social Status2RSS experience. Here are some items on our to-do list:
+- Polish the GUI to provide an even more delightful user experience.
+- Explore the possibility of generating AI-powered images to further enrich your statuses.
+- Continuously improve the code structure and security to ensure a robust and reliable platform.
+- Join us on this exciting journey as we revolutionize social media management and empower you with cutting-edge tools to create captivating and engaging content effortlessly.

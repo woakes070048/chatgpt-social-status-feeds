@@ -6,9 +6,7 @@
  * File: ../app/pages/gallery.php
  * Description: ChatGPT API Image Editor
  */
-?>
 
-<?php
 $accountOwner = $_SESSION['username'];
 $accountDirs = glob(ACCOUNTS_DIR . "/{$accountOwner}/*", GLOB_ONLYDIR);
 $accountDirs = array_filter($accountDirs, 'is_dir');  // Only keep directories
@@ -21,7 +19,6 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
 }
 
 ?>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.0/min/dropzone.min.css" rel="stylesheet" />
 <div class="edit-images-box">
@@ -43,14 +40,15 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
         </form>
 
         <h3>Upload Images To Account</h3>
-        <form action="/gallery/<?php echo urlencode($selectedAccountName); ?>" method="POST" class="dropzone" id="upload_images_form" enctype="multipart/form-data">
+        <form action="/gallery/<?php echo urlencode($selectedAccountName); ?>" method="post" enctype="multipart/form-data" class="dropzone" id="upload_images_form">
             <input type="hidden" name="page" value="gallery">
             <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($selectedAccountName); ?>">
             <div class="fallback">
-                <input name="image-file[]" type="file" multiple />
+                <input name="image_file[]" type="file" multiple />
             </div>
         </form>
-
+        <div id="message-container">
+        </div>
         <button class="reload-btn" onclick="window.location.reload();">Reload Page</button>
     </div>
 
@@ -76,7 +74,7 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
                     $image_name = basename($images[$i]);
             ?>
                     <div class="image-item">
-                    <img src="/gallery/<?php echo urlencode($selectedAccountName); ?>/<?php echo urlencode($image_name); ?>" alt="<?php echo htmlspecialchars($image_name); ?>">
+                        <img src="/gallery/<?php echo urlencode($selectedAccountName); ?>/<?php echo urlencode($image_name); ?>" alt="<?php echo htmlspecialchars($image_name); ?>">
                         <form class="delete-image" action="/gallery/<?php echo urlencode($selectedAccountName); ?>" method="POST">
                             <input type="hidden" name="page" value="gallery">
                             <input type="hidden" name="account_name" value="<?php echo htmlspecialchars($accountName); ?>">
@@ -111,58 +109,53 @@ if (!$selectedAccountName && count($accountDirs) > 0) {
 <script>
     Dropzone.autoDiscover = false;
 
-    var myDropzone = new Dropzone("#upload_images_form", {
-        paramName: "image-file[]", // This must match the name attribute of your input tag
-        maxFilesize: 10, // Size in MB
-        acceptedFiles: "image/*",
-        autoProcessQueue: false, // Disable auto processing of files
-        parallelUploads: 6, // Set the number of parallel uploads to 6
-        init: function() {
-            this.on("sending", function(file, xhr, formData) {
-                formData.append("upload_image", "true"); // Include the upload_image parameter
-                formData.append("account_name", document.querySelector('input[name="account_name"]').value);
-            });
-            this.on("success", function(file, response) {
-                // File uploaded successfully
-                console.log(response); // You can handle the response from the server here
-                if (this.getQueuedFiles().length > 0 && this.getUploadingFiles().length < 6) {
-                    // If there are more queued files and fewer than 6 uploading files, start the upload for the next file
-                    this.processQueue();
-                } else if (this.getQueuedFiles().length === 0 && this.getUploadingFiles().length === 0) {
-                    // All images have finished uploading
-                    window.location.href = "/gallery/<?php echo urlencode($selectedAccountName); ?>";
-                }
-            });
-            this.on("error", function(file, errorMessage) {
-                // File upload error
-                console.log(errorMessage);
-                if (this.getQueuedFiles().length > 0 && this.getUploadingFiles().length < 6) {
-                    // If there are more queued files and fewer than 6 uploading files, start the upload for the next file
-                    this.processQueue();
-                }
-            });
-            this.on("addedfiles", function() {
-                if (this.getUploadingFiles().length < 6) {
-                    // If there are fewer than 6 uploading files, start the upload for the newly added file
-                    this.processQueue();
-                }
-            });
-        }
-    });
+    $(document).ready(function() {
+        var myDropzone = new Dropzone("#upload_images_form", {
+            paramName: "image_file[]", // This must match the name attribute of your input tag
+            maxFilesize: 200, // Size in MB
+            acceptedFiles: "image/*",
+            autoProcessQueue: true, // Disable auto processing of files
+            parallelUploads: 6, // Set the number of parallel uploads to 6
+            params: {
+                account_name: "<?php echo htmlspecialchars($selectedAccountName); ?>" // Additional parameter to be sent with the file
+            },
+            init: function() {
+                var dz = this;
 
-    var accountSelect = document.getElementById('account_name');
-    accountSelect.addEventListener('change', function() {
-        destroyDropzone(); // Destroy existing Dropzone instance before changing the account
-        var selectedAccountName = this.value;
-        var form = document.getElementById('account_selection_form');
-        form.action = "/gallery/" + encodeURIComponent(selectedAccountName);
-        form.submit();
-    });
+                this.on("success", function(file, response) {
+                    // File uploaded successfully
+                    console.log(response); // You can handle the response from the server here
 
-    function destroyDropzone() {
-        if (myDropzone !== null) {
-            myDropzone.destroy(); // Destroy the Dropzone instance
-            myDropzone = null; // Reset the instance variable
-        }
-    }
+                    // Create a success message element
+                    var successMsg = $('<div class="success-message">Successfully uploaded file: ' + file.name + '</div>');
+
+                    // Insert the success message below the form
+                    $('#message-container').append(successMsg);
+                });
+
+                this.on("error", function(file, errorMessage) {
+                    // File upload error
+                    console.log(errorMessage);
+
+                    // Create an error message element
+                    var errorMsg = $('<div class="error-message">Error uploading file: ' + file.name + '</div>');
+
+                    // Insert the error message below the form
+                    $('#message-container').append(errorMsg);
+                });
+            }
+        });
+
+        var accountSelect = document.getElementById('account_name');
+        accountSelect.addEventListener('change', function() {
+            if (myDropzone !== null) {
+                myDropzone.destroy(); // Destroy the Dropzone instance
+                myDropzone = null; // Reset the instance variable
+            }
+            var selectedAccountName = this.value;
+            var form = document.getElementById('account_selection_form');
+            form.action = "/gallery/" + encodeURIComponent(selectedAccountName);
+            form.submit();
+        });
+    });
 </script>

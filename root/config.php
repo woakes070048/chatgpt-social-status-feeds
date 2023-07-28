@@ -1,7 +1,7 @@
 <?php
 /*
  * Project: ChatGPT API
- * Version: 3.0.0
+ * Version: 3.1.0
  * Author: Vontainment
  * URL: https://vontainment.com
  * File: config.php

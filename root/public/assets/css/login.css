@@ -7,7 +7,7 @@ body {
 body {
     align-items: center;
     background-color: #f1f1f1;
-    background-image: url("/assets/images/background.png");
+    background-image: url("/assets/images/background-marble.png");
     background-repeat: repeat;
     display: flex;
     height: 100vh;
