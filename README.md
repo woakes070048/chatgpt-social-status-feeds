@@ -1,4 +1,4 @@
-![Header](./png_20230324_105953_0000.png)
+![Header](/images/header/png)
 
 # ChatGPT Social Status2RSS
 ChatGPT Social Status2RSS is a powerful script and Web GUI that takes social media management to the next level. With customizable prompts and automatic generation of engaging statuses, this tool allows you to effortlessly create captivating status updates for your clients. But it doesn't stop there! The generated statuses are seamlessly added to RSS feeds, making it a breeze to automate posting across various social media platforms.
@@ -13,7 +13,25 @@ Expanded options: Customize your statuses with links and hashtags, enhancing eng
 Status images: Bring your statuses to life by attaching captivating images, grabbing attention and boosting engagement.
 User limits and more: Set API call limits, maximum number of accounts per user, and maximum number of statuses to manage resources effectively. The new help button, set your own help service.
 
-![GUI](screenshot.png)
+<table>
+  <tr>
+    <td><img src="/images/ss-1.jpg" alt="Screenshot 1" width="200"/></td>
+    <td><img src="/images/ss-2.jpg" alt="Screenshot 2" width="200"/></td>
+    <td><img src="/images/ss-3.jpg" alt="Screenshot 3" width="200"/></td>
+    <td><img src="/images/ss-4.jpg" alt="Screenshot 4" width="200"/></td>
+  </tr>
+  <tr>
+    <td><img src="/images/ss-5.jpg" alt="Screenshot 5" width="200"/></td>
+    <td><img src="/images/ss-6.jpg" alt="Screenshot 6" width="200"/></td>
+    <td><img src="/images/ss-7.jpg" alt="Screenshot 7" width="200"/></td>
+    <td><img src="/images/ss-8.jpg" alt="Screenshot 8" width="200"/></td>
+  </tr>
+  <tr>
+    <td><img src="/images/ss-9.jpg" alt="Screenshot 9" width="200"/></td>
+    <td><img src="/images/ss-10.jpg" alt="Screenshot 10" width="200"/></td>
+    <td><img src="/images/ss-11.jpg" alt="Screenshot 11" width="200"/></td>
+  </tr>
+</table>
 
 ### How It Works
 Admins vs Users
