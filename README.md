@@ -1,4 +1,4 @@
-![Header](/images/header/png)
+![Header](/images/header.png)
 
 # ChatGPT Social Status2RSS
 ChatGPT Social Status2RSS is a powerful script and Web GUI that takes social media management to the next level. With customizable prompts and automatic generation of engaging statuses, this tool allows you to effortlessly create captivating status updates for your clients. But it doesn't stop there! The generated statuses are seamlessly added to RSS feeds, making it a breeze to automate posting across various social media platforms.
