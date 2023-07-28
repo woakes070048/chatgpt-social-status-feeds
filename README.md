@@ -15,19 +15,19 @@ User limits and more: Set API call limits, maximum number of accounts per user, 
 
 <table>
   <tr>
-    <td><img src="/images/ss-1.jpg" alt="Screenshot 1" width="200"/></td>
-    <td><img src="/images/ss-2.jpg" alt="Screenshot 2" width="200"/></td>
-    <td><img src="/images/ss-4.jpg" alt="Screenshot 4" width="200"/></td>
+    <td><img src="/images/ss-1.jpg" alt="Screenshot 1" width="33%"/></td>
+    <td><img src="/images/ss-2.jpg" alt="Screenshot 2" width="33%"/></td>
+    <td><img src="/images/ss-4.jpg" alt="Screenshot 4" width="33%"/></td>
   </tr>
   <tr>
-    <td><img src="/images/ss-6.jpg" alt="Screenshot 6" width="200"/></td>
-    <td><img src="/images/ss-7.jpg" alt="Screenshot 7" width="200"/></td>
-    <td><img src="/images/ss-8.jpg" alt="Screenshot 8" width="200"/></td>
+    <td><img src="/images/ss-6.jpg" alt="Screenshot 6" width="33%"/></td>
+    <td><img src="/images/ss-7.jpg" alt="Screenshot 7" width="33%"/></td>
+    <td><img src="/images/ss-8.jpg" alt="Screenshot 8" width="33%"/></td>
   </tr>
   <tr>
-    <td><img src="/images/ss-9.jpg" alt="Screenshot 9" width="200"/></td>
-    <td><img src="/images/ss-10.jpg" alt="Screenshot 10" width="200"/></td>
-    <td><img src="/images/ss-11.jpg" alt="Screenshot 11" width="200"/></td>
+    <td><img src="/images/ss-9.jpg" alt="Screenshot 9" width="33%"/></td>
+    <td><img src="/images/ss-10.jpg" alt="Screenshot 10" width="33%"/></td>
+    <td><img src="/images/ss-11.jpg" alt="Screenshot 11" width="33%"/></td>
   </tr>
 </table>
 
