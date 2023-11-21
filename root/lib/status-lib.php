@@ -76,6 +76,46 @@ function getApiResponse($data)
     }
 }
 
+function generateImage($accountName, $accountOwner, $status_response)
+{
+    // Define the API endpoint and API key for DALL-E
+    define('API_ENDPOINT', 'https://api.openai.com/v1/images/generations');
+
+    $data = [
+        'prompt' => 'Generate an image to go with this social media status: ' . $status_response . '(Generate image in 6:19 aspect ratio)',
+        'n' => 1 // Number of images to generate
+    ];
+
+    // Initialize cURL session
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, API_ENDPOINT);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/json',
+        'Authorization: Bearer ' . API_KEY,
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    // Execute the cURL session and get the response
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    // Logging the request and response
+    error_log("API request: " . json_encode($data), 3, LOG_DIR . "/api.log");
+    error_log("API response: " . $response, 3, LOG_DIR . "/api.log");
+
+    // Decode the response
+    $response_data = json_decode($response, true);
+
+    // Handle the response from DALL-E API
+    if (isset($response_data['id'])) {
+        return $response_data['id']; // Returns the image ID or other relevant data
+    } else {
+        return 'Invalid response from API.';
+    }
+}
+
 function saveStatus($accountName, $accountOwner, $status)
 {
     $statusFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";

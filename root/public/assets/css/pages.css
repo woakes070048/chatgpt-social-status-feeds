@@ -12,14 +12,12 @@
 .statuses {
   padding: 10px;
   max-width: 100%;
-  overflow-x: overlay;
 }
 
 .statuses ul {
   list-style-type: none;
   padding: 0;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 }
@@ -34,11 +32,10 @@
   justify-content: space-between;
   width: 20%;
   border: 2px solid #66cc33;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inherit;
 }
 
 .status-text {
-  overflow-x: overlay;
   height: 250px;
 }
 
@@ -46,61 +43,51 @@
   width: calc(100% + 20px);
   height: 220px;
   margin: -10px 10px 10px -10px;
-  overflow-x: hidden;
 }
 
 .delete-status-button {
   width: 100%;
-  margin: 20px 0 10px 0;
+  margin: 20px 0;
 }
 
 .share-buttons {
-display: flex;
-background-color:aliceblue;
-flex-wrap: wrap;
-flex-direction: row;
-justify-content: space-around;
-margin: 0 -10px 0 -10px;
-padding: 10px;
-border-top: 2px solid #66cc33;
-border-bottom: 2px solid #66cc33;
-
+  display: flex;
+  background-color: aliceblue;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 -10px;
+  padding: 10px;
+  border-top: 2px solid #66cc33;
+  border-bottom: inherit;
 }
 
 .share-buttons svg {
   -webkit-filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
   transition: -webkit-filter 0.3s ease-in-out;
   transition: filter 0.3s ease-in-out;
-  transition: filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out;
 }
 
 .share-buttons svg:hover {
   -webkit-filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
-          filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
 }
 
 .cron-feed-addresses {
   padding-top: 20px;
   border-top: 2px solid #66cc33;
-  border-bottom: 2px solid #66cc33;
+  border-bottom: inherit;
   width: 100%;
 }
 
-.cron-feed-addresses > p {
-  margin: 0 10px 20px 10px;
+.cron-feed-addresses>p {
+  margin: 0 10px 20px;
 }
-
-/* ================================================
-    GALLERY PAGE STYLES
-================================================ */
 
 .images-list {
   display: flex;
   flex-wrap: wrap;
   border: 2px solid #66cc33;
-  overflow-y: hidden;
-  overflow-x: hidden;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -113,12 +100,12 @@ border-bottom: 2px solid #66cc33;
 
 .image-item img {
   width: 100%;
-  height: 225px;
+  height: 100%;
 }
 
 .no-images {
   margin: 20px;
-  font-size: 2dropem;
+  font-size: 2em;
 }
 
 .delete-image {
@@ -127,33 +114,28 @@ border-bottom: 2px solid #66cc33;
   left: 10px;
 }
 
-#account_selection_form > select {
+#account_selection_form>select {
   border: 1px solid #66cc33;
 }
 
 .dropzone {
-  min-height: 304px!important;
-  border: 2px solid #66cc33!important;
-  background: white!important;
-  padding: 20px 20px!important;
+  min-height: 304px !important;
+  border: 2px solid #66cc33 !important;
+  background: white !important;
+  padding: 20px !important;
   margin-bottom: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inherit;
   width: 100%;
-  overflow-y: overlay;
   max-height: 400px;
 }
 
-.dropzone .dz-message {
-  margin-top: 60px;
-}
-
 .dz-button {
-  box-shadow: unset;
+  box-shadow: none;
 }
 
 .dropzone .dz-preview .dz-image {
-  width: 100px!important;
-  height: 100px!important;
+  width: 100px !important;
+  height: 100px !important;
 }
 
 .pagination {
@@ -168,17 +150,15 @@ border-bottom: 2px solid #66cc33;
   margin: 0 5px;
   background-color: #66cc33;
   color: #fff;
-  border: none;
   font-size: 18px;
   padding: 10px 20px;
   border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inherit;
   transition: box-shadow 0.3s;
 }
 
 .pagination a.active {
   background-color: #333;
-  color: #fff;
 }
 
 .pagination a:hover {
@@ -186,12 +166,7 @@ border-bottom: 2px solid #66cc33;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* ================================================
-    ACCOUNT/USER/GALLERY EDITING STYLES
-================================================ */
-.edit-users-box,
-.edit-accounts-box,
-.edit-images-box {
+.edit-box {
   display: flex;
   flex-direction: row;
   border-radius: 20px 20px 0 0;
@@ -199,22 +174,17 @@ border-bottom: 2px solid #66cc33;
   min-height: 100vh;
 }
 
-.edit-users-form,
-.edit-accounts-form,
-.edit-images-form {
+.edit-form {
   width: 25%;
   padding: 20px;
   background-color: #d6d6d6;
 }
 
-.edit-users-list,
-.edit-accounts-list,
-.edit-images-list {
+.edit-list {
   width: 75%;
 }
 
-.user-item,
-.account-item {
+.item {
   min-width: 30%;
   padding: 10px;
   margin: 10px;
@@ -224,8 +194,7 @@ border-bottom: 2px solid #66cc33;
   float: left;
 }
 
-.user-item button,
-.account-item button {
+.item button {
   float: left;
   margin-right: 20px;
 }
@@ -245,7 +214,7 @@ border-bottom: 2px solid #66cc33;
   padding: 10px;
   margin-top: 39px;
   border: 1px solid #66cc33;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: inherit;
   align-items: center;
   justify-content: space-between;
 }

@@ -1,19 +1,9 @@
-html,
-body {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
 body {
     align-items: center;
-    background-color: #f1f1f1;
-    background-image: url("/assets/images/background-marble.png");
-    background-repeat: repeat;
+    background: #f1f1f1 url("/assets/images/background-marble.png") repeat;
     display: flex;
     height: 100vh;
     justify-content: center;
-    max-width: 100%;
-    overflow-x: hidden;
 }
 
 .logo {
@@ -52,7 +42,7 @@ input[type="submit"] {
     color: white;
     cursor: pointer;
     padding: 8px 20px;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    box-shadow: inherit;
 }
 
 input[type="submit"]:hover {
@@ -67,14 +57,11 @@ input[type="submit"]:hover {
 }
 
 @media (max-width: 600px) {
-
-    /* Adjust the logo size for smaller screens */
     .logo {
         height: auto;
         width: 60%;
     }
 
-    /* Reduce the width of the login box for smaller screens */
     .login-box {
         width: 80%;
     }
