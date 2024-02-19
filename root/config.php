@@ -1,20 +1,20 @@
 <?php
 /*
  * Project: ChatGPT API
- * Version: 3.1.0
+ * Version: 3.0.0
  * Author: Vontainment
  * URL: https://vontainment.com
  * File: config.php
  * Description: ChatGPT API Status Generator
 */
 
-define('API_KEY', '');
+define('API_KEY', 'gdfgdfgdgfdfgdfgdfg');
 define('API_ENDPOINT', 'https://api.openai.com/v1/chat/completions');
 define('MODEL', 'gpt-3.5-turbo');
 define('TEMPERATURE', 0.5);
 define('TOKENS', 256);
 // Set your domain
-define('DOMAIN', 'https://ai-status.servicesbyv.com');
+define('DOMAIN', 'https://dfgdgfdfgdfgdfgdgfdgf.com');
 
 // Set the system prompt
 define('SYSTEM_MSG', 'You are a social media marketer. You will respond with professional but fun social status update and nothing else.');

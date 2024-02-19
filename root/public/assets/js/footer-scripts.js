@@ -9,38 +9,6 @@ function copyToClipboard(statusText) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Always execute the following code, regardless of the page
-    document.querySelector('.supportButton').addEventListener('click', function () {
-        document.querySelector('.support-popup').style.display = 'block';
-        document.querySelector('.support-overlay').style.display = 'block';
-        document.querySelector('.support-iframe').src = "https://crm.vontainment.com/forms/ticket";
-    });
-
-    document.querySelector('.blklistButton').addEventListener('click', function () {
-        document.querySelector('.blklist-popup').style.display = 'block';
-        document.querySelector('.blklist-overlay').style.display = 'block';
-    });
-
-    document.querySelector('.statusButton').addEventListener('click', function () {
-        document.querySelector('.status-popup').style.display = 'block';
-        document.querySelector('.status-overlay').style.display = 'block';
-    });
-
-    document.querySelector('.support-closeButton').addEventListener('click', function () {
-        document.querySelector('.support-popup').style.display = 'none';
-        document.querySelector('.support-overlay').style.display = 'none';
-        document.querySelector('.support-iframe').src = "";
-    });
-
-    document.querySelector('.blklist-closeButton').addEventListener('click', function () {
-        document.querySelector('.blklist-popup').style.display = 'none';
-        document.querySelector('.blklist-overlay').style.display = 'none';
-    });
-
-    document.querySelector('.status-closeButton').addEventListener('click', function () {
-        document.querySelector('.status-popup').style.display = 'none';
-        document.querySelector('.status-overlay').style.display = 'none';
-    });
 
     // Check if the current URL path contains '/home'
     if (window.location.pathname.includes('/home')) {
@@ -66,22 +34,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
-    // The code for form submission
-    $("#quickstatusForm").submit(function(e){
-        e.preventDefault(); //prevent the form from actually submitting
-        var prompt = $("#prompt").val();
-
-        // Use AJAX to send a POST request
-        $.ajax({
-            url: '/ajax.php',  // Replace this with the path to your PHP file
-            type: 'POST',
-            data: { prompt: prompt },
-            success: function(data) {
-                $("#quickresponse").val(data);
-            }
-        });
-    });
 
     $("#copyButton").click(function(){
         /* Get the text field */

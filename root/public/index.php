@@ -48,15 +48,6 @@ require_once '../lib/load-lib.php';
     <div class="tab">
         <a href="/home"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/home') echo 'active'; ?>">Statuses</button></a>
         <a href="/accounts"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/accounts') echo 'active'; ?>">Accounts</button></a>
-        <a href="/gallery">
-    <button class="tablinks <?php
-    $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    if (preg_match('/^\/gallery\/.+/', $currentPath)) {
-        echo 'active';
-    }
-    ?>">Gallery</button>
-</a>
-
         <?php
         if (isset($_SESSION['username'])) {
             $userData = getUserInfo($_SESSION['username']);
@@ -89,7 +80,6 @@ require_once '../lib/load-lib.php';
         </p>
     </footer>
     <script src="/assets/js/footer-scripts.js"></script>
-    <?php require_once '../lib/support-lib.php'; ?>
 </body>
 
 </html>

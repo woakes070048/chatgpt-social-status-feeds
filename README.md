@@ -57,6 +57,9 @@ To ensure optimal performance and resource management, you can set limits on API
 
 ### Change Log
 
+#### Version 3.2.0
+- New automatic image creation with Dall-e
+
 #### Version 3.1.0
 - Admins now can check and remove IPs from blacklist that the built in WAF has blocked.
 - New Quick Status maker for unique situations.
