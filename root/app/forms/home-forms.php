@@ -7,19 +7,23 @@
  * Description: ChatGPT API Status Generator
  */
 
- if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+require_once '../lib/db.php'; // Make sure this points to your database access class
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["delete_status"])) {
         $accountName = trim($_POST["account"]);
         $accountOwner = trim($_POST["username"]);
-        $index = (int) $_POST["index"];
+        $statusId = (int) $_POST["index"];  // Assuming 'index' is the status ID to be deleted
 
-        $statusFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";
-        $statuses = file_exists($statusFile) ? json_decode(file_get_contents($statusFile), true) : [];
+        // Initialize database object
+        $db = new Database();
 
-        if (isset($statuses[$index])) {
-            array_splice($statuses, $index, 1); // Remove item at index
-            file_put_contents($statusFile, json_encode($statuses));
-        }
+        // Delete status from the database
+        $db->query("DELETE FROM status_updates WHERE id = :statusId AND account = :accountName AND username = :accountOwner");
+        $db->bind(':statusId', $statusId);
+        $db->bind(':accountName', $accountName);
+        $db->bind(':accountOwner', $accountOwner);
+        $db->execute();
     }
 }
-
+?>
