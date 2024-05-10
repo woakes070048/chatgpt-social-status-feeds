@@ -60,8 +60,15 @@
             <?php endif; ?>
 
             <div class="cron-feed-addresses">
-                <p>Feed: <a href="<?php echo $feedUrl; ?>">Right Click Here</a></p>
+                <button onclick="location.href='<?php echo $feedUrl; ?>';">View Feed</button>
+                <form action="/home" method="POST">
+                    <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
+                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($accountOwner); ?>">
+                    <input type="hidden" name="index" value="<?php echo $index; ?>">
+                    <button type="submit" class="generate-status-button" name="generate_status">Generate Status</button>
+                </form>
             </div>
+
         </div>
     <?php endforeach; ?>
 </div>

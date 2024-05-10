@@ -13,29 +13,11 @@
     width: 96%;
   }
 
-.support-popup iframe {
-    height: 100%;
-    width: 100%;
-}
-
-.myacct-popup, .support-popup, .blklist-popup, .status-popup  {
-  width: 95%;
-  height: 100%;
-}
-
-.myacct-closeButton, .support-closeButton, .blklist-closeButton , .status-closeButton {
-  right: 30px;
-  top: 20px;
-}
-
   select,
   .edit-users-form,
-  .edit-accounts-form,
-  .edit-images-form,
+  .edit-accounts-form
   .edit-users-list,
-  .edit-accounts-list,
-  .edit-images-list,
-  .dropzone {
+  .edit-accounts-list {
     width: 100%;
   }
 
@@ -81,8 +63,7 @@
 
   /* Edit Styles */
   .edit-users-box,
-  .edit-accounts-box,
-  .edit-images-box {
+  .edit-accounts-box{
     flex-wrap: wrap;
   }
 
@@ -91,18 +72,6 @@
     width: 100%;
   }
 
-  /* Pagination Styles */
-  .pagination {
-    display: flex;
-    justify-content: flex-start;
-    margin-top: 20px;
-    flex-wrap: wrap;
-    flex-direction: row;
-  }
-
-  .pagination a {
-    margin: 5px 5px;
-  }
 }
 
 /* ================================================

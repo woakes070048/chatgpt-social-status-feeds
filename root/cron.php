@@ -7,9 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-// 0 9,12,18 * * * php /path/to/cron/cron.php job_type=run_status
-// 0 0 1 * * php /path/to/cron.php job_type=reset_usage
-
 require_once './config.php';
 require_once '/lib/common-lib.php';
 require_once '/lib/status-lib.php';
@@ -23,9 +20,13 @@ if ($jobType == 'reset_usage') {
 } elseif ($jobType == 'run_status') {
     // Run status update jobs
     runStatusUpdateJobs();
+} elseif ($jobType == 'clear_list') {
+    // Clear the IP blacklist
+    clearIpBlacklist();
 }
 
-function runStatusUpdateJobs() {
+function runStatusUpdateJobs()
+{
     // Define times for cron jobs
     $cronTimes = [
         1 => ['12:00'],
@@ -63,19 +64,22 @@ function runStatusUpdateJobs() {
     }
 }
 
-function resetApiUsage() {
+function resetApiUsage()
+{
     $db = new Database();
     $db->query("UPDATE users SET used_api_calls = 0");
     $db->execute();
 }
 
-function getAllAccounts() {
+function getAllAccounts()
+{
     $db = new Database();
     $db->query("SELECT * FROM accounts");
     return $db->resultSet();
 }
 
-function hasStatusBeenPosted($accountName, $accountOwner, $currentTimeSlot) {
+function hasStatusBeenPosted($accountName, $accountOwner, $currentTimeSlot)
+{
     $db = new Database();
     // Calculate time window
     $startTime = date('Y-m-d H:i:s', strtotime($currentTimeSlot . ' -15 minutes'));
@@ -92,4 +96,10 @@ function hasStatusBeenPosted($accountName, $accountOwner, $currentTimeSlot) {
     // Return true if a status has been posted in the time window, false otherwise
     return $result->count > 0;
 }
-?>
+
+function clearIpBlacklist()
+{
+    $db = new Database();
+    $db->query("DELETE FROM ip_blacklist");
+    $db->execute();
+}

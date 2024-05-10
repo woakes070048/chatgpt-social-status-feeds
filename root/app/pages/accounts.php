@@ -15,6 +15,12 @@
         <form action="/accounts" method="POST">
             <label for="account_name">Account Name:</label>
             <input type="text" name="account_name" id="account_name" required>
+            <label for="platform">Platform:</label>
+            <select name="platform" id="platform" required>
+                <option value="facebook">Facebook</option>
+                <option value="twitter">Twitter</option>
+                <option value="instagram">Instagram</option>
+            </select>
             <label for="add-prompt">Prompt:</label>
             <textarea name="prompt" id="add-prompt" required></textarea>
             <label for="link">Link:</label>
