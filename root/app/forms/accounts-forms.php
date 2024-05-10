@@ -1,5 +1,5 @@
 <?php
- /*
+/*
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
@@ -7,92 +7,50 @@
  * Description: ChatGPT API Status Generator
  */
 
+require_once '../lib/db.php'; // Make sure this points to your database access class
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["edit_account"])) {
         $accountOwner = $_SESSION["username"];
         $accountName = trim($_POST["account_name"]);
         $key = trim($_POST["key"]);
         $prompt = trim($_POST["prompt"]);
-        $hashtags = isset($_POST["hashtags"]) ? true : false;
+        $hashtags = isset($_POST["hashtags"]) ? 1 : 0;
         $link = trim($_POST["link"]);
 
         if (!empty($accountName) && !empty($key) && !empty($prompt) && !empty($link)) {
-            $acctInfo = getAcctInfo($accountOwner, $accountName);
+            $db = new Database();
 
-            $acctInfo['key'] = $key;
-            $acctInfo['prompt'] = $prompt;
-            $acctInfo['hashtags'] = $hashtags;
-            $acctInfo['link'] = $link;
+            // Update or insert account data
+            $db->query("REPLACE INTO accounts (account_owner, account_name, key, prompt, hashtags, link) VALUES (:accountOwner, :accountName, :key, :prompt, :hashtags, :link)");
+            $db->bind(':accountOwner', $accountOwner);
+            $db->bind(':accountName', $accountName);
+            $db->bind(':key', $key);
+            $db->bind(':prompt', $prompt);
+            $db->bind(':hashtags', $hashtags);
+            $db->bind(':link', $link);
+            $db->execute();
 
-            // Create the directory for the account if it doesn't exist
-            $directoryPath = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/";
-            if (!file_exists($directoryPath)) {
-                mkdir($directoryPath, 0777, true);
-            }
-
-            // Create the directory for the images if it doesn't exist
-            $imagesDirectoryPath = "images/{$accountOwner}/{$accountName}/";
-            if (!file_exists($imagesDirectoryPath)) {
-                mkdir($imagesDirectoryPath, 0777, true);
-            }
-
-            // Then write the account file
-            file_put_contents("{$directoryPath}acct", json_encode($acctInfo));
-
-            echo '<script type="text/javascript">
-                alert("Account has been created or modified");
-                window.location.href = window.location.href;
-                </script>';
+            echo '<script type="text/javascript">alert("Account has been created or modified"); window.location.href = window.location.href;</script>';
             exit;
         } else {
-            echo '<script type="text/javascript">
-            alert("A field is missing or has incorrect data. Please try again.");
-            window.location.href = window.location.href;
-            </script>';
+            echo '<script type="text/javascript">alert("A field is missing or has incorrect data. Please try again."); window.location.href = window.location.href;</script>';
             exit;
         }
     } elseif (isset($_POST["delete_account"])) {
         $accountName = trim($_POST["account_name"]);
         $accountOwner = $_SESSION["username"];
 
-        $accountFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/acct";
-        $statusFile = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/statuses";
+        $db = new Database();
 
-        if (file_exists($accountFile)) {
-            unlink($accountFile);
+        // Delete the account from the database
+        $db->query("DELETE FROM accounts WHERE account_owner = :accountOwner AND account_name = :accountName");
+        $db->bind(':accountOwner', $accountOwner);
+        $db->bind(':accountName', $accountName);
+        $db->execute();
 
-            if (file_exists($statusFile)) {
-                unlink($statusFile);
-            }
-
-            $accountDirectory = ACCOUNTS_DIR . "/{$accountOwner}/{$accountName}/";
-            if (is_dir($accountDirectory)) {
-                $files = glob($accountDirectory . '*');
-                foreach ($files as $file) {
-                    if (is_file($file)) {
-                        unlink($file);
-                    }
-                }
-                rmdir($accountDirectory);
-            }
-
-            $imageFolder = IMAGES_DIR . "/{$accountOwner}/{$accountName}/";
-            if (file_exists($imageFolder)) {
-                $files = glob($imageFolder . '*');
-                foreach ($files as $file) {
-                    if (is_file($file)) {
-                        unlink($file);
-                    }
-                }
-                rmdir($imageFolder);
-            }
-
-            // Account Deleted
-            echo '<script type="text/javascript">
-                alert("Account Deleted");
-                window.location.href = window.location.href;
-            </script>';
-            exit;
-        }
+        echo '<script type="text/javascript">alert("Account Deleted"); window.location.href = window.location.href;</script>';
+        exit;
     }
 }
+?>
