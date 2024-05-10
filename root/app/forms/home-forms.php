@@ -7,8 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-require_once '../lib/db.php'; // Make sure this points to your database access class
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["delete_status"])) {
         $accountName = trim($_POST["account"]);
@@ -26,4 +24,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->execute();
     }
 }
-?>

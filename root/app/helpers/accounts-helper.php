@@ -7,8 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-require_once 'lib/db.php'; // Include your database class
-
 function generateAccountDetails() {
     $accountOwner = $_SESSION['username'];
 
@@ -34,4 +32,3 @@ function generateAccountDetails() {
     }
     return $output;
 }
-?>

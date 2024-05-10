@@ -43,7 +43,6 @@ function runStatusUpdateJobs() {
     foreach ($accounts as $account) {
         $accountOwner = $account->username;
         $accountName = $account->account;
-        $key = $account->key;
 
         $acctInfo = getAcctInfo($accountOwner, $accountName);
         $userInfo = getUserInfo($accountOwner);
@@ -57,7 +56,7 @@ function runStatusUpdateJobs() {
                     $prompt = $acctInfo->prompt;
                     $link = $acctInfo->link;
                     $hashtags = $acctInfo->hashtags;
-                    generateStatus($accountName, $accountOwner, $key, $prompt, $link, $hashtags);
+                    generateStatus($accountName, $accountOwner, $prompt, $link, $hashtags);
                 }
             }
         }

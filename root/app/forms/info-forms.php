@@ -7,8 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-require_once '../lib/db.php'; // Ensure this points to your database class
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["change_password"])) {
         $username = $_POST['username'];
@@ -23,21 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->query("UPDATE users SET password = :password WHERE username = :username");
             $db->bind(':username', $username);
             $db->bind(':password', $password); // Consider using password_hash($password, PASSWORD_DEFAULT) for security
-            $db->execute();
-
-            echo '<script type="text/javascript">
-    alert("Password Updated!");
-    window.location.href = window.location.href;
-</script>';
-            exit;
+            if ($db->execute()) {
+                $_SESSION['messages'][] = "Password Updated!";
+            } else {
+                $_SESSION['messages'][] = "Failed to update password.";
+            }
         } else {
-            // Passwords do not match
-            echo '<script type="text/javascript">
-    alert("Passwords do not match. Please try again.");
-    window.location.href = window.location.href;
-</script>';
-            exit;
+            $_SESSION['messages'][] = "Passwords do not match. Please try again.";
         }
+
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
     }
 }
-?>

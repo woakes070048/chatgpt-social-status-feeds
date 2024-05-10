@@ -1,52 +1,36 @@
-// Function to copy text to clipboard
-function copyToClipboard(statusText) {
-    var tempInput = document.createElement('textarea');
-    tempInput.value = statusText;
-    document.body.appendChild(tempInput);
-    tempInput.select();
-    document.execCommand('copy');
-    document.body.removeChild(tempInput);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    // Check if the current URL path contains '/home'
-    if (window.location.pathname.includes('/home')) {
-        // Get the Facebook button elements
-        const facebookButtons = document.querySelectorAll('.share-buttons a[data-social="facebook"]');
-        // Check if the elements exist
-        if (facebookButtons) {
-            // Loop through each Facebook button to add 'onclick' attribute for clipboard copy
-            facebookButtons.forEach((button) => {
-                const statusText = button.dataset.status;
-                button.setAttribute('onclick', 'copyToClipboard("' + statusText + '")');
-            });
-        }
-
-        // Get the linkedin button elements
-        const linkedinButtons = document.querySelectorAll('.share-buttons a[data-social="linkedin"]');
-        // Check if the elements exist
-        if (linkedinButtons) {
-            // Loop through each linkedin button to add 'onclick' attribute for clipboard copy
-            linkedinButtons.forEach((button) => {
-                const statusText = button.dataset.status;
-                button.setAttribute('onclick', 'copyToClipboard("' + statusText + '")');
-            });
-        }
-    }
-
-    $("#copyButton").click(function(){
-        /* Get the text field */
-        var copyText = document.getElementById("quickresponse");
-
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-
-        /* Copy the text inside the text field */
-        document.execCommand("copy");
-
-        /* Alert the copied text */
-        alert("Copied the text: " + copyText.value);
+document.addEventListener("DOMContentLoaded", function () {
+  // Handle copy to clipboard
+  const clipboardButtons = document.querySelectorAll(
+    '.share-buttons button[data-action="copy"]'
+  );
+  clipboardButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const text = this.getAttribute("data-status-text");
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          alert("Text copied to clipboard!");
+        })
+        .catch((err) => {
+          console.error("Failed to copy text: ", err);
+        });
     });
+  });
+
+  // Handle image download
+  const downloadButtons = document.querySelectorAll(
+    '.share-buttons button[data-action="download"]'
+  );
+  downloadButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const imagePath = this.getAttribute("data-image-path");
+      const filename = imagePath.substring(imagePath.lastIndexOf("/") + 1); // Extract filename from path
+      const link = document.createElement("a");
+      link.href = imagePath;
+      link.download = filename; // Ensure the 'download' attribute is set with the filename
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  });
 });

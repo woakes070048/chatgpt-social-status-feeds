@@ -6,9 +6,6 @@
  * File: ../app/pages/home.php
  * Description: ChatGPT API Status Generator
 */
-
-require_once '../lib/db.php'; // Include your database access class
-
 ?>
 
 <div class="account-box">
@@ -30,8 +27,7 @@ require_once '../lib/db.php'; // Include your database access class
         $accountName = $account->account_name;
         $acctInfo = getAcctInfo($accountOwner, $accountName);
         $statuses = getStatusInfo($accountOwner, $accountName);
-        $cronUrl = htmlspecialchars("/cron.php?user={$accountOwner}&acct={$accountName}&key={$acctInfo['key']}");
-        $feedUrl = htmlspecialchars("/feeds.php?user={$accountOwner}&acct={$accountName}&key={$acctInfo['key']}");
+        $feedUrl = htmlspecialchars("/feeds.php?user={$accountOwner}&acct={$accountName}");
     ?>
         <div class="statuses">
             <h3><?php echo htmlspecialchars($accountName); ?> Statuses</h3>
@@ -64,7 +60,6 @@ require_once '../lib/db.php'; // Include your database access class
             <?php endif; ?>
 
             <div class="cron-feed-addresses">
-                <p>Cron Job: <a href="<?php echo $cronUrl; ?>">Right Click Here</a></p>
                 <p>Feed: <a href="<?php echo $feedUrl; ?>">Right Click Here</a></p>
             </div>
         </div>

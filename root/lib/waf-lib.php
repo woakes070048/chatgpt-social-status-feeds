@@ -52,36 +52,49 @@ function contains_disallowed_patterns($str)
 
 function update_failed_attempts($ip)
 {
-    $blacklist_file = BLACKLIST_DIR . "/BLACKLIST.json";
-    $content = json_decode(file_get_contents($blacklist_file), true);
+    $db = new Database();
 
-    if (isset($content[$ip])) {
-        $content[$ip]['login_attempts'] += 1;
+    // Check if the IP already exists in the database
+    $db->query("SELECT * FROM ip_blacklist WHERE ip_address = :ip");
+    $db->bind(':ip', $ip);
+    $result = $db->single();
 
-        if ($content[$ip]['login_attempts'] >= 3) {
-            $content[$ip]['blacklisted'] = true;
-            $content[$ip]['timestamp'] = time();
-        }
+    if ($result) {
+        // IP exists, update login attempts and check for blacklisting
+        $attempts = $result['login_attempts'] + 1;
+        $is_blacklisted = ($attempts >= 3) ? true : false;
+        $timestamp = ($is_blacklisted) ? time() : $result['timestamp'];
+
+        $db->query("UPDATE ip_blacklist SET login_attempts = :attempts, blacklisted = :blacklisted, timestamp = :timestamp WHERE ip_address = :ip");
+        $db->bind(':attempts', $attempts);
+        $db->bind(':blacklisted', $is_blacklisted);
+        $db->bind(':timestamp', $timestamp);
     } else {
-        $content[$ip] = ['login_attempts' => 1, 'blacklisted' => false, 'timestamp' => time()];
+        // IP does not exist, insert new entry
+        $db->query("INSERT INTO ip_blacklist (ip_address, login_attempts, blacklisted, timestamp) VALUES (:ip, 1, FALSE, :timestamp)");
+        $db->bind(':ip', $ip);
+        $db->bind(':timestamp', time());
     }
-
-    file_put_contents($blacklist_file, json_encode($content));
+    $db->execute();
 }
+
 function is_blacklisted($ip)
 {
-    $blacklist_file = BLACKLIST_DIR . "/BLACKLIST.json";
-    $blacklist = json_decode(file_get_contents($blacklist_file), true);
+    $db = new Database();
+    $db->query("SELECT * FROM ip_blacklist WHERE ip_address = :ip AND blacklisted = TRUE");
+    $db->bind(':ip', $ip);
+    $result = $db->single();
 
-    if (isset($blacklist[$ip]) && $blacklist[$ip]['blacklisted']) {
-        // Check if the timestamp is older than three days
-        if (time() - $blacklist[$ip]['timestamp'] > (3 * 24 * 60 * 60)) {
-            // Remove the IP address from the blacklist
-            $blacklist[$ip]['blacklisted'] = false;
-            file_put_contents($blacklist_file, json_encode($blacklist));
-        } else {
-            return true;
+    if ($result) {
+        // Check if the blacklist timestamp is older than three days
+        if (time() - $result['timestamp'] > (3 * 24 * 60 * 60)) {
+            // Update to remove the IP from the blacklist
+            $db->query("UPDATE ip_blacklist SET blacklisted = FALSE WHERE ip_address = :ip");
+            $db->bind(':ip', $ip);
+            $db->execute();
+            return false;
         }
+        return true;
     }
     return false;
 }

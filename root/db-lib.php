@@ -1,5 +1,12 @@
 <?php
-// Include the configuration file for database credentials
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: /db.php
+ * Description: ChatGPT API Status Generator
+ */
+
 require_once 'config.php';
 
 class Database {

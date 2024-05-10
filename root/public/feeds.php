@@ -12,16 +12,19 @@ require_once '../lib/common-lib.php';
 require_once '../lib/rss-lib.php';
 
 // Check if the required query parameters are present in the URL
-if (!isset($_GET['user']) || !isset($_GET['acct']) || !isset($_GET['key'])) {
+if (!isset($_GET['user']) || !isset($_GET['acct'])) {
     echo 'Error: Missing required parameters';
     exit();
-} elseif (isset($_GET['user']) && isset($_GET['acct']) && isset($_GET['key'])) {
+} elseif (isset($_GET['user']) && isset($_GET['acct'])) {
     $accountOwner = $_GET['user'];
     $accountName = $_GET['acct'];
-    $key = $_GET['key'];
 
-    $acctInfo = getAcctInfo($accountOwner, $accountName); {
-            outputRssFeed($accountName, $accountOwner, $acctInfo, $key);
-
+    // Fetch account information using the provided username and account name
+    $acctInfo = getAcctInfo($accountOwner, $accountName);
+    if ($acctInfo) {
+        // Call the function to output RSS feed
+        outputRssFeed($accountName, $accountOwner, $acctInfo);
+    } else {
+        echo 'Error: Account information could not be retrieved';
     }
 }
