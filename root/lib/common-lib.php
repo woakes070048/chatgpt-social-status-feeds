@@ -7,38 +7,38 @@
  * Description: ChatGPT API Status Generator
  */
 
- //This function retrieves user information from the user file.
+require_once 'lib-db.php';  // Include the Database class for database operations
+
+// Retrieve user information from the database
 function getUserInfo($username) {
-    $filePath = USERS_DIR . "/{$username}";
-    if (file_exists($filePath)) {
-        $userData = file_get_contents($filePath);
-        $userInfo = json_decode($userData, true);
-        return $userInfo;
-    } else {
-        return null; // File not found
-    }
+    $db = new Database();
+    $db->query("SELECT * FROM users WHERE username = :username");
+    $db->bind(':username', $username);
+    return $db->single();
 }
 
-//This function retrieves account information from the account file.
+// Retrieve account information from the database
 function getAcctInfo($username, $account) {
-    $filePath = ACCOUNTS_DIR . "/{$username}/{$account}/acct";
-    if (file_exists($filePath)) {
-        $acctData = file_get_contents($filePath);
-        $acctInfo = json_decode($acctData, true);
-        return $acctInfo;
-    } else {
-        return null; // File not found
-    }
+    $db = new Database();
+    $db->query("SELECT * FROM accounts WHERE username = :username AND account = :account");
+    $db->bind(':username', $username);
+    $db->bind(':account', $account);
+    return $db->single();
 }
 
-//This function retrieves status information from the statuses file.
+// Retrieve status information from the database
 function getStatusInfo($username, $account) {
-    $filePath = ACCOUNTS_DIR . "/{$username}/{$account}/statuses";
-    if (file_exists($filePath)) {
-        $statusData = file_get_contents($filePath);
-        $statusInfo = json_decode($statusData, true);
-        return $statusInfo;
-    } else {
-        return null; // File not found
-    }
+    $db = new Database();
+    $db->query("SELECT * FROM status_updates WHERE username = :username AND account = :account ORDER BY created_at DESC");
+    $db->bind(':username', $username);
+    $db->bind(':account', $account);
+    return $db->resultSet();
+}
+
+// Retrieve all account names for a given username from the database
+function getAllUserAccts($username) {
+    $db = new Database();
+    $db->query("SELECT account FROM accounts WHERE username = :username");
+    $db->bind(':username', $username);
+    return $db->resultSet();  // Returns an array of objects where each object contains account information
 }
