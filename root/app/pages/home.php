@@ -6,22 +6,28 @@
  * File: ../app/pages/home.php
  * Description: ChatGPT API Status Generator
 */
+
+require_once '../lib/db.php'; // Include your database access class
+
 ?>
 
 <div class="account-box">
     <?php
     $accountOwner = $_SESSION['username'];
 
-    // Get the user's account directories
-    $accountDirs = glob(ACCOUNTS_DIR . "/{$accountOwner}/*", GLOB_ONLYDIR);
+    // Initialize database object
+    $db = new Database();
+    $db->query("SELECT account_name FROM accounts WHERE account_owner = :accountOwner");
+    $db->bind(':accountOwner', $accountOwner);
+    $accounts = $db->resultSet();
 
-    if (empty($accountDirs)) {
+    if (empty($accounts)) {
         echo 'Please set up an account!';
         return;
     }
 
-    foreach ($accountDirs as $accountDir) :
-        $accountName = basename($accountDir);
+    foreach ($accounts as $account) :
+        $accountName = $account->account_name;
         $acctInfo = getAcctInfo($accountOwner, $accountName);
         $statuses = getStatusInfo($accountOwner, $accountName);
         $cronUrl = htmlspecialchars("/cron.php?user={$accountOwner}&acct={$accountName}&key={$acctInfo['key']}");
@@ -32,17 +38,17 @@
             <?php if (!empty($statuses)) : ?>
                 <ul>
                     <?php foreach ($statuses as $index => $status) : ?>
-                        <?php if (!empty($status['text'])) : ?>
+                        <?php if (!empty($status->text)) : ?>
                             <?php
-                            $imagePath = $status['status-image'] !== null
-                                ? "images/{$accountOwner}/{$accountName}/{$status['status-image']}"
+                            $imagePath = $status->status_image !== null
+                                ? "images/{$accountOwner}/{$accountName}/{$status->status_image}"
                                 : 'assets/images/default.jpg';
                             $image = '<img src="' . htmlspecialchars($imagePath) . '" class="status-image">';
                             ?>
                             <li>
                                 <?php echo $image; ?>
-                                <p class="status-text"><?php echo htmlspecialchars($status['text']); ?></p>
-                                <?php echo shareButton($status['text'], $imagePath, $acctInfo['link'], $index); ?>
+                                <p class="status-text"><?php echo htmlspecialchars($status->text); ?></p>
+                                <?php echo shareButton($status->text, $imagePath, $acctInfo['link'], $index); ?>
                                 <form class="delete-status-form" action="/home" method="POST">
                                     <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
                                     <input type="hidden" name="username" value="<?php echo htmlspecialchars($accountOwner); ?>">
