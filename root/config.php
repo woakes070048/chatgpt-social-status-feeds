@@ -31,3 +31,12 @@ define('IMAGES_DIR', BASE_DIR . '/storage/images');
 define('USERS_DIR', BASE_DIR . '/storage/users');
 define('ACCOUNTS_DIR', BASE_DIR . '/storage/accounts');
 define('LOG_DIR', BASE_DIR . '/storage/logs');
+
+// MySQL Database Connection Variables
+define('DB_HOST', 'localhost');  // Database host
+define('DB_USER', 'your_username');  // Database username
+define('DB_PASSWORD', 'your_password');  // Database password
+define('DB_NAME', 'your_database_name');  // Database name
+
+// Additional settings
+define('INSTALLED', false);  // Flag to indicate if the system has been installed
