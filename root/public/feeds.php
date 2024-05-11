@@ -9,10 +9,10 @@
  */
 
 // Include necessary files from the base directory
-require_once __DIR__ . '/config.php'; // Configuration settings
-require_once __DIR__ . '/db.php'; // Database functions
-require_once __DIR__ . '/lib/common-lib.php'; // Common utility functions
-require_once __DIR__ . '/lib/rss-lib.php'; // RSS feed generation library
+require_once __DIR__ . '/../config.php'; // Configuration settings
+require_once __DIR__ . '/../db.php'; // Database functions
+require_once __DIR__ . '/../lib/common-lib.php'; // Common utility functions
+require_once __DIR__ . '/../lib/rss-lib.php'; // RSS feed generation library
 
 // Check if the required query parameters 'user' and 'acct' are present in the URL
 if (!isset($_GET['user']) || !isset($_GET['acct'])) {

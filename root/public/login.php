@@ -11,11 +11,11 @@ session_start();
 if (!defined('BASE_DIR')) {
     define('BASE_DIR', dirname($_SERVER['DOCUMENT_ROOT']));
 }
-require_once BASE_DIR . '/config.php';
-require_once BASE_DIR . '/db.php';
-require_once BASE_DIR . '/lib/waf-lib.php';
-require_once BASE_DIR . '/lib/common-lib.php';
-require_once BASE_DIR . '/lib/auth-lib.php';
+require_once __DIR__ .  '/../config.php';
+require_once __DIR__ .  '/../db.php';
+require_once __DIR__ .  '/../lib/waf-lib.php';
+require_once __DIR__ .  '/../lib/common-lib.php';
+require_once __DIR__ .  '/../lib/auth-lib.php';
 ?>
 
 <!DOCTYPE html>

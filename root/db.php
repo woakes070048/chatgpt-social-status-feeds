@@ -159,7 +159,7 @@ if (!defined('INSTALLED') || !INSTALLED) {
     $db->execute();
 
     // Update the config file to set INSTALLED to true
-    $configFilePath = BASE_DIR . '/config.php';
+    $configFilePath = __DIR__ .  '/config.php';
     $configData = file_get_contents($configFilePath);
     $configData = str_replace("define('INSTALLED', false);", "define('INSTALLED', true);", $configData);
     file_put_contents($configFilePath, $configData);

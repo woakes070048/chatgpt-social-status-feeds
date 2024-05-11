@@ -39,9 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
                 // Insert new account data
                 $db->query("INSERT INTO accounts (username, account, prompt, platform, hashtags, link, image_prompt, cron) VALUES (:accountOwner, :accountName, :prompt, :platform, :hashtags, :link, :imagePrompt, :cron)");
                 // Create directory for images if the account is being created
-                $acctImagePath = BASE_DIR . '/public/images/' . $accountOwner . '/' . $accountName;
+                // Create directory for images if the account is being created
+                $acctImagePath = __DIR__ .  '/../../public/images/' . $accountOwner . '/' . $accountName;
                 if (!file_exists($acctImagePath)) {
                     mkdir($acctImagePath, 0777, true); // Create the directory recursively
+
+                    // Create index.php in the new directory
+                    $indexFilePath = $acctImagePath . '/index.php';
+                    file_put_contents($indexFilePath, '<?php die(); ?>');
                 }
             }
             $db->bind(':accountOwner', $accountOwner);
@@ -79,23 +84,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
         $db->bind(':accountOwner', $accountOwner);
         $db->bind(':accountName', $accountName);
         $db->execute();
-
-        // Delete the folder and its contents
-        $folderPath = __DIR__ . "/../../public/images/{$accountOwner}/{$accountName}";
-        if (is_dir($folderPath)) {
-            // Remove all files and subdirectories
-            $files = glob($folderPath . '/*');
-            foreach ($files as $file) {
-                if (is_file($file)) {
-                    unlink($file); // Delete the file
-                } elseif (is_dir($file)) {
-                    // Delete the subdirectory and its contents recursively
-                    array_map('unlink', glob("$file/*.*"));
-                    rmdir($file);
-                }
-            }
-            rmdir($folderPath); // Delete the folder
-        }
 
         $_SESSION['messages'][] = "Account Deleted";
         header("Location: /accounts");

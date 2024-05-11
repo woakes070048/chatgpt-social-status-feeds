@@ -11,11 +11,6 @@
 // Start or resume a session
 session_start();
 
-// Define the BASE_DIR if not already defined to ensure proper path inclusion
-if (!defined('BASE_DIR')) {
-    define('BASE_DIR', dirname($_SERVER['DOCUMENT_ROOT']));
-}
-
 // Include necessary configuration and function files
 require_once '../config.php'; // Configuration settings
 require_once '../db.php'; // Database functions
