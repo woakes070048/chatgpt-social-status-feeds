@@ -7,7 +7,8 @@
  * Description: ChatGPT API Status Generator
  */
 
-function generateAccountDetails() {
+function generateAccountDetails()
+{
     $accountOwner = $_SESSION['username'];
 
     $db = new Database();

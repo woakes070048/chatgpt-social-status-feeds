@@ -1,30 +1,29 @@
 <?php
-/*
+
+/**
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
  * File: feeds.php
- * Description: ChatGPT API Status Generator
+ * Description: This file generates an RSS feed for the ChatGPT API based on user accounts.
  */
 
-require_once '../config.php';
-require_once '../lib/common-lib.php';
-require_once '../lib/rss-lib.php';
+// Include necessary files from the base directory
+require_once __DIR__ . '/config.php'; // Configuration settings
+require_once __DIR__ . '/db.php'; // Database functions
+require_once __DIR__ . '/lib/common-lib.php'; // Common utility functions
+require_once __DIR__ . '/lib/rss-lib.php'; // RSS feed generation library
 
-// Check if the required query parameters are present in the URL
+// Check if the required query parameters 'user' and 'acct' are present in the URL
 if (!isset($_GET['user']) || !isset($_GET['acct'])) {
+    // Output an error message if the required parameters are missing
     echo 'Error: Missing required parameters';
     exit();
 } elseif (isset($_GET['user']) && isset($_GET['acct'])) {
-    $accountOwner = $_GET['user'];
-    $accountName = $_GET['acct'];
+    // Sanitize and store the parameters to prevent security issues such as XSS
+    $accountOwner = htmlspecialchars($_GET['user']);
+    $accountName = htmlspecialchars($_GET['acct']);
 
-    // Fetch account information using the provided username and account name
-    $acctInfo = getAcctInfo($accountOwner, $accountName);
-    if ($acctInfo) {
-        // Call the function to output RSS feed
-        outputRssFeed($accountName, $accountOwner, $acctInfo);
-    } else {
-        echo 'Error: Account information could not be retrieved';
-    }
+    // Call the function to output the RSS feed for the given account owner and name
+    outputRssFeed($accountName, $accountOwner);
 }

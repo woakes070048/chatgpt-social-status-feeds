@@ -8,67 +8,84 @@
 */
 ?>
 
-<div class="account-box">
+<main class="container">
     <?php
     $accountOwner = $_SESSION['username'];
-
-    // Initialize database object
     $db = new Database();
-    $db->query("SELECT account_name FROM accounts WHERE account_owner = :accountOwner");
+    $db->query("SELECT account FROM accounts WHERE username = :accountOwner");
     $db->bind(':accountOwner', $accountOwner);
     $accounts = $db->resultSet();
 
     if (empty($accounts)) {
-        echo 'Please set up an account!';
+        echo '<div id="no-account"><p>Please set up an account!</p></div>';
         return;
     }
 
     foreach ($accounts as $account) :
-        $accountName = $account->account_name;
+        $accountName = $account->account;
         $acctInfo = getAcctInfo($accountOwner, $accountName);
         $statuses = getStatusInfo($accountOwner, $accountName);
         $feedUrl = htmlspecialchars("/feeds.php?user={$accountOwner}&acct={$accountName}");
     ?>
-        <div class="statuses">
-            <h3><?php echo htmlspecialchars($accountName); ?> Statuses</h3>
+        <div class="status-container">
+            <h3>Campaign #<?= htmlspecialchars($accountName) ?> Statuses</h3>
             <?php if (!empty($statuses)) : ?>
                 <ul>
-                    <?php foreach ($statuses as $index => $status) : ?>
-                        <?php if (!empty($status->text)) : ?>
-                            <?php
-                            $imagePath = $status->status_image !== null
-                                ? "images/{$accountOwner}/{$accountName}/{$status->status_image}"
-                                : 'assets/images/default.jpg';
-                            $image = '<img src="' . htmlspecialchars($imagePath) . '" class="status-image">';
-                            ?>
+                    <?php foreach ($statuses as $status) : ?>
+                        <?php if (!empty($status->status)) : ?>
                             <li>
-                                <?php echo $image; ?>
-                                <p class="status-text"><?php echo htmlspecialchars($status->text); ?></p>
-                                <?php echo shareButton($status->text, $imagePath, $acctInfo['link'], $index); ?>
+                                <img src="<?= htmlspecialchars($status->status_image ? "images/{$accountOwner}/{$accountName}/{$status->status_image}" : 'assets/images/default.png') ?>" class="status-image">
+                                <p class="status-text"><?= htmlspecialchars($status->status) ?></p>
+                                <?php echo shareButton($status->status, $status->status_image, $status->id, $accountOwner, $accountName); ?>
                                 <form class="delete-status-form" action="/home" method="POST">
-                                    <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
-                                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($accountOwner); ?>">
-                                    <input type="hidden" name="index" value="<?php echo $index; ?>">
-                                    <button type="submit" class="delete-status-button" name="delete_status">Delete</button>
+                                    <input type="hidden" name="account" value="<?= htmlspecialchars($accountName) ?>">
+                                    <input type="hidden" name="username" value="<?= htmlspecialchars($accountOwner) ?>">
+                                    <input type="hidden" name="id" value="<?= $status->id ?>">
+                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                                    <button class="delete-status-button red-button" type="submit" name="delete_status">Delete</button>
                                 </form>
                             </li>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
             <?php else : ?>
-                <p>No statuses available.</p>
+                <div id="no-status">
+                    <p>No statuses available.</p>
+                </div>
             <?php endif; ?>
 
-            <div class="cron-feed-addresses">
-                <button onclick="location.href='<?php echo $feedUrl; ?>';">View Feed</button>
-                <form action="/home" method="POST">
-                    <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
-                    <input type="hidden" name="username" value="<?php echo htmlspecialchars($accountOwner); ?>">
-                    <input type="hidden" name="index" value="<?php echo $index; ?>">
-                    <button type="submit" class="generate-status-button" name="generate_status">Generate Status</button>
+            <div class="account-action-container">
+                <button class="view-feed-button blue-button" onclick="location.href='<?= $feedUrl ?>';">View Feed</button>
+                <form class="account-action-form" action="/home" method="POST">
+                    <input type="hidden" name="account" value="<?= htmlspecialchars($accountName) ?>">
+                    <input type="hidden" name="username" value="<?= htmlspecialchars($accountOwner) ?>">
+                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                    <button type="submit" class="generate-status-button green-button" name="generate_status">Generate Status</button>
                 </form>
             </div>
-
         </div>
     <?php endforeach; ?>
-</div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.share-buttons .blue-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.getAttribute('data-text') ? 'copy' : 'download';
+                if (action === 'copy') {
+                    const text = this.getAttribute('data-text');
+                    navigator.clipboard.writeText(text).then(() => alert('Text copied to clipboard!'));
+                } else {
+                    const url = this.getAttribute('data-url');
+                    const filename = this.getAttribute('data-filename');
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            });
+        });
+    });
+</script>

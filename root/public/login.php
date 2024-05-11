@@ -8,11 +8,14 @@
  */
 
 session_start();
-require_once '../config.php';
-require_once '../db.php';
-require_once '../lib/waf-lib.php';
-require_once '../lib/common-lib.php';
-require_once '../lib/auth-lib.php';
+if (!defined('BASE_DIR')) {
+    define('BASE_DIR', dirname($_SERVER['DOCUMENT_ROOT']));
+}
+require_once BASE_DIR . '/config.php';
+require_once BASE_DIR . '/db.php';
+require_once BASE_DIR . '/lib/waf-lib.php';
+require_once BASE_DIR . '/lib/common-lib.php';
+require_once BASE_DIR . '/lib/auth-lib.php';
 ?>
 
 <!DOCTYPE html>

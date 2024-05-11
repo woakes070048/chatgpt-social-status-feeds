@@ -27,13 +27,14 @@ function getAcctInfo($username, $account)
 }
 
 // Retrieve status information from the database
+// Retrieve status information from the database
 function getStatusInfo($username, $account)
 {
     $db = new Database();
     $db->query("SELECT * FROM status_updates WHERE username = :username AND account = :account ORDER BY created_at DESC");
     $db->bind(':username', $username);
     $db->bind(':account', $account);
-    return $db->resultSet();
+    return $db->resultSet(); // Return the result set directly
 }
 
 // Retrieve all users from the database

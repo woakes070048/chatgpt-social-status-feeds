@@ -6,79 +6,47 @@
   body {
     margin: 0 0 70px;
   }
-
   input,
   textarea,
   select {
     width: 96%;
   }
-
+  .flex-container {
+    flex-wrap: wrap;
+  }
   select,
-  .edit-users-form,
-  .edit-accounts-form
-  .edit-users-list,
-  .edit-accounts-list {
+  #left-col, #right-col {
     width: 100%;
   }
-
-  .status-image {
-    width: calc(100% + 20px);
-  }
-
   /* Logo Styles */
   .logo img {
     width: 200px;
   }
-
   /* Account Styles */
   .account-details {
     width: 90%;
     flex-direction: column;
   }
-
-  .account-item,
-  .user-item {
+  .item-box {
     width: 90%;
   }
-
-  .account-box {
-    width: 100%;
-    flex: unset;
-    margin: 0;
-  }
-
   /* Status Styles */
-  .statuses li {
+  .status-container li {
     width: 100%;
   }
-
   .status-image {
-    height: 200px;
+    height: 250px;
     margin: -10px -10px 10px -10px;
   }
-
   .delete-status-form {
     margin-top: 10px;
   }
-
-  /* Edit Styles */
-  .edit-users-box,
-  .edit-accounts-box{
-    flex-wrap: wrap;
-  }
-
-  /* Image Styles */
-  .image-item {
-    width: 100%;
-  }
-
 }
-
 /* ================================================
    TABLET RESPONSIVE STYLES
 ================================================ */
 @media (min-width: 769px) and (max-width: 1200px) {
-.statuses li {
+  .status-container li {
     width: 30%;
   }
 }

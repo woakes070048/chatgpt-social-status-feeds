@@ -1,21 +1,12 @@
 /* ================================================
     STATUS MANAGEMENT STYLES
 ================================================ */
-.account-box {
-  background-color: #ffffff;
-  min-height: calc(100% - 85px);
-  border-radius: 20px 20px 4px 4px;
-  border-bottom: 2px solid #66cc33;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.statuses {
+.status-container {
   padding: 10px;
   max-width: 100%;
   overflow-x: overlay;
 }
-
-.statuses ul {
+.status-container ul {
   list-style-type: none;
   padding: 0;
   display: flex;
@@ -23,8 +14,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
 }
-
-.statuses li {
+.status-container li {
   display: flex;
   padding: 10px;
   margin-bottom: 10px;
@@ -36,88 +26,77 @@
   border: 2px solid #66cc33;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
 .status-text {
   overflow-x: overlay;
   height: 250px;
 }
-
 .status-image {
   width: calc(100% + 20px);
   height: 220px;
   margin: -10px 10px 10px -10px;
   overflow-x: hidden;
 }
-
 .delete-status-button {
   width: 100%;
   margin: 20px 0 10px 0;
 }
-
 .share-buttons {
-display: flex;
-background-color:aliceblue;
-flex-wrap: wrap;
-flex-direction: row;
-justify-content: space-around;
-margin: 0 -10px 0 -10px;
-padding: 10px;
-border-top: 2px solid #66cc33;
-border-bottom: 2px solid #66cc33;
-
+  display: flex;
+  background-color: aliceblue;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 0 -10px 0 -10px;
+  padding: 10px;
+  border-top: 2px solid #66cc33;
+  border-bottom: 2px solid #66cc33;
 }
-
 .share-buttons svg {
   -webkit-filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
-          filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.3));
   transition: -webkit-filter 0.3s ease-in-out;
   transition: filter 0.3s ease-in-out;
   transition: filter 0.3s ease-in-out, -webkit-filter 0.3s ease-in-out;
 }
-
 .share-buttons svg:hover {
   -webkit-filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
-          filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.1));
 }
-
-.cron-feed-addresses {
-  padding-top: 20px;
+.account-action-container {
+  padding: 10px;
   border-top: 2px solid #66cc33;
   border-bottom: 2px solid #66cc33;
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-
-.cron-feed-addresses button {
-  display: inline-block;
+.account-action-container button {
+  margin: 10px;
+  width: 200px;
 }
-
+#no-status {
+  justify-content: center;
+  display: flex;
+  padding: 40px;
+}
+#no-account {
+  justify-content: center;
+  display: flex;
+  padding: 40px;
+}
 /* ================================================
     ACCOUNT/USER EDITING STYLES
 ================================================ */
-.edit-users-box,
-.edit-accounts-box{
-  display: flex;
-  flex-direction: row;
-  border-radius: 20px 20px 0 0;
-  background-color: #ffffff;
-  min-height: 100vh;
-}
-
-.edit-users-form,
-.edit-accounts-form {
+#left-col {
   width: 25%;
   padding: 20px;
   background-color: #d6d6d6;
 }
-
-.edit-users-list,
-.edit-accounts-list{
+#right-col {
   width: 75%;
 }
-
-.user-item,
-.account-item {
+.item-box {
   min-width: 30%;
   padding: 10px;
   margin: 10px;
@@ -126,33 +105,32 @@ border-bottom: 2px solid #66cc33;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   float: left;
 }
-
-.user-item button,
-.account-item button {
+.item-box h3 {
+  font-size: 3em;
+  margin: 5px;
+}
+.edit-account-button,
+.edit-user-button {
+  width: 100%;
+  margin-top: 20px;
+}
+.update-account-button,
+.update-user-button,
+.delete-account-form,
+.delete-user-form {
+  margin-right: 8px;
   float: left;
-  margin-right: 20px;
+  width: 48%;
 }
-
-.selections {
-  display: flex;
-  flex-direction: column;
+.delete-user-button, .delete-account-button {
+  width: 100%;
 }
-
-.selections label,
-.selections select {
-  flex: 1;
-}
-
 .account-details {
-  display: inline-flex;
   padding: 10px;
   margin-top: 39px;
   border: 1px solid #66cc33;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  align-items: center;
-  justify-content: space-between;
 }
-
 .account-details p {
   margin-inline: 10px;
 }

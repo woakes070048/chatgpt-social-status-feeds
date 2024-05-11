@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Serve a default PNG image if the requested PNG does not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^images/.*\.png$ /assets/images/default.png[L]
+
 # redirect '/' to '/home' for external requests only
 RewriteCond %{THE_REQUEST} \s/\s [NC]
 RewriteRule ^$ /home [L,R=301]
@@ -13,6 +17,7 @@ RewriteCond %{REQUEST_URI} ^/(home|users|accounts|info)$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^/]*)$ /index.php?page=$1 [L]
+
 
 # Enable caching for certain file types
 <IfModule mod_expires.c>
