@@ -7,7 +7,7 @@
  * Description: ChatGPT API Status Generator
  */
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSION['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['edit_users'])) {
         $username = $_POST['username']; // Convert username to lowercase and replace spaces with hyphens
         $password = $_POST['password'];
@@ -87,8 +87,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
         header("Location: /users");
         exit;
     }
-} else {
-    // CSRF validation failed, handle the error
-    echo 'CSRF token mismatch.';
-    exit;
 }

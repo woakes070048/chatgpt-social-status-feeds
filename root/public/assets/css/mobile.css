@@ -27,6 +27,12 @@
     width: 90%;
     flex-direction: column;
   }
+  .view-feed-button, .account-action-form {
+    width: 45% !important;
+  }
+  .generate-status-button {
+    width: 100% !important;
+  }
   .item-box {
     width: 90%;
   }
@@ -38,8 +44,14 @@
     height: 250px;
     margin: -10px -10px 10px -10px;
   }
-  .delete-status-form {
-    margin-top: 10px;
+  .delete-user-button, .delete-account-button {
+    width: 100%;
+  }
+  .update-account-button, .update-user-button {
+    margin-right: 10px;
+  }
+  .delete-account-form, .delete-user-form {
+    margin-right: 0px;
   }
 }
 /* ================================================
@@ -48,5 +60,11 @@
 @media (min-width: 769px) and (max-width: 1200px) {
   .status-container li {
     width: 30%;
+  }
+  .item-box {
+    width: 94%;
+  }
+  .update-account-button, .update-user-button {
+    margin-right: 20px;
   }
 }

@@ -5,7 +5,7 @@
  * URL: https://vontainment.com
  * File: ../app/pages/accounts.php
  * Description: ChatGPT API Status Generator
-*/
+ */
 
 // Initialize the Database object
 $db = new Database();
@@ -31,12 +31,16 @@ $db = new Database();
             <label for="image_prompt">Image Prompt:</label>
             <input type="text" name="image_prompt" id="image_prompt" required>
             <label for="cron">Cron:</label> <!-- Added cron label -->
-            <select name="cron" id="cron" required> <!-- Dropdown for cron -->
-                <option value="1">1 post per day</option>
-                <option value="2">2 posts per day</option>
-                <option value="3">3 posts per day</option>
-                <option value="4">4 posts per day</option>
-                <option value="5">5 posts per day</option>
+            <select name="cron[]" id="cron" multiple> <!-- Multi-select dropdown for cron -->
+                <?php
+                for ($hour = 6; $hour <= 22; $hour++) {
+                    $amPm = ($hour < 12) ? 'am' : 'pm';
+                    $displayHour = ($hour <= 12) ? $hour : $hour - 12;
+                    $displayTime = "{$displayHour} {$amPm}";
+                    $value = ($hour < 10) ? "0{$hour}" : "{$hour}";
+                    echo "<option value=\"{$value}\">{$displayTime}</option>";
+                }
+                ?>
             </select>
             <div class="hashtags">
                 <label for="hashtags">Include Hashtags:</label>
@@ -65,7 +69,7 @@ $db = new Database();
             $dataAttributes .= "data-link=\"" . htmlspecialchars($accountData->link) . "\" ";
             $dataAttributes .= "data-image_prompt=\"" . htmlspecialchars($accountData->image_prompt) . "\" ";
             $dataAttributes .= "data-hashtags=\"" . ($accountData->hashtags ? 'true' : 'false') . "\" ";
-            $dataAttributes .= "data-cron=\"" . htmlspecialchars($accountData->cron) . "\" ";
+            $dataAttributes .= "data-cron=\"" . htmlspecialchars(implode(',', explode(',', $accountData->cron))) . "\" ";
             $dataAttributes .= "data-platform=\"" . htmlspecialchars($accountData->platform) . "\""; // Ensure this is correctly added
 
         ?>
@@ -84,6 +88,7 @@ $db = new Database();
 </main>
 
 <script>
+    // Updated JavaScript for handling multi-select cron field
     document.addEventListener('DOMContentLoaded', function() {
         const updateButtons = document.querySelectorAll('#update-button');
         updateButtons.forEach(button => {
@@ -101,7 +106,16 @@ $db = new Database();
                 linkField.value = decodeURIComponent(this.dataset.link.replace(/\+/g, ' '));
                 imagePromptField.value = decodeURIComponent(this.dataset.image_prompt.replace(/\+/g, ' '));
                 hashtagCheckbox.checked = this.dataset.hashtags === 'true';
-                cronField.value = this.dataset.cron;
+
+                // Set selected options for multi-select cron field
+                const selectedCronValues = this.dataset.cron.split(',');
+                selectedCronValues.forEach(value => {
+                    const option = cronField.querySelector(`option[value="${value}"]`);
+                    if (option) {
+                        option.selected = true;
+                    }
+                });
+
                 platformSelect.value = this.dataset.platform; // Set the platform dropdown
 
                 // Set the account name field as readonly when updating

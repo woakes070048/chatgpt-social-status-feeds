@@ -94,7 +94,7 @@ require_once '../lib/load-lib.php'; // Dynamic page loading library
 
     <!-- Footer section -->
     <footer>
-        <p>&copy; <?php echo date("Y"); ?> Vontainment. All Rights Reserved.</p>
+        <p>&copy; <?php echo date("Y"); ?> <a href="https://vontainment.com">Vontainment.com</a> All Rights Reserved.</p>
     </footer>
     <script>
         window.difyChatbotConfig = {

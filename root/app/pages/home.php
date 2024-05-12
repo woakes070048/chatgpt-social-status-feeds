@@ -21,14 +21,14 @@
         return;
     }
 
-    foreach ($accounts as $account) :
+    foreach ($accounts as $account) {
         $accountName = $account->account;
         $acctInfo = getAcctInfo($accountOwner, $accountName);
         $statuses = getStatusInfo($accountOwner, $accountName);
         $feedUrl = htmlspecialchars("/feeds.php?user={$accountOwner}&acct={$accountName}");
     ?>
         <div class="status-container">
-            <h3>Campaign #<?= htmlspecialchars($accountName) ?> Statuses</h3>
+            <h3>Status Campaign: #<?= htmlspecialchars($accountName) ?></h3>
             <?php if (!empty($statuses)) : ?>
                 <ul>
                     <?php foreach ($statuses as $status) : ?>
@@ -36,14 +36,7 @@
                             <li>
                                 <img src="<?= htmlspecialchars($status->status_image ? "images/{$accountOwner}/{$accountName}/{$status->status_image}" : 'assets/images/default.png') ?>" class="status-image">
                                 <p class="status-text"><?= htmlspecialchars($status->status) ?></p>
-                                <?php echo shareButton($status->status, $status->status_image, $status->id, $accountOwner, $accountName); ?>
-                                <form class="delete-status-form" action="/home" method="POST">
-                                    <input type="hidden" name="account" value="<?= htmlspecialchars($accountName) ?>">
-                                    <input type="hidden" name="username" value="<?= htmlspecialchars($accountOwner) ?>">
-                                    <input type="hidden" name="id" value="<?= $status->id ?>">
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <button class="delete-status-button red-button" type="submit" name="delete_status">Delete</button>
-                                </form>
+                                <?php echo shareButton($status->status, $status->status_image, $accountOwner, $accountName, $status->id); ?>
                             </li>
                         <?php endif; ?>
                     <?php endforeach; ?>
@@ -64,8 +57,10 @@
                 </form>
             </div>
         </div>
-    <?php endforeach; ?>
+    <?php } ?>
+
 </main>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

@@ -123,22 +123,22 @@ if (!defined('INSTALLED') || !INSTALLED) {
 
     // Create and populate the accounts table
     $db->query("CREATE TABLE IF NOT EXISTS accounts (
-        account VARCHAR(255) NOT NULL,
-        username VARCHAR(255) NOT NULL,
-        prompt TEXT,
-        hashtags BOOLEAN DEFAULT FALSE,
-        link VARCHAR(255),
-        cron INT DEFAULT 0,
-        image_prompt VARCHAR(255),
-        platform VARCHAR(255) NOT NULL,
-        PRIMARY KEY (account),
-        INDEX username_idx (username)
-    );");
+    account VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    prompt TEXT,
+    hashtags BOOLEAN DEFAULT FALSE,
+    link VARCHAR(255),
+    cron VARCHAR(255), // Change data type to string
+    image_prompt VARCHAR(255),
+    platform VARCHAR(255) NOT NULL,
+    PRIMARY KEY (account),
+    INDEX username_idx (username)
+);");
     $db->execute();
 
     // Insert an example account into the accounts table
     $db->query("INSERT INTO accounts (account, username, prompt, hashtags, link, cron, image_prompt, platform)
-    VALUES ('admin', 'admin', 'Write a Facebook status update for my business page.', TRUE, 'https://domain.com/', 3, 'image_prompt_example.jpg', 'facebook');");
+    VALUES ('admin', 'admin', 'Write a Facebook status update for my business page.', TRUE, 'https://domain.com/', '6,12,18' 'image_prompt_example.jpg', 'facebook');");
     $db->execute();
 
     // Create and populate the users table
@@ -159,7 +159,7 @@ if (!defined('INSTALLED') || !INSTALLED) {
     $db->execute();
 
     // Update the config file to set INSTALLED to true
-    $configFilePath = __DIR__ .  '/config.php';
+    $configFilePath = BASE_DIR . '/config.php';
     $configData = file_get_contents($configFilePath);
     $configData = str_replace("define('INSTALLED', false);", "define('INSTALLED', true);", $configData);
     file_put_contents($configFilePath, $configData);

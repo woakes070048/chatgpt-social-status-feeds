@@ -9,7 +9,7 @@
 
 require_once __DIR__ . '/../../lib/status-lib.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSION['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["delete_status"])) {
         $accountName = trim($_POST["account"]);
         $accountOwner = trim($_POST["username"]);
@@ -71,8 +71,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
         header("Location: /home");
         exit;
     }
-} else {
-    // CSRF validation failed, handle the error
-    echo 'CSRF token mismatch.';
-    exit;
 }

@@ -7,7 +7,7 @@
  * Description: ChatGPT API Status Generator
 */
 
-function shareButton($statusText, $imagePath, $index, $accountOwner, $accountName)
+function shareButton($statusText, $imagePath, $accountOwner, $accountName, $statusId)
 {
     $filename = basename($imagePath);
     $imageUrl = DOMAIN . "/images/{$accountOwner}/{$accountName}/" . $filename;
@@ -19,10 +19,23 @@ function shareButton($statusText, $imagePath, $index, $accountOwner, $accountNam
     // SVG code for the download icon
     $downloadSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 20h14v-2H5v2zm7-16l-5.5 5.5 1.41 1.41L11 7.83V16h2V7.83l3.09 3.08 1.41-1.41L12 4z" fill="currentColor"/></svg>';
 
+    // SVG code for the delete icon
+    $deleteSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.5 20l4.5-4.5 4.5 4.5 1.5-1.5-4.5-4.5 4.5-4.5-1.5-1.5-4.5 4.5-4.5-4.5-1.5 1.5 4.5 4.5-4.5 4.5 1.5 1.5z" fill="white"/></svg>';
+
     // Building the buttons
-    $content = "<div id='share-buttons-{$index}' class='share-buttons'>";
+    $content = "<div id='share-buttons-{$statusId}' class='share-buttons'>";
     $content .= "<button class='blue-button' data-text='{$encodedStatusText}' title='Copy Text'>{$clipboardSvg}</button>";
     $content .= "<button class='blue-button' data-url='{$imageUrl}' data-filename='{$filename}' title='Download Image'>{$downloadSvg}</button>";
+
+    // Add the delete button/form
+    $content .= "<form action='/home' method='POST'>";
+    $content .= "<input type='hidden' name='account' value='" . htmlspecialchars($accountName) . "'>";
+    $content .= "<input type='hidden' name='username' value='" . htmlspecialchars($accountOwner) . "'>";
+    $content .= "<input type='hidden' name='id' value='{$statusId}'>";
+    $content .= "<input type='hidden' name='csrf_token' value='{$_SESSION['csrf_token']}'>";
+    $content .= "<button class='red-button' type='submit' name='delete_status'>{$deleteSvg}</button>";
+    $content .= "</form>";
+
     $content .= "</div>";
 
     return $content;

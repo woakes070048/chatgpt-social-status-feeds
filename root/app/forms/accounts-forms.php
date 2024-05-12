@@ -7,7 +7,7 @@
  * Description: ChatGPT API Status Generator
  */
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSION['csrf_token']) && $_POST['csrf_token'] === $_SESSION['csrf_token']) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST["edit_account"])) {
         $accountOwner = $_SESSION["username"];
         $accountName = strtolower(str_replace(' ', '-', trim($_POST["account"])));
@@ -16,13 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
         $hashtags = isset($_POST["hashtags"]) ? 1 : 0;
         $link = trim($_POST["link"]);
         $imagePrompt = trim($_POST["image_prompt"]);
-        $cron = trim($_POST["cron"]);
+        $cron = !empty($_POST["cron"]) ? implode(',', $_POST["cron"]) : null; // Convert array to comma-separated string or set to null if empty
 
-        // Validate account name and link
+        // Validate account name, link, and cron
         if (!preg_match('/^[a-z0-9-]{8,18}$/', $accountName)) {
             $_SESSION['messages'][] = "Account name must be 8-18 characters long, alphanumeric and hyphens only.";
         } elseif (!preg_match('/^https:\/\/[\w.-]+(\/[\w.-]*)*\/?$/', $link)) {
             $_SESSION['messages'][] = "Link must be a valid URL starting with https://";
+        } elseif (empty($cron)) {
+            $_SESSION['messages'][] = "Please select at least one cron value.";
         } elseif (!empty($accountName) && !empty($prompt) && !empty($platform) && !empty($link) && !empty($imagePrompt) && !empty($cron)) {
             $db = new Database();
 
@@ -38,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
             } else {
                 // Insert new account data
                 $db->query("INSERT INTO accounts (username, account, prompt, platform, hashtags, link, image_prompt, cron) VALUES (:accountOwner, :accountName, :prompt, :platform, :hashtags, :link, :imagePrompt, :cron)");
-                // Create directory for images if the account is being created
                 // Create directory for images if the account is being created
                 $acctImagePath = __DIR__ .  '/../../public/images/' . $accountOwner . '/' . $accountName;
                 if (!file_exists($acctImagePath)) {
@@ -89,8 +90,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['csrf_token'], $_SESSI
         header("Location: /accounts");
         exit;
     }
-} else {
-    // CSRF validation failed, handle the error
-    echo 'CSRF token mismatch.';
-    exit;
 }

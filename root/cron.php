@@ -8,7 +8,6 @@
  * Description: Handles scheduled tasks such as resetting API usage, running status updates, and clearing the IP blacklist.
  */
 
-
 // Including necessary configuration and library files
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/db.php';
@@ -20,11 +19,13 @@ $jobType = $argv[1] ?? 'run_status'; // Default to 'run_status' if no argument p
 
 // Execute the appropriate function based on the job type
 if ($jobType == 'reset_usage') {
-    resetApiUsage(); // Reset used API calls for all users
+    resetApiUsage();
 } elseif ($jobType == 'run_status') {
-    runStatusUpdateJobs(); // Run status update jobs
+    runStatusUpdateJobs();
 } elseif ($jobType == 'clear_list') {
-    clearIpBlacklist(); // Clear the IP blacklist
+    clearIpBlacklist();
+} elseif ($jobType == 'cleanup') {
+    cleanupStatuses();
 }
 
 // Function to run status update jobs
@@ -32,51 +33,43 @@ function runStatusUpdateJobs()
 {
     // Fetch all accounts from the database
     $accounts = getAllAccounts();
-    $currentDate = date('Y-m-d'); // Gets the current date
+    $currentHour = date('H'); // Gets the current hour in 24-hour format
+    $currentMinute = date('i'); // Gets the current minute
+    $currentTimeSlot = sprintf("%02d", $currentHour) . ':' . $currentMinute;
 
     foreach ($accounts as $account) {
         // Account details
         $accountOwner = $account->username;
         $accountName = $account->account;
+        $cron = explode(',', $account->cron); // Split cron schedule into an array
 
-        // Retrieve account and user information
-        $acctInfo = getAcctInfo($accountOwner, $accountName);
-        $userInfo = getUserInfo($accountOwner);
+        // Check if the current time slot matches any cron schedule
+        foreach ($cron as $scheduledHour) {
+            if ($currentHour == $scheduledHour) {
+                // Only proceed if a status hasn't been generated for this time slot
+                if (!hasStatusBeenPosted($accountName, $accountOwner, $scheduledHour)) {
+                    // Retrieve account and user information
+                    $acctInfo = getAcctInfo($accountOwner, $accountName);
+                    $userInfo = getUserInfo($accountOwner);
 
-        // Count the number of statuses posted today for this account
-        $statusCountToday = countStatusesPostedToday($accountName, $accountOwner, $currentDate);
+                    // Only proceed if the user has remaining API calls
+                    if ($userInfo && $userInfo->used_api_calls < $userInfo->max_api_calls) {
+                        $userInfo->used_api_calls += 1; // Increment used API calls
 
-        // Check if the number of statuses posted is less than the cron setting
-        if ($statusCountToday < $acctInfo->cron) {
-            // Only proceed if the user has remaining API calls
-            if ($userInfo && $userInfo->used_api_calls < $userInfo->max_api_calls) {
-                $userInfo->used_api_calls += 1; // Increment used API calls
+                        // Update user's used API calls in the database
+                        $db = new Database();
+                        $db->query("UPDATE users SET used_api_calls = :used_api_calls WHERE username = :username");
+                        $db->bind(':used_api_calls', $userInfo->used_api_calls);
+                        $db->bind(':username', $accountOwner);
+                        $db->execute();
 
-                // Update user's used API calls in the database
-                $db = new Database();
-                $db->query("UPDATE users SET used_api_calls = :used_api_calls WHERE username = :username");
-                $db->bind(':used_api_calls', $userInfo->used_api_calls);
-                $db->bind(':username', $accountOwner);
-                $db->execute();
-
-                generateStatus($accountName, $accountOwner); // Generate the status update
+                        generateStatus($accountName, $accountOwner); // Generate the status update
+                    }
+                }
             }
         }
     }
 }
-
-// Function to count the number of statuses posted today
-function countStatusesPostedToday($accountName, $accountOwner, $currentDate)
-{
-    $db = new Database();
-    $db->query("SELECT COUNT(*) as count FROM status_updates WHERE username = :username AND account = :account AND DATE(created_at) = :currentDate");
-    $db->bind(':username', $accountOwner);
-    $db->bind(':account', $accountName);
-    $db->bind(':currentDate', $currentDate);
-    $result = $db->single();
-    return $result->count;
-}
-
 
 // Function to reset API usage for all users
 function resetApiUsage()
@@ -84,6 +77,35 @@ function resetApiUsage()
     $db = new Database();
     $db->query("UPDATE users SET used_api_calls = 0"); // Reset used API calls to 0
     $db->execute();
+}
+
+// New function to cleanup old statuses
+function cleanupStatuses()
+{
+    $db = new Database();
+    $accounts = getAllAccounts();
+    foreach ($accounts as $account) {
+        $accountName = $account->account;
+        $accountOwner = $account->username;
+
+        // Count the current number of statuses
+        $db->query("SELECT COUNT(*) as count FROM status_updates WHERE account = :account");
+        $db->bind(':account', $accountName);
+        $result = $db->single();
+        $statusCount = $result->count;
+
+        // Check if the number of statuses exceeds the maximum allowed
+        if ($statusCount > MAX_STATUSES) {
+            // Calculate how many statuses to delete
+            $deleteCount = $statusCount - MAX_STATUSES;
+
+            // Delete the oldest statuses
+            $db->query("DELETE FROM status_updates WHERE account = :account ORDER BY created_at ASC LIMIT :deleteCount");
+            $db->bind(':account', $accountName);
+            $db->bind(':deleteCount', $deleteCount);
+            $db->execute();
+        }
+    }
 }
 
 // Function to fetch all accounts from the database
@@ -94,7 +116,7 @@ function getAllAccounts()
     return $db->resultSet(); // Return the result set
 }
 
-// Function to check if a status has been posted within a specific time window
+// Function to check if a status has been posted within a specific time slot
 function hasStatusBeenPosted($accountName, $accountOwner, $currentTimeSlot)
 {
     $db = new Database();
