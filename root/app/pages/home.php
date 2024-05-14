@@ -35,7 +35,12 @@
                         <?php if (!empty($status->status)) : ?>
                             <li>
                                 <img src="<?= htmlspecialchars($status->status_image ? "images/{$accountOwner}/{$accountName}/{$status->status_image}" : 'assets/images/default.png') ?>" class="status-image">
-                                <p class="status-text"><?= htmlspecialchars($status->status) ?></p>
+                                <p class="status-text">
+                                    <?= htmlspecialchars($status->status) ?>
+                                </p>
+                                <strong class="status-info">
+                                    <?= date('m/d/y g:ia', strtotime($status->created_at)) ?>
+                                </strong>
                                 <?php echo shareButton($status->status, $status->status_image, $accountOwner, $accountName, $status->id); ?>
                             </li>
                         <?php endif; ?>
@@ -58,8 +63,8 @@
             </div>
         </div>
     <?php } ?>
-
 </main>
+
 
 
 <script>

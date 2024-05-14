@@ -41,6 +41,12 @@ function runStatusUpdateJobs()
         // Account details
         $accountOwner = $account->username;
         $accountName = $account->account;
+
+        // Check if cron schedule is set or not
+        if ($account->cron === null || $account->cron === '') {
+            continue; // Skip this account if cron is 'null' or empty (Off state)
+        }
+
         $cron = explode(',', $account->cron); // Split cron schedule into an array
 
         // Check if the current time slot matches any cron schedule

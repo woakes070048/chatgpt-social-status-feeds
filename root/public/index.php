@@ -96,14 +96,6 @@ require_once '../lib/load-lib.php'; // Dynamic page loading library
     <footer>
         <p>&copy; <?php echo date("Y"); ?> <a href="https://vontainment.com">Vontainment.com</a> All Rights Reserved.</p>
     </footer>
-    <script>
-        window.difyChatbotConfig = {
-            token: '4JqpLaqG8GoSdI65',
-            baseUrl: 'https://dify.hugev.xyz'
-        }
-    </script>
-    <script src="https://dify.hugev.xyz/embed.min.js" id="4JqpLaqG8GoSdI65" defer>
-    </script>
 </body>
 
 </html>

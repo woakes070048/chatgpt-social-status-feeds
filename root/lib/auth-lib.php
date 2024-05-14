@@ -1,6 +1,3 @@
-this needs t generate a csrf token for the user on login
-
-
 <?php
 /*
  * Project: ChatGPT API

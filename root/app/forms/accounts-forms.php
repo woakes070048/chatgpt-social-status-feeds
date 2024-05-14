@@ -16,16 +16,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashtags = isset($_POST["hashtags"]) ? 1 : 0;
         $link = trim($_POST["link"]);
         $imagePrompt = trim($_POST["image_prompt"]);
-        $cron = !empty($_POST["cron"]) ? implode(',', $_POST["cron"]) : null; // Convert array to comma-separated string or set to null if empty
+
+        // Check if 'cron' field is submitted and process it accordingly
+        if (isset($_POST["cron"]) && in_array("off", $_POST["cron"], true)) {
+            $cron = null; // "Off" is selected, set cron to null
+        } elseif (!empty($_POST["cron"])) {
+            $cron = implode(',', $_POST["cron"]); // Concatenate all selected times
+        } else {
+            $cron = null; // Handle cases where no cron time is selected
+        }
 
         // Validate account name, link, and cron
         if (!preg_match('/^[a-z0-9-]{8,18}$/', $accountName)) {
             $_SESSION['messages'][] = "Account name must be 8-18 characters long, alphanumeric and hyphens only.";
         } elseif (!preg_match('/^https:\/\/[\w.-]+(\/[\w.-]*)*\/?$/', $link)) {
             $_SESSION['messages'][] = "Link must be a valid URL starting with https://";
-        } elseif (empty($cron)) {
-            $_SESSION['messages'][] = "Please select at least one cron value.";
-        } elseif (!empty($accountName) && !empty($prompt) && !empty($platform) && !empty($link) && !empty($imagePrompt) && !empty($cron)) {
+        } elseif ($cron === null && !in_array("off", $_POST["cron"], true)) {
+            $_SESSION['messages'][] = "Please select at least one cron value or set it to 'Off'.";
+        } elseif (!empty($accountName) && !empty($prompt) && !empty($platform) && !empty($link) && !empty($imagePrompt) && ($cron !== null || in_array("off", $_POST["cron"], true))) {
             $db = new Database();
 
             // Check if the account exists
@@ -40,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 // Insert new account data
                 $db->query("INSERT INTO accounts (username, account, prompt, platform, hashtags, link, image_prompt, cron) VALUES (:accountOwner, :accountName, :prompt, :platform, :hashtags, :link, :imagePrompt, :cron)");
-                // Create directory for images if the account is being created
-                $acctImagePath = __DIR__ .  '/../../public/images/' . $accountOwner . '/' . $accountName;
+                // Additional logic for new accounts
+                $acctImagePath = __DIR__ . '/../../public/images/' . $accountOwner . '/' . $accountName;
                 if (!file_exists($acctImagePath)) {
                     mkdir($acctImagePath, 0777, true); // Create the directory recursively
 
@@ -61,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->execute();
 
             $_SESSION['messages'][] = "Account has been created or modified";
-            header("Location: /accounts"); // Redirect to avoid form resubmission
+            header("Location: /accounts");
             exit;
         } else {
             $_SESSION['messages'][] = "A field is missing or has incorrect data. Please try again.";

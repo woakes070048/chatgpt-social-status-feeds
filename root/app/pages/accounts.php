@@ -32,6 +32,7 @@ $db = new Database();
             <input type="text" name="image_prompt" id="image_prompt" required>
             <label for="cron">Cron:</label> <!-- Added cron label -->
             <select name="cron[]" id="cron" multiple> <!-- Multi-select dropdown for cron -->
+                <option value="off">Off</option> <!-- Added 'Off' option with empty value -->
                 <?php
                 for ($hour = 6; $hour <= 22; $hour++) {
                     $amPm = ($hour < 12) ? 'am' : 'pm';
@@ -88,7 +89,6 @@ $db = new Database();
 </main>
 
 <script>
-    // Updated JavaScript for handling multi-select cron field
     document.addEventListener('DOMContentLoaded', function() {
         const updateButtons = document.querySelectorAll('#update-button');
         updateButtons.forEach(button => {
@@ -107,14 +107,25 @@ $db = new Database();
                 imagePromptField.value = decodeURIComponent(this.dataset.image_prompt.replace(/\+/g, ' '));
                 hashtagCheckbox.checked = this.dataset.hashtags === 'true';
 
-                // Set selected options for multi-select cron field
-                const selectedCronValues = this.dataset.cron.split(',');
-                selectedCronValues.forEach(value => {
-                    const option = cronField.querySelector(`option[value="${value}"]`);
-                    if (option) {
-                        option.selected = true;
-                    }
+                // Clear all selections before setting new ones
+                Array.from(cronField.options).forEach(option => {
+                    option.selected = false;
                 });
+
+                // Set selected options for multi-select cron field
+                const selectedCronValues = this.dataset.cron ? this.dataset.cron.split(',') : [];
+                if (selectedCronValues.length === 0 || selectedCronValues.includes("off")) {
+                    // Select 'Off' if no cron values or explicitly off
+                    const offOption = cronField.querySelector('option[value="off"]');
+                    offOption.selected = true;
+                } else {
+                    selectedCronValues.forEach(value => {
+                        const option = cronField.querySelector(`option[value="${value}"]`);
+                        if (option) {
+                            option.selected = true;
+                        }
+                    });
+                }
 
                 platformSelect.value = this.dataset.platform; // Set the platform dropdown
 
