@@ -1,11 +1,11 @@
 <?php
 /*
- * Project: ChatGPT API
- * Author: Vontainment
- * URL: https://vontainment.com
- * File: /pages/users.php
- * Description: ChatGPT API Status Generator
- */
+* Project: ChatGPT API
+* Author: Vontainment
+* URL: https://vontainment.com
+* File: /pages/users.php
+* Description: ChatGPT API Status Generator
+*/
 ?>
 
 <main class="flex-container">
@@ -60,7 +60,7 @@
             <div class="item-box">
                 <h3><?php echo htmlspecialchars($user->username); ?></h3>
                 <button class="update-user-button green-button" id="update-btn" <?php echo $dataAttributes; ?>>Update</button>
-                <form class=" delete-user-form" action=" /users" method="POST">
+                <form class="delete-user-form" action="/users" method="POST">
                     <input type="hidden" name="username" value="<?php echo htmlspecialchars($user->username); ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <button class="delete-user-button red-button" name="delete_user">Delete</button>

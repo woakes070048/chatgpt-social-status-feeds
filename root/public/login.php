@@ -13,6 +13,19 @@ require_once __DIR__ .  '/../db.php';
 require_once __DIR__ .  '/../lib/waf-lib.php';
 require_once __DIR__ .  '/../lib/common-lib.php';
 require_once __DIR__ .  '/../lib/auth-lib.php';
+
+// Handle login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    if (login($username, $password)) {
+        header('Location: /home');
+        exit();
+    } else {
+        $_SESSION['error'] = "Invalid username or password.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -37,8 +50,8 @@ require_once __DIR__ .  '/../lib/auth-lib.php';
             <input type="password" name="password"><br><br>
             <input type="submit" value="Log In">
         </form>
-        <?php if (isset($error_msg)) : ?>
-            <div id="error-msg"><?php echo $error_msg; ?></div>
+        <?php if (isset($_SESSION['error'])) : ?>
+            <div id="error-msg"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></div>
         <?php endif; ?>
     </div>
 </body>

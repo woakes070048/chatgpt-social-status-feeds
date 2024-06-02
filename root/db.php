@@ -128,7 +128,8 @@ if (!defined('INSTALLED') || !INSTALLED) {
     prompt TEXT,
     hashtags BOOLEAN DEFAULT FALSE,
     link VARCHAR(255),
-    cron VARCHAR(255), // Change data type to string
+    cron VARCHAR(255),
+    days VARCHAR(255), // New days field
     image_prompt VARCHAR(255),
     platform VARCHAR(255) NOT NULL,
     PRIMARY KEY (account),
@@ -159,7 +160,7 @@ if (!defined('INSTALLED') || !INSTALLED) {
     $db->execute();
 
     // Update the config file to set INSTALLED to true
-    $configFilePath = BASE_DIR . '/config.php';
+    $configFilePath = __DIR__ .  '/config.php';
     $configData = file_get_contents($configFilePath);
     $configData = str_replace("define('INSTALLED', false);", "define('INSTALLED', true);", $configData);
     file_put_contents($configFilePath, $configData);

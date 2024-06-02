@@ -29,11 +29,13 @@ if ($jobType == 'reset_usage') {
 }
 
 // Function to run status update jobs
+// Function to run status update jobs
 function runStatusUpdateJobs()
 {
     // Fetch all accounts from the database
     $accounts = getAllAccounts();
     $currentHour = date('H'); // Gets the current hour in 24-hour format
+    $currentDay = strtolower(date('l')); // Gets the current day in lowercase
     $currentMinute = date('i'); // Gets the current minute
     $currentTimeSlot = sprintf("%02d", $currentHour) . ':' . $currentMinute;
 
@@ -42,10 +44,11 @@ function runStatusUpdateJobs()
         $accountOwner = $account->username;
         $accountName = $account->account;
         $cron = explode(',', $account->cron); // Split cron schedule into an array
+        $days = explode(',', $account->days); // Split days into an array
 
-        // Check if the current time slot matches any cron schedule
+        // Check if the current time slot matches any cron schedule and if the day is included
         foreach ($cron as $scheduledHour) {
-            if ($currentHour == $scheduledHour) {
+            if ($currentHour == $scheduledHour && (in_array('everyday', $days) || in_array($currentDay, $days))) {
                 // Only proceed if a status hasn't been generated for this time slot
                 if (!hasStatusBeenPosted($accountName, $accountOwner, $scheduledHour)) {
                     // Retrieve account and user information
@@ -70,6 +73,7 @@ function runStatusUpdateJobs()
         }
     }
 }
+
 
 // Function to reset API usage for all users
 function resetApiUsage()

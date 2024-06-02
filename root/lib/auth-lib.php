@@ -43,13 +43,11 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
         if (is_blacklisted($ip)) {
             // User is blacklisted
-            $error_msg = "Your IP has been blacklisted due to multiple failed login attempts.";
-            $_SESSION['error'] = $error_msg;
+            $_SESSION['error']  = "Your IP has been blacklisted due to multiple failed login attempts.";
         } else {
             // Update the number of failed login attempts
             update_failed_attempts($ip);
-            $error_msg = "Invalid username or password.";
-            $_SESSION['error'] = $error_msg;
+            $_SESSION['error'] = "Invalid username or password.";
         }
 
         header("Location: login.php");

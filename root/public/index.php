@@ -65,17 +65,19 @@ require_once '../lib/load-lib.php'; // Dynamic page loading library
         <?php
         // Check if user is logged in and retrieve their data
         if (isset($_SESSION['username'])) {
-            $userData = getUserInfo($_SESSION['username']);
+            // Use the common function to get user info
+            $userInfo = getUserInfo($_SESSION['username']);
+
             // Display Users tab for admins
-            if ($userData && isset($userData->admin)) {
-                if ($userData->admin == 1) {
+            if ($userInfo && isset($userInfo->admin)) {
+                if ($userInfo->admin == 1) {
         ?>
                     <a href="/users"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/users') echo 'active'; ?>">Users</button></a>
                 <?php
                     // Display My info tab for non-admin users
-                } elseif ($userData->admin == 0) {
+                } elseif ($userInfo->admin == 0) {
                 ?>
-                    <a href="/info"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/info') echo 'active'; ?>">My info</button></a>
+                    <a href="/info"><button class="tablinks <?php if ($_SERVER['REQUEST_URI'] === '/info') echo 'active'; ?>">My Info</button></a>
         <?php
                 }
             }
@@ -96,6 +98,14 @@ require_once '../lib/load-lib.php'; // Dynamic page loading library
     <footer>
         <p>&copy; <?php echo date("Y"); ?> <a href="https://vontainment.com">Vontainment.com</a> All Rights Reserved.</p>
     </footer>
+    <script>
+        window.difyChatbotConfig = {
+            token: '4JqpLaqG8GoSdI65',
+            baseUrl: 'https://dify.hugev.xyz'
+        }
+    </script>
+    <script src="https://dify.hugev.xyz/embed.min.js" id="4JqpLaqG8GoSdI65" defer>
+    </script>
 </body>
 
 </html>

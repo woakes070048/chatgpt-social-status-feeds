@@ -7,9 +7,6 @@
  * Description: ChatGPT API Status Generator
  */
 
-// Initialize the Database object
-$db = new Database();
-
 ?>
 
 <main class="flex-container">
@@ -29,9 +26,20 @@ $db = new Database();
             <label for="link">Link:</label>
             <input type="text" name="link" id="link" required>
             <label for="image_prompt">Image Prompt:</label>
-            <input type="text" name="image_prompt" id="image_prompt" required>
-            <label for="cron">Cron:</label> <!-- Added cron label -->
-            <select name="cron[]" id="cron" multiple> <!-- Multi-select dropdown for cron -->
+            <textarea name="image_prompt" id="image_prompt" required></textarea> <!-- Changed input to textarea -->
+            <label for="days">Days:</label> <!-- Added days label -->
+            <select name="days[]" id="days" multiple required> <!-- Multi-select dropdown for days -->
+                <option value="everyday">Everyday</option>
+                <option value="sunday">Sunday</option>
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday">Saturday</option>
+            </select>
+            <label for="cron">Post Schedule:</label> <!-- Changed cron label to Post Schedule -->
+            <select name="cron[]" id="cron" multiple> <!-- Multi-select dropdown for Post Schedule -->
                 <option value="off">Off</option> <!-- Added 'Off' option with empty value -->
                 <?php
                 for ($hour = 6; $hour <= 22; $hour++) {
@@ -57,6 +65,7 @@ $db = new Database();
     <section id="right-col">
         <?php
         $username = $_SESSION['username'];
+        $db = new Database();
         $db->query("SELECT * FROM accounts WHERE username = :username");
         $db->bind(':username', $username);
         $accounts = $db->resultSet();
@@ -71,6 +80,7 @@ $db = new Database();
             $dataAttributes .= "data-image_prompt=\"" . htmlspecialchars($accountData->image_prompt) . "\" ";
             $dataAttributes .= "data-hashtags=\"" . ($accountData->hashtags ? 'true' : 'false') . "\" ";
             $dataAttributes .= "data-cron=\"" . htmlspecialchars(implode(',', explode(',', $accountData->cron))) . "\" ";
+            $dataAttributes .= "data-days=\"" . htmlspecialchars(implode(',', explode(',', $accountData->days))) . "\" ";
             $dataAttributes .= "data-platform=\"" . htmlspecialchars($accountData->platform) . "\""; // Ensure this is correctly added
 
         ?>
@@ -78,7 +88,7 @@ $db = new Database();
             <div class="item-box">
                 <h3><?php echo htmlspecialchars($accountName); ?></h3>
                 <button class="update-account-button green-button" id="update-button" <?php echo $dataAttributes; ?>>Update</button>
-                <form class=" delete-account-form" action="/accounts" method="POST">
+                <form class="delete-account-form" action="/accounts" method="POST">
                     <input type="hidden" name="account" value="<?php echo htmlspecialchars($accountName); ?>">
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <button class="delete-account-button red-button" name="delete_account">Delete</button>
@@ -99,6 +109,7 @@ $db = new Database();
                 const imagePromptField = document.querySelector('#image_prompt');
                 const hashtagCheckbox = document.querySelector('#hashtags');
                 const cronField = document.querySelector('#cron');
+                const daysField = document.querySelector('#days');
                 const platformSelect = document.querySelector('#platform');
 
                 accountNameField.value = this.dataset.accountName;
@@ -111,11 +122,13 @@ $db = new Database();
                 Array.from(cronField.options).forEach(option => {
                     option.selected = false;
                 });
+                Array.from(daysField.options).forEach(option => {
+                    option.selected = false;
+                });
 
-                // Set selected options for multi-select cron field
+                // Set selected options for multi-select cron and days fields
                 const selectedCronValues = this.dataset.cron ? this.dataset.cron.split(',') : [];
                 if (selectedCronValues.length === 0 || selectedCronValues.includes("off")) {
-                    // Select 'Off' if no cron values or explicitly off
                     const offOption = cronField.querySelector('option[value="off"]');
                     offOption.selected = true;
                 } else {
@@ -127,11 +140,40 @@ $db = new Database();
                     });
                 }
 
-                platformSelect.value = this.dataset.platform; // Set the platform dropdown
+                const selectedDaysValues = this.dataset.days ? this.dataset.days.split(',') : [];
+                if (selectedDaysValues.length === 0 || selectedDaysValues.includes("everyday")) {
+                    const everydayOption = daysField.querySelector('option[value="everyday"]');
+                    everydayOption.selected = true;
+                } else {
+                    selectedDaysValues.forEach(value => {
+                        const option = daysField.querySelector(`option[value="${value}"]`);
+                        if (option) {
+                            option.selected = true;
+                        }
+                    });
+                }
+
+                platformSelect.value = this.dataset.platform;
 
                 // Set the account name field as readonly when updating
                 accountNameField.readOnly = true;
             });
+        });
+
+        // Handle the logic for selecting/deselecting 'Everyday' option
+        const daysField = document.querySelector('#days');
+        daysField.addEventListener('change', function() {
+            const selectedOptions = Array.from(daysField.selectedOptions).map(option => option.value);
+            if (selectedOptions.includes('everyday')) {
+                Array.from(daysField.options).forEach(option => {
+                    if (option.value !== 'everyday') {
+                        option.selected = false;
+                    }
+                });
+            } else if (selectedOptions.length > 0) {
+                const everydayOption = daysField.querySelector('option[value="everyday"]');
+                everydayOption.selected = false;
+            }
         });
     });
 </script>
