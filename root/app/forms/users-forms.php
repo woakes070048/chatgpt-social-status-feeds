@@ -3,7 +3,14 @@
  * Project: ChatGPT API
  * Author: Vontainment
  * URL: https://vontainment.com
- * File: ../app/forms/users"-forms.php
+ * File: ../app/forms/users-forms.php
+ * Description: ChatGPT API Status Generator
+ */
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: ../app/forms/users-forms.php
  * Description: ChatGPT API Status Generator
  */
 
@@ -14,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $totalAccounts = $_POST['total-accounts'];
         $maxApiCalls = $_POST['max-api-calls'];
         $usedApiCalls = $_POST['used-api-calls'];
-        $admin = isset($_POST['admin']) ? 1 : 0;
+        $admin = $_POST['admin']; // Use the value directly from the POST data
 
         // Validate username and password
         if (!preg_match('/^[a-z0-9]{8,18}$/', $username)) {
@@ -86,5 +93,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         header("Location: /users");
         exit;
+    } elseif (isset($_POST['login_as']) && isset($_POST['username'])) {
+        $username = $_POST['username'];
+
+        $user = getUserInfo($username);
+        if ($user) {
+            // Set original username in session if not already set
+            if (!isset($_SESSION['isReally'])) {
+                $_SESSION['isReally'] = $_SESSION['username'];
+            }
+            // Change session to new user
+            $_SESSION['username'] = $user->username;
+            $_SESSION['logged_in'] = true;
+            header("Location: /home");
+            exit;
+        }
     }
 }

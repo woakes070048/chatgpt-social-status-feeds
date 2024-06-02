@@ -11,10 +11,7 @@
 <main class="container">
     <?php
     $accountOwner = $_SESSION['username'];
-    $db = new Database();
-    $db->query("SELECT account FROM accounts WHERE username = :accountOwner");
-    $db->bind(':accountOwner', $accountOwner);
-    $accounts = $db->resultSet();
+    $accounts = getAllUserAccts($accountOwner);
 
     if (empty($accounts)) {
         echo '<div id="no-account"><p>Please set up an account!</p></div>';
@@ -64,8 +61,6 @@
         </div>
     <?php } ?>
 </main>
-
-
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

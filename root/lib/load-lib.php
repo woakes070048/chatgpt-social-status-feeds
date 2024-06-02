@@ -7,6 +7,8 @@
  * Description: ChatGPT API Status Generator
  */
 
+session_start();
+
 $ip = $_SERVER['REMOTE_ADDR'];
 if (is_blacklisted($ip)) {
     // Stop the script and show an error if the IP is blacklisted
@@ -18,25 +20,37 @@ if (is_blacklisted($ip)) {
     header('Location: login.php');
     exit();
 } elseif (isset($_GET['page'])) {
-    $page = $_GET['page'];
+    $page = htmlspecialchars($_GET['page']);
 
     $_SESSION['timeout'] = time();
+
+    // Fetch user information using the common function
+    $user = getUserInfo($_SESSION['username']);
 
     // Check if $page-helper.php exists
     $helperFile = "../app/helpers/" . $page . "-helper.php";
     if (file_exists($helperFile)) {
-        require_once($helperFile);
+        // Only include the file if the user is an admin or if it's not the users-helper.php
+        if ($page !== 'users' || ($user && $user->admin == 1)) {
+            require_once($helperFile);
+        }
     }
 
     // Check if $page-forms.php exists
     $formsFile = "../app/forms/" . $page . "-forms.php";
     if (file_exists($formsFile)) {
-        require_once($formsFile);
+        // Only include the file if the user is an admin or if it's not the users-forms.php
+        if ($page !== 'users' || ($user && $user->admin == 1)) {
+            require_once($formsFile);
+        }
     }
 
     // Check if $page.php exists
     $pageFile = "../app/pages/" . $page . ".php";
     if (file_exists($pageFile)) {
-        $pageOutput = $pageFile;
+        // Only set the pageOutput if the user is an admin or if it's not the users.php
+        if ($page !== 'users' || ($user && $user->admin == 1)) {
+            $pageOutput = $pageFile;
+        }
     }
 }

@@ -11,16 +11,14 @@ function generateAccountDetails()
 {
     $accountOwner = $_SESSION['username'];
 
-    $db = new Database();
-    $db->query("SELECT total_accounts, max_api_calls, used_api_calls FROM users WHERE username = :username");
-    $db->bind(':username', $accountOwner);
-    $data = $db->single();
+    // Use the common function to get user info
+    $userInfo = getUserInfo($accountOwner);
 
-    if ($data) {
-        // Extract the required fields from the data
-        $totalAccounts = $data->total_accounts;
-        $maxApiCalls = $data->max_api_calls;
-        $usedApiCalls = $data->used_api_calls;
+    if ($userInfo) {
+        // Extract the required fields from the user info
+        $totalAccounts = $userInfo->total_accounts;
+        $maxApiCalls = $userInfo->max_api_calls;
+        $usedApiCalls = $userInfo->used_api_calls;
 
         // Format the data into a nice box
         $output = "<div class=\"account-details\">";

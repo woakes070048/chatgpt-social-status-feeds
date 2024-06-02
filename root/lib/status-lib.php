@@ -136,6 +136,7 @@ function getImage($accountName, $accountOwner, $image_prompt)
         'model' => 'dall-e-3',
         'prompt' => $image_prompt,
         'n' => 1,
+        'quality' => "standard",
         'size' => "1792x1024"
     ];
 

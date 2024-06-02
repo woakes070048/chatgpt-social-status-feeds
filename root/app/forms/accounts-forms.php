@@ -26,6 +26,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $cron = null; // Handle cases where no cron time is selected
         }
 
+        // Process the 'days' field
+        $days = isset($_POST["days"]) ? implode(',', $_POST["days"]) : 'everyday';
+
         // Validate account name, link, and cron
         if (!preg_match('/^[a-z0-9-]{8,18}$/', $accountName)) {
             $_SESSION['messages'][] = "Account name must be 8-18 characters long, alphanumeric and hyphens only.";
@@ -44,10 +47,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if ($accountExists) {
                 // Update account data
-                $db->query("UPDATE accounts SET prompt = :prompt, platform = :platform, hashtags = :hashtags, link = :link, image_prompt = :imagePrompt, cron = :cron WHERE username = :accountOwner AND account = :accountName");
+                $db->query("UPDATE accounts SET prompt = :prompt, platform = :platform, hashtags = :hashtags, link = :link, image_prompt = :imagePrompt, cron = :cron, days = :days WHERE username = :accountOwner AND account = :accountName");
             } else {
                 // Insert new account data
-                $db->query("INSERT INTO accounts (username, account, prompt, platform, hashtags, link, image_prompt, cron) VALUES (:accountOwner, :accountName, :prompt, :platform, :hashtags, :link, :imagePrompt, :cron)");
+                $db->query("INSERT INTO accounts (username, account, prompt, platform, hashtags, link, image_prompt, cron, days) VALUES (:accountOwner, :accountName, :prompt, :platform, :hashtags, :link, :imagePrompt, :cron, :days)");
                 // Additional logic for new accounts
                 $acctImagePath = __DIR__ . '/../../public/images/' . $accountOwner . '/' . $accountName;
                 if (!file_exists($acctImagePath)) {
@@ -66,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->bind(':link', $link);
             $db->bind(':imagePrompt', $imagePrompt);
             $db->bind(':cron', $cron);
+            $db->bind(':days', $days);
             $db->execute();
 
             $_SESSION['messages'][] = "Account has been created or modified";
