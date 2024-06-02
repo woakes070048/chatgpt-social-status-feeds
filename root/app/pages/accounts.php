@@ -22,14 +22,14 @@
                 <option value="instagram">Instagram</option>
             </select>
             <label for="add-prompt">Prompt:</label>
-            <textarea name="prompt" id="add-prompt" required></textarea>
+            <textarea name="prompt" id="add-prompt" required>Create a compelling status update about...</textarea>
             <label for="link">Link:</label>
-            <input type="text" name="link" id="link" required>
+            <input type="text" name="link" id="link" required value="https://domain.com">
             <label for="image_prompt">Image Prompt:</label>
-            <textarea name="image_prompt" id="image_prompt" required></textarea> <!-- Changed input to textarea -->
+            <textarea name="image_prompt" id="image_prompt" required>Create an image of...</textarea> <!-- Changed input to textarea -->
             <label for="days">Days:</label> <!-- Added days label -->
             <select name="days[]" id="days" multiple required> <!-- Multi-select dropdown for days -->
-                <option value="everyday">Everyday</option>
+                <option value="everyday" selected>Everyday</option>
                 <option value="sunday">Sunday</option>
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
@@ -40,7 +40,7 @@
             </select>
             <label for="cron">Post Schedule:</label> <!-- Changed cron label to Post Schedule -->
             <select name="cron[]" id="cron" multiple> <!-- Multi-select dropdown for Post Schedule -->
-                <option value="off">Off</option> <!-- Added 'Off' option with empty value -->
+                <option value="off" selected>Off</option> <!-- Added 'Off' option with empty value -->
                 <?php
                 for ($hour = 6; $hour <= 22; $hour++) {
                     $amPm = ($hour < 12) ? 'am' : 'pm';
@@ -65,10 +65,7 @@
     <section id="right-col">
         <?php
         $username = $_SESSION['username'];
-        $db = new Database();
-        $db->query("SELECT * FROM accounts WHERE username = :username");
-        $db->bind(':username', $username);
-        $accounts = $db->resultSet();
+        $accounts = getAllUserAccts($username);
 
         foreach ($accounts as $account) :
             $accountName = $account->account;

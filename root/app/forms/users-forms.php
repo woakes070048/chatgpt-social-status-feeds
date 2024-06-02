@@ -6,6 +6,13 @@
  * File: ../app/forms/users-forms.php
  * Description: ChatGPT API Status Generator
  */
+/*
+ * Project: ChatGPT API
+ * Author: Vontainment
+ * URL: https://vontainment.com
+ * File: ../app/forms/users-forms.php
+ * Description: ChatGPT API Status Generator
+ */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['edit_users'])) {
@@ -86,5 +93,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         header("Location: /users");
         exit;
+    } elseif (isset($_POST['login_as']) && isset($_POST['username'])) {
+        $username = $_POST['username'];
+
+        $user = getUserInfo($username);
+        if ($user) {
+            // Set original username in session if not already set
+            if (!isset($_SESSION['isReally'])) {
+                $_SESSION['isReally'] = $_SESSION['username'];
+            }
+            // Change session to new user
+            $_SESSION['username'] = $user->username;
+            $_SESSION['logged_in'] = true;
+            header("Location: /home");
+            exit;
+        }
     }
 }

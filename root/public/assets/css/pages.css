@@ -112,20 +112,22 @@
   font-size: 3em;
   margin: 5px;
 }
-.edit-account-button,
-.edit-user-button {
-  width: 100%;
-  margin-top: 20px;
-}
+
 .update-account-button,
-.update-user-button,
-.delete-account-form,
-.delete-user-form {
+.delete-account-form {
   margin-right: 8px;
   float: left;
   width: 48%;
 }
-.delete-user-button, .delete-account-button {
+
+.update-user-button, .delete-user-form, .login-as-form {
+    margin-top: 8px;
+    margin-right: 8px;
+    float: left;
+    width: 30%;
+}
+
+.delete-user-button, .delete-account-button, .login-as-button  {
   width: 100%;
 }
 .account-details {

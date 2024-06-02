@@ -14,7 +14,6 @@ session_start();
 // Include necessary configuration and function files
 require_once '../config.php'; // Configuration settings
 require_once '../db.php'; // Database functions
-require_once '../lib/waf-lib.php'; // Web application firewall library
 require_once '../lib/common-lib.php'; // Common utility functions
 require_once '../lib/load-lib.php'; // Dynamic page loading library
 ?>

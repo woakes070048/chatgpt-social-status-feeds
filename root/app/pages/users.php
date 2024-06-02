@@ -25,10 +25,11 @@
             <label for="max-api-calls">Max API Calls:</label>
             <select name="max-api-calls" id="max-api-calls">
                 <option value="0">Off</option>
-                <option value="180">180</option>
-                <option value="360">360</option>
-                <option value="1080">1,080</option>
-                <option value="3240">3,240</option>
+                <option value="30">30</option>
+                <option value="60">60</option>
+                <option value="90">90</option>
+                <option value="120">120</option>
+                <option value="150">150</option>
                 <option value="9999999999">Unlimited</option>
             </select>
             <label for="used-api-calls">Used API Calls:</label>
@@ -65,6 +66,13 @@
                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                     <button class="delete-user-button red-button" name="delete_user">Delete</button>
                 </form>
+                <?php if ($user->username !== $_SESSION['username']) : ?>
+                    <form class="login-as-form" action="/users" method="POST">
+                        <input type="hidden" name="username" value="<?php echo htmlspecialchars($user->username); ?>">
+                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                        <button class="login-as-button blue-button" name="login_as">Login</button>
+                    </form>
+                <?php endif; ?>
             </div>
         <?php
         }
