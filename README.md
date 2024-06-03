@@ -29,11 +29,21 @@ Every account automatically generates an RSS feed where the statuses are seamles
 
 To ensure optimal performance and resource management, you can set limits on API calls, maximum accounts per user, and maximum statuses per account. For example, you can specify a limit of 30 statuses per account, with the system automatically removing the oldest status and its associated image when a new one is generated.
 
-#### Get Started
+### Get Started
 - Getting started is quick and easy! Simply edit the config.php file to configure your API key and other settings.
 - Upload files to web server.
 - Change docroot to public folder.
 - Create MySQL Database
 - Update config.php
-- Login admin/admin'
+- Add cron jobs
+  0	12	1	*	* /usr/bin/php /PATH_TO/public_html/cron.php reset_usage
+  0	12	*	*	0 /usr/bin/php /PATH_TO/public_html/cron.php clear_list
+  0	*	*	*	* /usr/bin/php /PATH_TO/public_html/cron.php run_status
+- Login admin/admin
 - Get ready to take your social media game to new heights with ChatGPT Social Status2RSS!
+
+
+### Newest Updates
+- Completely moved to Mysql DB.
+- Added Login-as user option for Admins.
+- You can now schedule posts for Account/Campaigns by day(s) of the week and hours(s).
